@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accountBook">
+	<insert id="insert" parameterType="accountBookDTO" useGeneratedKeys="true" keyProperty="SEQ">
+		insert into account_book values (#{seq},#{userId},#{createAt})
+	</insert>
+	<select id="one" parameterType="String" resultType="accountBookDTO">
+		select * from account_book where USER_ID = #{userId}
+	</select>
+	<select id="list" resultType="accountBookDTO">
+		select * from account_book
+	</select>
+	<update id="update" parameterType="accountBookDTO">
+		update account_book set
+		where USER_ID = #{userId}
+	</update>
+	<delete id="delete" parameterType="String">
+		delete from account_book where USER_ID = #{userId}
+	</delete>
+</mapper>

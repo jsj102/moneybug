@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tagreply">
+
+	<insert id="insert" parameterType="tagreplyDTO"
+		useGeneratedKeys="true" keyProperty="seq">
+		insert into tag_reply (SEQ,
+		BOARD_SEQ, CONTENT, WRITER_ID, CREATE_AT, ORIGIN_SEQ, REPLY_ORDER,
+		REPLY_LEVEL)
+		values (null, #{boardSeq}, #{content}, #{writerId}, now(),
+		null, 0, 0)
+	</insert>
+
+	<insert id="reinsert" parameterType="tagreplyDTO"
+		useGeneratedKeys="true" keyProperty="SEQ">
+		insert into tag_reply (SEQ,
+		BOARD_SEQ, CONTENT, WRITER_ID, CREATE_AT, ORIGIN_SEQ, REPLY_ORDER,
+		REPLY_LEVEL)
+		SELECT
+		null, #{boardSeq}, #{content}, #{writerId}, now(),
+		#{originSeq},
+		COALESCE(MAX(REPLY_ORDER), 0) + 1,1
+		FROM tag_reply WHERE
+		ORIGIN_SEQ = #{originSeq}
+	</insert>
+
+
+	<select id="list" resultType="tagreplyDTO">
+		select * from tag_reply
+		where
+		BOARD_SEQ = #{boardSeq}
+		order by CASE WHEN SEQ = ORIGIN_SEQ THEN REPLY_ORDER ELSE SEQ END asc,
+		REPLY_ORDER asc,
+		SEQ asc
+	</select>
+
+
+	<update id="update" parameterType="tagreplyDTO">
+		update tag_reply set CONTENT =
+		#{content} WHERE SEQ = #{seq}
+	</update>
+
+	<delete id="delete">
+		delete from tag_reply WHERE SEQ = #{seq}
+	</delete>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
