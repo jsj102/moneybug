@@ -74,7 +74,11 @@ public class AccountDetailService {
 		for(AccountDetailDTO temp:list) {
 			String tempStr = temp.getAccountCategory();
 			Integer tempInt = temp.getPrice();
-			categoryMapInt.put(tempStr, tempInt + categoryMapInt.getOrDefault(tempStr, 0));		
+			if(temp.getAccountType().equals("지출")) {
+				categoryMapInt.put(tempStr, tempInt + categoryMapInt.getOrDefault(tempStr, 0));	
+			}else {
+				categoryMapInt.put(tempStr, - tempInt + categoryMapInt.getOrDefault(tempStr, 0));	
+			}
 		}
 		return categoryMapInt;
 	}

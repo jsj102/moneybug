@@ -56,23 +56,21 @@
                     listTable += '<tr><td>' + list[i].accountCategory
                     + '</td><td>' + list[i].description
                     + '</td><td>' + formattedPrice + '</td></tr>';
-                    detailSomeLabelList.push(list[i].accountCategory);
+                    detailSomeLabelList.push(list[i].description);
+                    if(list[i].accountType=="지출"){
+                    	detailSomeDataPlusList.push(0);
+                        detailSomeDataMinusList.push(-list[i].price);
+                    }else{
+                    	
                     detailSomeDataPlusList.push(list[i].price);
-                    detailSomeDataMinusList.push(-list[i].price);
+                    detailSomeDataMinusList.push(0);
+                    }
                 }
                 listTable += '</table>';
                 
-                let mapTable = '<table border="1" class="MonthlyTable"><tr><th>분류</th><th>총액</th></tr>';
-                for (var key in map) {
-                    let formattedTotalPrice = map[key].toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
-                    mapTable += '<tr><td>' + key + '</td><td>'
-                    + formattedTotalPrice + '</td></tr>';
-                    detailTotalDataList.push(map[key]);
-                }
-                mapTable += '</table>';
+
 
                 $('#RecentTable').html(listTable);
-                $('#MonthlyTalbe').html(mapTable);
                 //
 				$.ajax({
 					url: "monthlyReportRequestBudgetAndExpenses",
@@ -83,11 +81,21 @@
 		                    labelList.push(budgetKey);
 		                    budgetDataList.push(budgetMap[budgetKey]);
 		                }
-		        	    console.log(labelList);
-		        	    console.log(detailTotalDataList);
-		        	    console.log(budgetDataList);
-
-					
+		                
+		                let mapTable = '<table border="1" class="MonthlyTable"><tr><th>분류</th><th>총액(현재 지출)</th><th>(지출 계획)</th></tr>';
+		                let listInt = 0;
+		                for (var key in map) {
+		                    let formattedTotalPrice = map[key].toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
+		                    let formattedTotalPrice2 = " ( "+(budgetDataList[listInt]).toLocaleString()+ " ) ";
+		                    mapTable += '<tr><td>' + key + '</td><td>'
+		                    + formattedTotalPrice + '</td><td>'+formattedTotalPrice2+'</td></tr>';
+		                    listInt=listInt+1;
+		                    console.log(listInt);
+		                    detailTotalDataList.push(map[key]);
+		                }
+		                mapTable += '</table>'; //1차 ajax로부터 데이터
+		                $('#MonthlyTalbe').html(mapTable);//1차 ajax로부터 데이터
+		                
 						const ctx = document.getElementById('myChart');
 						const ctx2 = document.getElementById('myChart2');
 					//Chart.js 에서는 getContext('2d') 를 사용하지않아도됨.
