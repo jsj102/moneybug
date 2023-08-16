@@ -26,5 +26,10 @@
 		from user_member
 		where SOCIAL_ID = #{socialId}
 	</select>
+	
+	<select id="findNick" parameterType="String" resultType="int">
+		select count(*) from user_member
+		where USER_NICKNAME = #{userNickname}
+	</select>
 
 </mapper>

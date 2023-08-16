@@ -29,5 +29,10 @@ public class MemberService {
         List<MemberDTO> selectedMembers = memberDAO.select(memberDTO); // DAO에서 List<MemberDTO>로 반환되는 데이터를 가져옴
         return selectedMembers; // MemberDTO 리스트 반환
     }
+	
+	public int findNick(String userNickname) {
+		int findResult = memberDAO.findNick(userNickname);
+		return findResult;
+	}
 
 }

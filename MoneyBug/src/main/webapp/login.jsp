@@ -121,9 +121,6 @@
 			    console.log('Full Name: ' + responsePayload.name);
 			    console.log("Email: " + responsePayload.email); 
 
-			
-			    console.log("google2")
-
 			    $.ajax({
 				type: 'POST',
 				url: '${pageContext.request.contextPath}/member/findMember.do', 
@@ -133,9 +130,8 @@
 				    'userName': responsePayload.name
 					},
 				success : function(member) {	
-					alert("ajax success");
 					if(member === 'old') {
-						window.location.href = '${pageContext.request.contextPath}/main.jsp';
+						window.location.href = '${pageContext.request.contextPath}/main.do';
 					} else if (member == 'new') {
 						window.location.href = '${pageContext.request.contextPath}/member/myPage.do';
 					} else {
