@@ -14,60 +14,60 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
-	body {
-		height: 150vh;
-		background: linear-gradient(to bottom, #96A0FF, #9669FF);
-		display: flex;
-		justify-content: center;
-	}
-	
-	.page-container {
-		margin-top: 100px;
-		margin-bottom: 100px;
-		width: 50%;
-		align-items: center;
-		flex-direction: column;
-	}
-	
-	.info-container {
-		padding: 40px;
-		justify-content: center;
-		box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-		background-color: white;
-		border-radius: 20px;
-	}
-	
-	.card-body {
-		padding-left: 50px;
-		padding-right: 50px;
-	}
-	
-	form {
-		display: flex;
-		flex-direction: column;
-	}
-	
-	h1 {
-		font-size: 60px;
-		font-weight: 100;
-		text-align: center;
-		color: white;
-	}
-	
-	.nick-container {
-		padding: 50px;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-	
-	.btn-custom {
-		margin-top: 30px;
-		background-color: #764dff;
-		color: white;
-		width: 70%;
-		align-self: center; /* Add this line */
-	}
+body {
+	height: 150vh;
+	background: linear-gradient(to bottom, #96A0FF, #9669FF);
+	display: flex;
+	justify-content: center;
+}
+
+.page-container {
+	margin-top: 100px;
+	margin-bottom: 100px;
+	width: 50%;
+	align-items: center;
+	flex-direction: column;
+}
+
+.info-container {
+	padding: 40px;
+	justify-content: center;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+	background-color: white;
+	border-radius: 20px;
+}
+
+.card-body {
+	padding-left: 50px;
+	padding-right: 50px;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+}
+
+h1 {
+	font-size: 60px;
+	font-weight: 100;
+	text-align: center;
+	color: white;
+}
+
+.nick-container {
+	padding: 50px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.btn-custom {
+	margin-top: 30px;
+	background-color: #764dff;
+	color: white;
+	width: 70%;
+	align-self: center; /* Add this line */
+}
 </style>
 </head>
 <body>
@@ -106,14 +106,42 @@
 						<label for="oldNickname">기존 닉네임: (신규일경우, 아래에 새로 등록해주세요.)</label> <input
 							type="text" readonly class="form-control" value="${userNickname}" />
 						<label for="newNickname">새로운 닉네임:</label> <input type="text"
-							id="newNickname" name="userNickname" required class="form-control" />
-						<button type="submit" class="btn btn-custom btn-lg">수정하기</button>
-					</form>
-					
-				</div>
+							id="newNickname" name="userNickname" required
+							class="form-control" />
 
+						<button type="button" id="checkIdButton"
+							class="btn btn-custom btn-lg">중복확인하기</button>
+						<button type="submit" id="updateButton"
+							class="btn btn-custom btn-lg">등록하기</button>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
+
+	<script>
+						$(document).ready(function() {
+							$("#updateButton").prop("disabled", true);
+						    $("#checkIdButton").click(function() {
+						        var newNickname = $("#newNickname").val();
+						        var idExist = false; 
+						        
+						        $.ajax({
+						            type: "POST",
+						            url: "checkNickname.do", // 닉네임 중복확인을 처리할 서버 경로로 변경해야 합니다.
+						            data: { userNickname: newNickname },
+						            success: function(response) {
+						                if (response === "available") {
+						                	$("#updateButton").prop("disabled", false);
+						                    alert("사용 가능한 닉네임입니다.");
+						                } else {
+						                    alert("이미 사용 중인 닉네임입니다.");
+						                    $("#updateButton").prop("disabled", true);
+						                }
+						            }
+						        });
+						    });
+						});
+</script>
 </body>
 </html>
