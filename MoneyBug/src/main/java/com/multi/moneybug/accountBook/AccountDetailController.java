@@ -1,6 +1,5 @@
 package com.multi.moneybug.accountBook;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -65,15 +64,12 @@ public class AccountDetailController {
 // 성능비교용 Service 3개 사용
 	@RequestMapping("accountBook/monthlyReportRequestJSON")
 	@ResponseBody
-	public HashMap<String,Object> monthlyReportRequestJSON(Model model) {
+	public HashMap<String,Object> monthlyReportRequestJSON(Model model,@RequestParam("year") int year, @RequestParam("month") int month) {
 		int accountBookId=0; 									//나중에 accountBookId값 넣어주기
-		LocalDate currentDate = LocalDate.now();
-		int currentYear = currentDate.getYear();
-		int currentMonth = currentDate.getMonthValue();
 		AccountDetailDTO accountDetailDTO = new AccountDetailDTO();
 		accountDetailDTO.setAccountBookId(accountBookId);
-		accountDetailDTO.setCurrentYear(currentYear);
-		accountDetailDTO.setCurrentMonth(currentMonth);
+		accountDetailDTO.setCurrentYear(year);
+		accountDetailDTO.setCurrentMonth(month);
 		
 		
 		HashMap<String,Object> map =  new LinkedHashMap<String,Object>();
@@ -82,9 +78,8 @@ public class AccountDetailController {
 		
 		LinkedHashMap<String, Integer> accountDetailMap = accountDetailService.sumLabelCategory(accountDetailList);
 		
-		map.put("list", accountDetailList = accountDetailList.subList(0, 5)); //0~4번까지 5개 리스트 입력
+		map.put("list", accountDetailList = accountDetailList.subList(0, (accountDetailList.size()<5) ? accountDetailList.size() : 5)); //0~4번까지 5개 리스트 입력
 		map.put("map", accountDetailMap);
-		System.out.println(map.toString());
 		 //최근 5개만 골라서 전송
 		
 		return map;

@@ -9,7 +9,9 @@
 $(function() {
 	let countinput = 1;
 	//ajax로 resultbudget에 월간 입력값 조회
-	
+	$('#moneyinput1').on('input', function() {
+            this.value = this.value.replace(/[^\d]/g, '');
+    });//인풋에 입력시 숫자외의 값 제거
 	
 	$.ajax({
     	url: "budgetfirst",
@@ -23,7 +25,6 @@ $(function() {
 	
 	$('#addLine').click(function() {
 		countinput = countinput+1;
-		console.log(countinput);
 		$('#budgetoption').append('<br>'+
 				'<select name="budget'+countinput+'" id="budget'+countinput+'">'
 				  +'<option value="주거/통신">주거/통신</option>'
@@ -45,6 +46,11 @@ $(function() {
 		+'<input id="moneyinput'
 		+countinput+'" placeholder="금액 입력란" class="moneyinput">');
 		
+		
+        $('#moneyinput' + countinput).on('input', function() {
+            this.value = this.value.replace(/[^\d]/g, '');
+        });//인풋에 입력시 숫자외의 값 제거
+        
 	})//한줄추가
 	
 

@@ -7,6 +7,10 @@
 <script type="text/javascript">
 	$(function() {
 		let countinput = 1;
+		$('#moneyinput1').on('input', function() {
+            this.value = this.value.replace(/[^\d]/g, '');
+   		});//인풋에 입력시 숫자외의 값 제거
+		
 		//ajax로 resultexpenses에 고정지출값 조회
 
 		$.ajax({
@@ -43,8 +47,11 @@
 													+ '<option value="기타">기타</option>'
 													+ '</select> '
 													+ '<input id="moneyinput'
-		+countinput+'" placeholder="금액 입력란" class="moneyinput">');
-
+													+countinput+'" placeholder="금액 입력란" class="moneyinput">');
+							
+					        $('#moneyinput' + countinput).on('input', function() {
+					            this.value = this.value.replace(/[^\d]/g, '');
+					        });//인풋에 입력시 숫자외의 값 제거
 						})//한줄추가
 
 		$('#addexpenses').click(function() {

@@ -4,8 +4,8 @@
 <insert id="insert" parameterType="accountGPTDTO" useGeneratedKeys="true" keyProperty="SEQ">
 		insert into account_gpt values (#{seq},#{accountBookId},#{content},#{createAt})
 	</insert>
-	<select id="one" parameterType="String" resultType="accountGPTDTO">
-		select * from account_gpt where ACCOUNT_BOOK_ID = #{accountBookId}
+	<select id="one" parameterType="accountGPTDTO" resultType="accountGPTDTO">
+		select * from account_gpt where ACCOUNT_BOOK_ID = #{accountBookId} and MONTH(CREATE_AT) = #{currentMonth} AND YEAR(CREATE_AT) = #{currentYear}
 	</select>
 	<select id="list" resultType="accountGPTDTO">
 		select * from account_gpt

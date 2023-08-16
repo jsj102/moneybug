@@ -14,7 +14,7 @@ public class AccountGPTDAO {
 		return my.insert("accountGPT.insert",accountGPTDTO);
 	}
 	
-	public AccountGPTDAO readOne(int  accountBookId) {
-		return my.selectOne("accountGPT.One",accountBookId);
+	public AccountGPTDTO readOne(AccountGPTDTO accountGPTDTO) {
+		return my.selectOne("accountGPT.one",accountGPTDTO);
 	}
 }

@@ -54,13 +54,11 @@ public class AccountBudgetService {
 	}
 
 
-	public List<AccountBudgetDTO> getListBudget(int accountBookId) {
-	// 페이지에 첫 접속시 LocalDate 비교해서 getList후반환
-		LocalDate currentDate = LocalDate.now();
+	public List<AccountBudgetDTO> getListBudget(int accountBookId,int selectYear,int selectMonth) {
 		AccountBudgetDTO accountBudgetDTO = new AccountBudgetDTO();
 		accountBudgetDTO.setAccountBookId(accountBookId);	
-		accountBudgetDTO.setCurrentMonth(currentDate.getMonthValue());
-		accountBudgetDTO.setCurrentYear(currentDate.getYear());
+		accountBudgetDTO.setCurrentMonth(selectMonth);
+		accountBudgetDTO.setCurrentYear(selectYear);
 		
 		return accountBudgetDAO.readList(accountBudgetDTO);
 	}

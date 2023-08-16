@@ -109,6 +109,10 @@ public class AccountGPTService {
 	
 	public int insert(AccountGPTDTO accountGPTDTO) {
 		return accountGPTDAO.insert(accountGPTDTO);
+	} 
+	
+	public AccountGPTDTO readOne(AccountGPTDTO accountGPTDTO) {
+		return accountGPTDAO.readOne(accountGPTDTO);
 	}
 
 }
