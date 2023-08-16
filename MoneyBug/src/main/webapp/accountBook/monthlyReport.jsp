@@ -249,7 +249,7 @@
             	$('#resultGPT').html(answer);
             },
             error : function() {
-				
+            	$('#resultGPT').html("아직 분석되지 않은 레포트입니다.");				
 			}
         });//gpt ajax
         
@@ -403,7 +403,7 @@
     		            	$('#resultGPT').html(answer);
     		            },
     		            error : function() {
-    						
+    		            	$('#resultGPT').html("아직 분석되지 않은 레포트입니다.");
     					}
     		        });//gpt ajax
                 },
