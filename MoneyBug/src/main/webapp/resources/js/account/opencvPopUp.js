@@ -1,6 +1,38 @@
-/**
- * 
- */
+
+/* 자식창을 닫으면서 값을 넘겨줌 */
+
+function closePopup() { //자식창(팝업창) 닫기
+	const priceInput = document.getElementById('price_input');
+	const valueToSend = priceInput.value;
+	const parentOrigin = "http://localhost:8181";
+	window.opener.postMessage(valueToSend, parentOrigin);
+    window.close(); // 팝업 창 닫기
+}
+
+/* ocr_button 자동 버튼 */
+
+ $(document).ready(function() {
+            $("#ocr_button").click(function() {
+                var formData = new FormData($("#ocr_form")[0]);
+                $.ajax({
+                    url: "/moneybug/ocr",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(result) {
+                        $("#price_input").val(result); // 결과를 입력란에 채움
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+ 
+ 
+ 
+ /* processButton 수동 버튼 */
 
   const inputElement = document.getElementById("fileInput");  // 파일 업로드 인풋 요소
   const canvas = document.getElementById('canvas');  // 캔버스 요소

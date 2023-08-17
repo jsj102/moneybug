@@ -65,12 +65,12 @@
 				<td><h6 align="center">영수증 OCR</h6></td>
 			</tr>
 			<tr>
-				<td> 업로드할 이미지 선택:<input type="file" id="fileInput" name="file"accept="image/*" /><td>
+				<td> 업로드할 이미지 선택:<input type="file" id="fileInput" name="file" accept="image/*" onchange="checkFileSelection()" /><td>
 			</tr>
 			<tr>
 				<td>
-				 		<input type="button" value="자동" id="ocr_button">
-						<input type="button" value="수동" id="processButton" onclick="performImageProcessingAndSend()">
+				 		<input type="button" value="자동" id="ocr_button" disabled>
+						<input type="button" value="수동" id="processButton" onclick="performImageProcessingAndSend()" disabled>
 				 		결과: <input name="price" type="text" id="price_input" value="">
 						<button onclick="closePopup()">확인</button>
 				</td>
@@ -87,35 +87,38 @@
 </div>
 <%@ include file="/resources/layout/footer.jsp"%>
 
-<script>
-  const fileInput = document.getElementById('fileInput');
-  const uploadedImage = document.getElementById('uploadedImage');
 
-  fileInput.addEventListener('change', function() {
-    const selectedFile = fileInput.files[0];
+<script> //파일 업로드가 없을 때  자동,수동 버튼을 누를 수 없음. 파일업로드 되었을 때 이미지 파일인 경우에만 자동, 수동 버튼을 누를 수 있음.
+function checkFileSelection() {
+    const fileInput = document.getElementById('fileInput');
+    const ocrButton = document.getElementById('ocr_button');
+    const processButton = document.getElementById('processButton');
 
-    if (selectedFile) {
-      const reader = new FileReader();
-
-      reader.onload = function(e) {
-        uploadedImage.src = e.target.result;
-      };
-
-      reader.readAsDataURL(selectedFile);
+    if (fileInput.files.length > 0) {
+        const selectedFile = fileInput.files[0];
+        
+        if (selectedFile.type.includes('image')) { // 이미지 파일인 경우
+            ocrButton.disabled = false;
+            processButton.disabled = false;
+        } else { // 이미지 파일이 아닌 경우
+            ocrButton.disabled = true;
+            processButton.disabled = true;
+        }
+    } else { // 파일이 선택되지 않은 경우
+        ocrButton.disabled = true;
+        processButton.disabled = true;
     }
-  });
-</script>
-  <script async src="https://docs.opencv.org/master/opencv.js" onload="onOpenCvReady();" type="text/javascript">
-  </script>
-  <script src="/moneybug/resources/js/account/opencv.js"></script>
-  <script src="/moneybug/resources/js/account/ocrPost.js"></script>
-
-<script>
-function closePopup() { //자식창(팝업창) 닫기
-	const priceInput = document.getElementById('price_input');
-	const valueToSend = priceInput.value;
-	const parentOrigin = "http://localhost:8181";
-	window.opener.postMessage(valueToSend, parentOrigin);
-    window.close(); // 팝업 창 닫기
 }
 </script>
+
+<!-- Opencv.js를 사용하기 위해서 -->
+<script async src="https://docs.opencv.org/master/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+
+<!-- 
+<포함된 스크립트>
+1. 자식창을 닫으면서 값을 넘겨줌
+2. ocr_button 자동 버튼
+3. processButton 수동 버튼
+ -->
+<script src="/moneybug/resources/js/account/opencvPopUp.js"></script>
+
