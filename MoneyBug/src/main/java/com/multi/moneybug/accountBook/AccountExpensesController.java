@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AccountExpensesController {
 	@Autowired
-	AccountExpensesService accountExpensesService;
+	private AccountExpensesService accountExpensesService;
 	
 	@RequestMapping("accountBook/expensesupdate")
 	public void budgetupdate(@RequestParam("expensesList") String expensesList, @RequestParam("moneyList") String moneyList, Model model) {

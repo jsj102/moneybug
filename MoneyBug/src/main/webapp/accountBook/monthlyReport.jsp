@@ -12,17 +12,16 @@
 	<!-- 일별그래프 - 내역 -->
 	<!-- GPT -->
 	<!-- 선언만 먼저 해두고 ajax후에 success의 result로 chart생성 -->
-	<div align="left">
+	<div align="right">
 		<label for="year">년 : </label>
 			<select id="year" name="year">
-  			<!-- 여기에 년도 옵션을 추가 -->
 		</select>
 
 		<label for="month">월 : </label>
 			<select id="month" name="month">
-  			<!-- 여기에 월 옵션을 추가 -->
 		</select>
 		<button id="moveReport">이동</button>
+		<button id="reportDownload">다운로드</button>
 	</div>
 	<h3>월간 지출 차트</h3>
 	<div id="chartcontent" style="display: flex; width: 1100px; height: 655px; border: 1px solid #993300;">
@@ -222,7 +221,7 @@
 					chart2 = new Chart(ctx2, config2);
 				},//2차 success
 				error: function(xhr, status, error) {
-	                var errorMessage = "2차 오류 상태 코드: " + xhr.status + "\n"
+	                let errorMessage = "2차 오류 상태 코드: " + xhr.status + "\n"
 	                    + "오류 메시지: " + error + "\n" + "오류 타입: "
 	                    + status;
 	                alert(errorMessage);
@@ -230,7 +229,7 @@
 				}); // ajax2차
             },
             error: function(xhr, status, error) {
-                var errorMessage = "오류 상태 코드: " + xhr.status + "\n"
+                let errorMessage = "오류 상태 코드: " + xhr.status + "\n"
                     + "오류 메시지: " + error + "\n" + "오류 타입: "
                     + status;
                 alert(errorMessage);
@@ -386,7 +385,7 @@
     					chart2.update();
     				},//2차 success
     				error: function(xhr, status, error) {
-    	                var errorMessage = "2차 오류 상태 코드: " + xhr.status + "\n"
+    	                let errorMessage = "2차 오류 상태 코드: " + xhr.status + "\n"
     	                    + "오류 메시지: " + error + "\n" + "오류 타입: "
     	                    + status;
     	                alert(errorMessage);
@@ -408,7 +407,7 @@
     		        });//gpt ajax
                 },
                 error: function(xhr, status, error) {
-                    var errorMessage = "오류 상태 코드: " + xhr.status + "\n"
+                    let errorMessage = "오류 상태 코드: " + xhr.status + "\n"
                         + "오류 메시지: " + error + "\n" + "오류 타입: "
                         + status;
                     alert(errorMessage);
@@ -416,8 +415,24 @@
             }); // ajax1차 - 페이지 호출시 자동
 		})
         
-        
-    });
+        $('#reportDownload').click(function() {
+			$.ajax({
+				url : "downloadPDF",
+				method : "POST",
+				data : {
+					accountBookId : 0,
+					year : $('#year').val(),
+					month : $('#month').val()
+				},
+				success : function(res) {
+					
+				},
+				error : function() {
+					
+				}
+			})
+		})//reportDownload
+    });//$
 </script>
 </div>
 <%@ include file="../resources/layout/footer.jsp"%>

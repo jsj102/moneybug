@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class AccountDetailController {
 
 	@Autowired
-	AccountDetailService accountDetailService;
+	private AccountDetailService accountDetailService;
 	
 	@RequestMapping("insert.accountDetail")
 	public String insert(AccountDetailDTO accountDetailDTO, Model model) {

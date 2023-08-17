@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class AccountBudgetController {
 	@Autowired
-	AccountBudgetService accountBudgetService;
+	private AccountBudgetService accountBudgetService;
 	
 	@RequestMapping("accountBook/budgetupdate")
 	public void budgetupdate(@RequestParam("budgetList") String budgetList, @RequestParam("moneyList") String moneyList, Model model) {
@@ -39,7 +39,7 @@ public class AccountBudgetController {
 	
 	
 	@Autowired
-	AccountExpensesService accountExpensesService;
+	private AccountExpensesService accountExpensesService;
 	
 	@RequestMapping("accountBook/monthlyReportRequestBudgetAndExpenses")
 	@ResponseBody
