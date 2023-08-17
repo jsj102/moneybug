@@ -1,35 +1,57 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<script></script>
-<%@ include file="../resources/layout/header.jsp"%>
 
-<div id="nav" class="dropdown">
-	<h2>
-		<메뉴>
-	</h2>
-	<a href="/moneybug/accountBook/accountDetail_List.jsp">내역 작성</a>
+<script type="text/javascript">  //입력란 예외처리
+        function checkWrite() {
+            const priceInput = document.getElementById("price_input");
+            const descriptionInput = document.getElementById("description");
 
-	<button class="dropbtn">보고서</button>
-	<div class="dropdown-content">
-		<a href="index.jsp">●월별보고서</a> <a href="index.jsp">●월별지출</a> <a
-			href="index.jsp">●월별수입</a>
-	</div>
-	<br> <br>
-	<button class="dropbtn">설정</button>
-	<div class="dropdown-content">
-		<a href="index.jsp">●목표설정</a><br>
-	</div>
-</div>
+            if (priceInput.value === "") {
+                alert("금액을 입력하십시오!");
+            } else if (isNaN(priceInput.value)) {
+                alert("금액에는 숫자만 입력하십시오!");
+            } else if (descriptionInput.value === "") {
+                alert("내용을 입력하십시오!");
+            } else {
+                document.getElementById("writeForm").submit();
+            }
+        }
+</script>
+<%@ include file="../resources/layout/header.jsp"%>  <!-- header -->
+<%@ include file="../resources/layout/accountNav.jsp"%> <!-- Nav -->
 
-<div id="section">
-	<form action="/moneybug/insert.accountDetail">
+<!-- 입력 테이블 스타일 -->
+<style>
+    #section table {  
+        width: 500px;
+        height: 500px;
+        background-color: rgba(255, 255, 255, 0.295);
+		border-radius: 30px;
+		border: 1px transparent solid;
+		border-spacing: 0px;
+    }
+    
+    #section td {
+        font-size: 16px; /* 필요한대로 글꼴 크기 조정 */
+        font-weight: bold; /* 텍스트를 굵게 표시 */
+        padding: 10px;
+       
+    }
+</style>
+
+<div id="section" align="center">  <!--  section -->
+	<form action="/moneybug/insert.accountDetail" id="writeForm">
 		<!-- ../insert.accountDetail -->
-		<table>
+	
+		<br>
+		<br>
+		<table style="width: 500px; height: 500px">
 			<tr>
 				<td colspan="2" style="text-align: center">입력</td>
 			</tr>
 			<tr>
-				<td><input name="accountBookId" type="text" value="1">가계부
-					아이디</td>
+				<td>
+					<input name="accountBookId" type="hidden" value="1">
+				</td>
 			</tr>
 			<tr>
 				<td><input type='date' name="usedAt" id="usedAt" /></td>
@@ -41,10 +63,12 @@
 				</select></td>
 			</tr>
 			<tr>
-				<td>금액</td>
-			</tr>
+				<td>금액<input type="button" value="영수증 OCR" onclick="showPopup();"/></td>
+			</tr>			
 			<tr>
-				<td><input name="price" type="text">원</td>
+			
+
+				<td><input type="text" name="price" id="price_input" value="" />원</td>
 			</tr>
 			<tr>
 				<td>분류</td>
@@ -72,37 +96,72 @@
 				<td>내용</td>
 			</tr>
 			<tr>
-				<td><textarea name="description" cols="30" rows="3"
-						placeholder="영수증 사진을 통해서 기록하려면 오른쪽 OCR 버튼을 이용해주세요..."></textarea>
+				<td><textarea name="description" cols="30" rows="3" placeholder="내용을 작성해주세요..." id="description" value=""></textarea>
 					 
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<button>저장</button>
+					
+					<input type="button" value="저장" onclick="javascript:checkWrite()">
+			
 				</td>
 			</tr>
 		</table>
 	</form>
-
-<h6>OCR 이미지 업로드</h6>
-<form action="" method="post" enctype="multipart/form-data">
-                업로드할 이미지 선택:<br><input type="file" name="file" id="file">
-<input type="submit" value="OCR" name="submit">
-</form>
 </div>
 
-
-
-
-
+<%@ include file="../resources/layout/accountAside.jsp"%>
 <%@ include file="../resources/layout/footer.jsp"%>
 
-<script type="text/javascript">
-// 오늘 날짜를 가져옵니다.
+<!--  Opencv, OCR 팝업창 -->
+<script>
+function showPopup() {
+	  window.open("opencvPopUp.jsp", "_blank", "width=500, height=1000, left=100, top=50");
+}
+</script>
+
+<!-- 현재 날짜를 기본값으로-->
+<script>
+//오늘 날짜를 가져옵니다.
 const currentDate = new Date();
 // 'YYYY-MM-DD' 형식의 날짜 문자열로 변환합니다.
 const dateString = currentDate.toISOString().split('T')[0];
 // input 요소의 value 속성에 날짜를 설정합니다.
 document.getElementById('usedAt').value = dateString;
 </script>
+
+<!-- 팝업창이 닫힐 때, POST 메세지로 자식창으로 부터 부모창에 결과값을 보여줌 -->
+<script>
+//부모 창 코드 내부
+const allowedOrigin = "http://localhost:8181"; // 허용된 출처로 대체
+
+window.addEventListener("message", receiveMessage, false);
+
+function receiveMessage(event) {
+  if (event.origin !== allowedOrigin) {
+    console.log("신뢰할 수 없는 출처에서 메시지를 받았습니다:", event.origin);
+    return;
+  }
+
+  const receivedValue = event.data;
+  console.log("팝업에서 받은 값:", receivedValue);
+
+  // <input> 요소에 receivedValue 값을 넣어줍니다.
+  const priceInput = document.getElementById('price_input');
+  priceInput.value = receivedValue;
+}
+
+</script>
+
+<!--  script만 따로 뺏을 때 -->
+
+<!-- 
+<script src="../resources/js/opencvPopUp.js"></script>
+-->
+
+<!-- 
+<script src="../resources/js/currentDate.js"></script>
+
+-->
+

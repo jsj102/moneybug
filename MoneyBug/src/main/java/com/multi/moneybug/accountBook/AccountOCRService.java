@@ -30,9 +30,11 @@ import org.springframework.stereotype.Service;
 @PropertySource("classpath:key.properties")
 public class AccountOCRService {
 
+	//OCR 키 값
     @Value("${api.ocr}")
     private String key;
 
+    //OCR API
     public String processOCR(HttpServletRequest request) throws IOException {
         String apiURL = "https://2gynp8yln1.apigw.ntruss.com/custom/v1/24318/3f80d7f6c6c01256a43336e3c2f64477e0b999bb4d309021de87cf002387aa30/infer";
         String requestId = UUID.randomUUID().toString();
@@ -59,12 +61,13 @@ public class AccountOCRService {
         return jsonParsing(result);
     }
     
+    //JSON 파일 생성
     private String createRequestJSON(String requestId, long timestamp) {
         return String.format("{\"images\": [{\"format\": \"jpg\", \"name\": \"demo\"}], \"requestId\": \"%s\", \"version\": \"V2\", \"timestamp\": %d}", requestId, timestamp);
 	}
 
+    // JSON 파싱
     private String jsonParsing(String ocrResponse) {
-		 // JSON 파싱
         JSONObject jsonResponse = new JSONObject(ocrResponse);
         JSONArray imagesArray = jsonResponse.getJSONArray("images");
         String inferTextValue = "";
@@ -99,7 +102,7 @@ public class AccountOCRService {
         
 	 }
     
-    
+    // 파일 업로드
     private MultipartEntityBuilder createMultipartEntityBuilder(String requestId, long timestamp, HttpServletRequest request) throws java.io.IOException, org.apache.tomcat.util.http.fileupload.FileUploadException {
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         
