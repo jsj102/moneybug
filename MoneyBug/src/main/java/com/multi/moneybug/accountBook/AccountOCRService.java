@@ -103,7 +103,7 @@ public class AccountOCRService {
 	 }
     
     // 파일 업로드
-    private MultipartEntityBuilder createMultipartEntityBuilder(String requestId, long timestamp, HttpServletRequest request) throws java.io.IOException, org.apache.tomcat.util.http.fileupload.FileUploadException {
+    private MultipartEntityBuilder createMultipartEntityBuilder(String requestId, long timestamp, HttpServletRequest request) throws IOException {
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         
         builder.addTextBody("message", createRequestJSON(requestId, timestamp), ContentType.APPLICATION_JSON);
