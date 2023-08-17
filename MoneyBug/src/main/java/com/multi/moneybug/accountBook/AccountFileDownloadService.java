@@ -6,7 +6,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,7 +22,7 @@ public class AccountFileDownloadService {
 	        contentStream.setFont(PDType1Font.COURIER, 12);
 	        
 	        // 이동할 y 좌표 값을 설정
-	        float newX = page.getMediaBox().getWidth() - 50;
+	        float newX = page.getMediaBox().getWidth();
 	        float newY = page.getMediaBox().getHeight() - 50; // 예: 50 포인트 아래로 이동
 	        
 	        contentStream.beginText();
