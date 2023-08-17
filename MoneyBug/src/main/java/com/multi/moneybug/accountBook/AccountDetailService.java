@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class AccountDetailService {
 	
 	@Autowired
-	AccountDetailDAO accountDetailDAO;
+	private AccountDetailDAO accountDetailDAO;
 	
 	public int insert(AccountDetailDTO accountDetailDTO) {
 		return accountDetailDAO.insert(accountDetailDTO);
@@ -49,6 +49,13 @@ public class AccountDetailService {
 		return accountDetailDAO.readListMonth(accountDetailDTO);
 	}
 	
+	public AccountDetailDTO makeDTOForReadMonth(int accountBookId, int currentYear, int currentMonth) {
+		AccountDetailDTO accountDetailDTO = new AccountDetailDTO();
+		accountDetailDTO.setAccountBookId(accountBookId);
+		accountDetailDTO.setCurrentYear(currentYear);
+		accountDetailDTO.setCurrentMonth(currentMonth);
+		return accountDetailDTO;
+	}
 	
 	public HashMap<String, Integer> sumCategory(List<AccountDetailDTO> list) {
 		HashMap<String, Integer> categoryMapInt = new HashMap<String, Integer>();
@@ -83,13 +90,5 @@ public class AccountDetailService {
 		return categoryMapInt;
 	}
 
-
-	
-	public void expensesListMatchFormat(List<AccountExpensesDTO> list,HashMap<String, Integer> map) {
-		
-	}
-	public void budgetListMatchFormat(List<AccountBudgetDTO> list,HashMap<String, Integer> map) {
-		
-	}
 }
 

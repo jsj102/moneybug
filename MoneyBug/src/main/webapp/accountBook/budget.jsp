@@ -10,7 +10,7 @@ $(function() {
 	let countinput = 1;
 	//ajax로 resultbudget에 월간 입력값 조회
 	$('#moneyinput1').on('input', function() {
-            this.value = this.value.replace(/[^\d]/g, '');
+            this.value = this.value.replace(/[^\d]/g, ''); //정규식) ^-> 제외한 문자를 찾음. d-> 숫자 = 숫자를 제외한 문자를 찾음  / g->this.value의 전역에서 / ''로 replace
     });//인풋에 입력시 숫자외의 값 제거
 	
 	$.ajax({

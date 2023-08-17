@@ -415,23 +415,41 @@
             }); // ajax1차 - 페이지 호출시 자동
 		})
         
-        $('#reportDownload').click(function() {
-			$.ajax({
-				url : "downloadPDF",
-				method : "POST",
-				data : {
-					accountBookId : 0,
-					year : $('#year').val(),
-					month : $('#month').val()
-				},
-				success : function(res) {
-					
-				},
-				error : function() {
-					
-				}
-			})
-		})//reportDownload
+		$('#reportDownload').click(function() {
+    		let accountBookId = 0; // 어떻게 accountBookId 값을 가져올지에 따라 설정
+   			let year = $('#year').val();
+    		let month = $('#month').val();
+    		
+    		$.ajax({
+        		url: "downloadPDF",
+        		method: "POST",
+        		xhrFields: {
+            		responseType: "blob" // 바이너리 데이터를 받아오도록 responseType 설정
+        		},
+        		data: {
+            		accountBookId: accountBookId,
+            		year: year,
+            		month: month
+        		},
+        		success: function(data) {
+            		// 다운로드 링크 생성
+            		let blob = new Blob([data], { type: "application/pdf" });
+            		let link = document.createElement("a");
+            		link.href = window.URL.createObjectURL(blob);
+            
+            		// 파일명 설정
+            		link.download = "accountBook_" + accountBookId + "_" + year + "_" + month + ".pdf";
+            
+            		document.body.appendChild(link);
+            		link.click();
+            		document.body.removeChild(link);
+        		},
+        		error: function() {
+            		
+        		}
+    		});
+		});  //reportDownload
+
     });//$
 </script>
 </div>
