@@ -111,9 +111,7 @@
   <script src="/moneybug/resources/js/account/ocrPost.js"></script>
 
 <script>
-function closePopup() {
-	//opener.parent.location.reload();
-	//window.opener.onunload();
+function closePopup() { //자식창(팝업창) 닫기
 	const priceInput = document.getElementById('price_input');
 	const valueToSend = priceInput.value;
 	const parentOrigin = "http://localhost:8181";
