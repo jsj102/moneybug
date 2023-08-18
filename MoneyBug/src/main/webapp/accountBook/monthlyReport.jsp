@@ -52,6 +52,8 @@
     $(function() {
 		const ctx = document.getElementById('myChart');
 		const ctx2 = document.getElementById('myChart2');
+		let chart1;
+		let chart2;
     	// 년도 옵션 추가
     	const yearSelect = document.getElementById("year");
     	const currentYear = new Date().getFullYear();
@@ -417,38 +419,35 @@
         
 		$('#reportDownload').click(function() {
     		let accountBookId = 0; // 어떻게 accountBookId 값을 가져올지에 따라 설정
-   			let year = $('#year').val();
+    		let year = $('#year').val();
     		let month = $('#month').val();
-    		
+    
     		$.ajax({
         		url: "downloadPDF",
         		method: "POST",
         		xhrFields: {
-            		responseType: "blob" // 바이너리 데이터를 받아오도록 responseType 설정
+            		responseType: "blob" //responseType을 blob으로 설정해 바이너리 데이터를 받아오도록함
         		},
         		data: {
             		accountBookId: accountBookId,
             		year: year,
             		month: month
         		},
-        		success: function(data) {
-            		// 다운로드 링크 생성
-            		let blob = new Blob([data], { type: "application/pdf" });
+		        success: function(data) {
+        		    // 다운로드 링크 생성
+            		let file = new File([data], "accountBook_" + accountBookId + "_" + year + "_" + month + ".pdf", { type: "application/pdf" }); //file객체를 이용해 binary데이터(data)를 "~"형태의 이름으로 저장 MIME타입은 application/pdf로 pdf임을 명시
             		let link = document.createElement("a");
-            		link.href = window.URL.createObjectURL(blob);
-            
-            		// 파일명 설정
-            		link.download = "accountBook_" + accountBookId + "_" + year + "_" + month + ".pdf";
-            
+            		link.href = URL.createObjectURL(file); //window객체의 하위객체인 URL 객체를 통해 파일 접근링크 생성
+            		link.download = file.name; // 파일 다운로드
             		document.body.appendChild(link);
             		link.click();
             		document.body.removeChild(link);
         		},
         		error: function() {
-            		
+            
         		}
     		});
-		});  //reportDownload
+		}); // reportDownload
 
     });//$
 </script>

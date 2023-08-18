@@ -44,7 +44,7 @@ $(function() {
 				  +'<option value="기타">기타</option>'
 				+'</select> '
 		+'<input id="moneyinput'
-		+countinput+'" placeholder="금액 입력란" class="moneyinput">');
+		+countinput+'" placeholder="금액 입력란" class="moneyinput" value="0">');
 		
 		
         $('#moneyinput' + countinput).on('input', function() {
@@ -116,7 +116,7 @@ $(function() {
 					<option value="마트/편의점/쇼핑">마트/편의점/쇼핑</option>
 					<option value="반려동물">반려동물</option>
 					<option value="기타">기타</option>
-		</select> <input id="moneyinput1" placeholder="금액 입력란" class="moneyinput">
+		</select> <input id="moneyinput1" placeholder="금액 입력란" class="moneyinput" value="0">
 		<button id="addBudget">완료</button>
 
 	</div>

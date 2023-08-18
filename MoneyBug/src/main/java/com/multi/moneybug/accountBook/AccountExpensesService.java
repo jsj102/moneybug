@@ -31,7 +31,6 @@ public class AccountExpensesService {
 				accountExpensesDTO.setAccountBookId(accountBookId);	
 				accountExpensesDTO.setFixedCategory(expensesArray[i]);
 				accountExpensesDTO.setPrice(money);
-//		accountExpensesDTO.setSeq(seq);
 
 				// 파라메터 DTO / 현재 년,월, account_book_id, category(expenses) , price(money) ,
 				if(isExpensesNull(accountExpensesDAO.readOne(accountExpensesDTO))) {
@@ -50,7 +49,6 @@ public class AccountExpensesService {
 
 
 	public List<AccountExpensesDTO> getListExpenses(int accountBookId) {
-	// 페이지에 첫 접속시 LocalDate 비교해서 getList후반환
 		AccountExpensesDTO accountExpensesDTO = new AccountExpensesDTO();
 		accountExpensesDTO.setAccountBookId(accountBookId);	
 		
@@ -90,7 +88,7 @@ public class AccountExpensesService {
 			Integer.parseInt(str);
 			return true;
 		} catch (NumberFormatException e) {
-			System.out.println("예산에 숫자외의 값 입력 들어옴");
+			System.out.println("고정지출에 숫자외의 값 입력 들어옴");
 			return false;
 		}
 
