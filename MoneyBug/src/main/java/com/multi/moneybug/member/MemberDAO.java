@@ -28,5 +28,14 @@ import org.springframework.stereotype.Repository;
 		public List<MemberDTO> select(MemberDTO memberDTO) {
 			return my.selectList("member.findall", memberDTO);
 		}
+
+		public int findNick(String userNickname) {
+			return my.selectOne("member.findNick", userNickname);
+		}
+
+		public String getUserIdByUserNickname(String userNickname) {
+			 return my.selectOne("member.getUserIdByUserNickname", userNickname);
+		}
+
 	
 }

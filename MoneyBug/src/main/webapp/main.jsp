@@ -125,8 +125,30 @@
             <div class="col-md-6 text-right">
                 <a href="#" class="btn btn-custom6 btn-lg btn-block mb-3">이벤트</a>
             </div>
+            <div class="col-md-6 text-right">
+                <a href="/moneybug/product/Product_test.jsp" class="btn btn-custom5 btn-lg btn-block mb-3">굿즈 판매</a>
+            </div>
         </div>
     </div>
+    
+     <div class="main-content">
+           <% 
+        String userNickname = (String) session.getAttribute("userNickname");
+
+        if (userNickname != null && !userNickname.isEmpty()) {
+            %>
+            <p>안녕하세요, <%= userNickname %>님. 사용자 정보를 확인하세요.</p>
+            <a href="#" class="btn btn-custom btn-lg btn-block mb-3">사용자 정보 확인</a>
+            <a href="/moneybug/logout.do" class="btn btn-custom btn-lg btn-block mb-3">로그아웃</a>
+            <%
+        } else {
+            %>
+            <p>사용자 정보가 없습니다.</p>
+            <a href="login.jsp" class="btn btn-custom btn-lg btn-block mb-3">로그인 페이지로 이동</a>
+            <%
+        }
+        %>
+        </div>
 
 
 </body>

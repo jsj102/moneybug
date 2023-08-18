@@ -22,8 +22,6 @@
 		<!-- var naver_id_login = new naver_id_login("P6wa8kR9Cvd1_JJOtheu", "http://localhost:9091/moneybug/navercallback.jsp"); -->
 		<!-- var naver_id_login = new naver_id_login("P6wa8kR9Cvd1_JJOtheu", "http://localhost:8989/moneybug/navercallback.jsp"); -->
 		<!-- var naver_id_login = new naver_id_login("P6wa8kR9Cvd1_JJOtheu", "http://localhost:8080/moneybug/navercallback.jsp"); -->
-
-			alert(naver_id_login.oauthParams.access_token);
 			naver_id_login.get_naver_userprofile("naverSignInCallback()");
 			console.log('콜백실행')  
 		  
@@ -45,9 +43,8 @@
 					'userName': name
 					},
 				success : function(member) {	
-					alert("ajax success");
 					if(member === 'old') {
-						window.location.href = '${pageContext.request.contextPath}/main.jsp';
+						window.location.href = '${pageContext.request.contextPath}/main.do';
 					} else if (member == 'new') {
 						window.location.href = '${pageContext.request.contextPath}/member/myPage.do';
 					} else {

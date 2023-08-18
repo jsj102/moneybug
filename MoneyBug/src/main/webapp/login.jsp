@@ -133,9 +133,8 @@
 				    'userName': responsePayload.name
 					},
 				success : function(member) {	
-					alert("ajax success");
 					if(member === 'old') {
-						window.location.href = '${pageContext.request.contextPath}/main.jsp';
+						window.location.href = '${pageContext.request.contextPath}/main.do';
 					} else if (member == 'new') {
 						window.location.href = '${pageContext.request.contextPath}/member/myPage.do';
 					} else {
