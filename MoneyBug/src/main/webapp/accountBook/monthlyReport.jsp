@@ -12,17 +12,16 @@
 	<!-- 일별그래프 - 내역 -->
 	<!-- GPT -->
 	<!-- 선언만 먼저 해두고 ajax후에 success의 result로 chart생성 -->
-	<div align="left">
+	<div align="right">
 		<label for="year">년 : </label>
 			<select id="year" name="year">
-  			<!-- 여기에 년도 옵션을 추가 -->
 		</select>
 
 		<label for="month">월 : </label>
 			<select id="month" name="month">
-  			<!-- 여기에 월 옵션을 추가 -->
 		</select>
 		<button id="moveReport">이동</button>
+		<button id="reportDownload">다운로드</button>
 	</div>
 	<h3>월간 지출 차트</h3>
 	<div id="chartcontent" style="display: flex; width: 1100px; height: 655px; border: 1px solid #993300;">
@@ -53,6 +52,8 @@
     $(function() {
 		const ctx = document.getElementById('myChart');
 		const ctx2 = document.getElementById('myChart2');
+		let chart1;
+		let chart2;
     	// 년도 옵션 추가
     	const yearSelect = document.getElementById("year");
     	const currentYear = new Date().getFullYear();
@@ -222,7 +223,7 @@
 					chart2 = new Chart(ctx2, config2);
 				},//2차 success
 				error: function(xhr, status, error) {
-	                var errorMessage = "2차 오류 상태 코드: " + xhr.status + "\n"
+	                let errorMessage = "2차 오류 상태 코드: " + xhr.status + "\n"
 	                    + "오류 메시지: " + error + "\n" + "오류 타입: "
 	                    + status;
 	                alert(errorMessage);
@@ -230,7 +231,7 @@
 				}); // ajax2차
             },
             error: function(xhr, status, error) {
-                var errorMessage = "오류 상태 코드: " + xhr.status + "\n"
+                let errorMessage = "오류 상태 코드: " + xhr.status + "\n"
                     + "오류 메시지: " + error + "\n" + "오류 타입: "
                     + status;
                 alert(errorMessage);
@@ -249,7 +250,7 @@
             	$('#resultGPT').html(answer);
             },
             error : function() {
-				
+            	$('#resultGPT').html("아직 분석되지 않은 레포트입니다.");				
 			}
         });//gpt ajax
         
@@ -386,7 +387,7 @@
     					chart2.update();
     				},//2차 success
     				error: function(xhr, status, error) {
-    	                var errorMessage = "2차 오류 상태 코드: " + xhr.status + "\n"
+    	                let errorMessage = "2차 오류 상태 코드: " + xhr.status + "\n"
     	                    + "오류 메시지: " + error + "\n" + "오류 타입: "
     	                    + status;
     	                alert(errorMessage);
@@ -403,12 +404,12 @@
     		            	$('#resultGPT').html(answer);
     		            },
     		            error : function() {
-    						
+    		            	$('#resultGPT').html("아직 분석되지 않은 레포트입니다.");
     					}
     		        });//gpt ajax
                 },
                 error: function(xhr, status, error) {
-                    var errorMessage = "오류 상태 코드: " + xhr.status + "\n"
+                    let errorMessage = "오류 상태 코드: " + xhr.status + "\n"
                         + "오류 메시지: " + error + "\n" + "오류 타입: "
                         + status;
                     alert(errorMessage);
@@ -416,8 +417,39 @@
             }); // ajax1차 - 페이지 호출시 자동
 		})
         
-        
-    });
+		$('#reportDownload').click(function() {
+    		let accountBookId = 0; // 어떻게 accountBookId 값을 가져올지에 따라 설정
+    		let year = $('#year').val();
+    		let month = $('#month').val();
+    
+    		$.ajax({
+        		url: "downloadPDF",
+        		method: "POST",
+        		xhrFields: {
+            		responseType: "blob" //responseType을 blob으로 설정해 바이너리 데이터를 받아오도록함
+        		},
+        		data: {
+            		accountBookId: accountBookId,
+            		year: year,
+            		month: month
+        		},
+		        success: function(data) {
+        		    // 다운로드 링크 생성
+            		let file = new File([data], "accountBook_" + accountBookId + "_" + year + "_" + month + ".pdf", { type: "application/pdf" }); //file객체를 이용해 binary데이터(data)를 "~"형태의 이름으로 저장 MIME타입은 application/pdf로 pdf임을 명시
+            		let link = document.createElement("a");
+            		link.href = URL.createObjectURL(file); //window객체의 하위객체인 URL 객체를 통해 파일 접근링크 생성
+            		link.download = file.name; // 파일 다운로드
+            		document.body.appendChild(link);
+            		link.click();
+            		document.body.removeChild(link);
+        		},
+        		error: function() {
+            
+        		}
+    		});
+		}); // reportDownload
+
+    });//$
 </script>
 </div>
 <%@ include file="../resources/layout/footer.jsp"%>

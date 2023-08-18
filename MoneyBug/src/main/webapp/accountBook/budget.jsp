@@ -10,7 +10,7 @@ $(function() {
 	let countinput = 1;
 	//ajax로 resultbudget에 월간 입력값 조회
 	$('#moneyinput1').on('input', function() {
-            this.value = this.value.replace(/[^\d]/g, '');
+            this.value = this.value.replace(/[^\d]/g, ''); //정규식) ^-> 제외한 문자를 찾음. d-> 숫자 = 숫자를 제외한 문자를 찾음  / g->this.value의 전역에서 / ''로 replace
     });//인풋에 입력시 숫자외의 값 제거
 	
 	$.ajax({
@@ -44,7 +44,7 @@ $(function() {
 				  +'<option value="기타">기타</option>'
 				+'</select> '
 		+'<input id="moneyinput'
-		+countinput+'" placeholder="금액 입력란" class="moneyinput">');
+		+countinput+'" placeholder="금액 입력란" class="moneyinput" value="0">');
 		
 		
         $('#moneyinput' + countinput).on('input', function() {
@@ -116,7 +116,7 @@ $(function() {
 					<option value="마트/편의점/쇼핑">마트/편의점/쇼핑</option>
 					<option value="반려동물">반려동물</option>
 					<option value="기타">기타</option>
-		</select> <input id="moneyinput1" placeholder="금액 입력란" class="moneyinput">
+		</select> <input id="moneyinput1" placeholder="금액 입력란" class="moneyinput" value="0">
 		<button id="addBudget">완료</button>
 
 	</div>

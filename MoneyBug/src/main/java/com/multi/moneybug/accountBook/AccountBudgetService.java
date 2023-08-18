@@ -1,8 +1,6 @@
 package com.multi.moneybug.accountBook;
 
-import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -38,7 +36,6 @@ public class AccountBudgetService {
 				accountBudgetDTO.setFixedCategory(budgetArray[i]);
 				accountBudgetDTO.setPrice(money);
 
-				// 파라메터 DTO / 현재 년,월, account_book_id, category(budget) , price(money) ,
 				if(isBudgetNull(accountBudgetDAO.readOne(accountBudgetDTO))) {
 					//insert해주기
 					accountBudgetDAO.insert(accountBudgetDTO);

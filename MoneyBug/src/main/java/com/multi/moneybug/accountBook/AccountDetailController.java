@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class AccountDetailController {
 
 	@Autowired
-	AccountDetailService accountDetailService;
+	private AccountDetailService accountDetailService;
 	
 	@RequestMapping("insert.accountDetail")
 	public String insert(AccountDetailDTO accountDetailDTO, Model model) {
@@ -59,13 +59,10 @@ public class AccountDetailController {
 		return "accountBook/accountDetail_read_one";
 	}
 
-	// 성능비교용 Service1개 사용 Join 사용추가
-
-// 성능비교용 Service 3개 사용
 	@RequestMapping("accountBook/monthlyReportRequestJSON")
 	@ResponseBody
 	public HashMap<String,Object> monthlyReportRequestJSON(Model model,@RequestParam("year") int year, @RequestParam("month") int month) {
-		int accountBookId=0; 									//나중에 accountBookId값 넣어주기
+		int accountBookId=0; 									//나중에 accountBookId값 넣어주기session으로
 		AccountDetailDTO accountDetailDTO = new AccountDetailDTO();
 		accountDetailDTO.setAccountBookId(accountBookId);
 		accountDetailDTO.setCurrentYear(year);
@@ -80,7 +77,6 @@ public class AccountDetailController {
 		
 		map.put("list", accountDetailList = accountDetailList.subList(0, (accountDetailList.size()<5) ? accountDetailList.size() : 5)); //0~4번까지 5개 리스트 입력
 		map.put("map", accountDetailMap);
-		 //최근 5개만 골라서 전송
 		
 		return map;
 	}
