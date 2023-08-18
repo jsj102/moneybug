@@ -34,5 +34,10 @@ public class MemberService {
 		int findResult = memberDAO.findNick(userNickname);
 		return findResult;
 	}
+	
+	public String getUserIdByUserNickname(String userNickname) {
+		String findId = memberDAO.getUserIdByUserNickname(userNickname);
+		return findId;
+	}
 
 }

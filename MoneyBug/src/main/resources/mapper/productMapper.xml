@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="product">
+	
+	<resultMap id="productResultMap" type="com.multi.moneybug.product.ProductDTO">
+    <id property="product_id" column="product_id"/>
+    <result property="product_type" column="product_type"/>
+    <result property="product_name" column="product_name"/>
+    <result property="product_img" column="product_img"/>
+    <result property="product_oriprice" column="product_oriprice"/>
+    <result property="product_price" column="product_price"/>
+    <result property="product_info" column="product_info"/>
+</resultMap>
+
+	
+	<select id="product_List" resultMap="productResultMap">
+		select * from product
+	</select>
+	
+	<select id="item" parameterType="int" resultType="productDTO">
+		select * from
+		product
+		where product_id = #{product_id}
+	</select>
+
+</mapper>

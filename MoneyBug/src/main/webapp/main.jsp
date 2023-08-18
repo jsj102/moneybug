@@ -125,6 +125,9 @@
             <div class="col-md-6 text-right">
                 <a href="#" class="btn btn-custom6 btn-lg btn-block mb-3">이벤트</a>
             </div>
+            <div class="col-md-6 text-right">
+                <a href="/moneybug/product/Product_test.jsp" class="btn btn-custom5 btn-lg btn-block mb-3">굿즈 판매</a>
+            </div>
         </div>
     </div>
     

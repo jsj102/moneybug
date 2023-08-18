@@ -12,33 +12,63 @@
 	<!-- 일별그래프 - 내역 -->
 	<!-- GPT -->
 	<!-- 선언만 먼저 해두고 ajax후에 success의 result로 chart생성 -->
-<h3>월간 지출 차트</h3>
-<div id="chartcontent" style="display: flex; width: 1100px; height: 655px; border: 1px solid #993300;">
-    <div style="flex: 1;" id="chartdiv">
-        <div id="mycharttest" style="width: 600px; height: 655px; border: 1px solid #993300;">
-            <canvas id="myChart" style="width: 600px; height: 655px; border: 1px solid #993300;"></canvas>
-        </div>
-    </div>
-    <div style="flex: 1; " id="MonthlyTalbe">
-    </div>
-</div>
-<br>
-<h3>최근 사용 내역(5회)</h3>
-<div id="mycharttest2" style="display: flex; width: 1100px; height: 650px; border: 1px solid #993300;">
-    <div style="flex: 1;">
-        <canvas id="myChart2" style="width: 600px; height: 650px; border: 1px solid #993300;"></canvas>
-    </div>
-    <div style="flex: 1;">
-        <div style=" border: 1px solid #993300; height: 340px;" id="RecentTable"></div>
-	<!-- DB에서 GPT답변 받아오는 div -->
-		<div id="resultGPT" style="padding: 5px;">GPT : 돈 아껴써라 마!!!
+	<div align="left">
+		<label for="year">년 : </label>
+			<select id="year" name="year">
+  			<!-- 여기에 년도 옵션을 추가 -->
+		</select>
+
+		<label for="month">월 : </label>
+			<select id="month" name="month">
+  			<!-- 여기에 월 옵션을 추가 -->
+		</select>
+		<button id="moveReport">이동</button>
+	</div>
+	<h3>월간 지출 차트</h3>
+	<div id="chartcontent" style="display: flex; width: 1100px; height: 655px; border: 1px solid #993300;">
+    	<div style="flex: 1;" id="chartdiv">
+        	<div id="mycharttest" style="width: 600px; height: 655px; border: 1px solid #993300;">
+            	<canvas id="myChart" style="width: 600px; height: 655px; border: 1px solid #993300;"></canvas>
+        	</div>
+    	</div>
+    	<div style="flex: 1; " id="MonthlyTalbe">
+    	</div>
+	</div>
+	<br>
+	<h3>최근 사용 내역(5회)</h3>
+	<div id="mycharttest2" style="display: flex; width: 1100px; height: 650px; border: 1px solid #993300;">
+    	<div style="flex: 1;">
+     	   <canvas id="myChart2" style="width: 600px; height: 650px; border: 1px solid #993300;"></canvas>
+    	</div>
+   	 <div style="flex: 1;">
+    	    <div style=" border: 1px solid #993300; height: 340px;" id="RecentTable"></div>
+		<!-- DB에서 GPT답변 받아오는 div -->
+			<div id="resultGPT" style="padding: 5px;">GPT : 돈 아껴써라 마!!!
 	
-		</div>
-    </div>
-</div>
+			</div>
+    	</div>
+	</div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript">
     $(function() {
+    	  // 년도 옵션 추가
+    	  const yearSelect = document.getElementById("year");
+    	  const currentYear = new Date().getFullYear();
+    	  for (let year = currentYear; year >= currentYear - 10; year--) {
+    	    const option = document.createElement("option");
+    	    option.value = year;
+    	    option.textContent = year;
+    	    yearSelect.appendChild(option);
+    	  }
+    	  console.log(document.getElementById("year"));
+    	  // 월 옵션 추가
+    	  const monthSelect = document.getElementById("month");
+    	  for (let month = 1; month <= 12; month++) {
+    	    const option = document.createElement("option");
+    	    option.value = month;
+    	    option.textContent = month;
+    	    monthSelect.appendChild(option);
+    	  }
         $.ajax({
             url: "monthlyReportRequestJSON",
             dataType: "json",
