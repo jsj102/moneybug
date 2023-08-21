@@ -60,9 +60,27 @@
 
 
 </style>
+
+	<script>
+		$(document).ready(function() {
+			$("#increase").click(function() {
+				var currentQuantity = parseInt($("#quantity").val());
+				$("#quantity").val(currentQuantity + 1);
+			});
+	
+			$("#decrease").click(function() {
+				var currentQuantity = parseInt($("#quantity").val());
+				if (currentQuantity > 0) {
+					$("#quantity").val(currentQuantity - 1);
+				}
+			});
+		});
+	</script>
+	
 </head>
 
 <body>
+
 
 	<!-- 로그인 컨테이너 login  -->
 	

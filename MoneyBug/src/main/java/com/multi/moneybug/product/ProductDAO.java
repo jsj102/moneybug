@@ -14,5 +14,21 @@ public class ProductDAO {
 	public List<ProductDTO> getAllProducts(ProductDTO productDTO) {
 		return my.selectList("product.product_List", productDTO);
 	}
+	
+	public ProductDTO getProductById(int productId) {
+		ProductDTO productDTO = my.selectOne("product.product_detail", productId);
+		return productDTO;
+	}
+	
+	 public List<ProductDTO> getProductsByIds(List<Integer> productIds) {
+	        return my.selectList("product.getProductsByIds", productIds);
+	 }
 
+	public List<ProductDTO> list(ProductDTO productDTO) {
+		return my.selectList("product.manageList");
+	}
+
+	public void insert(ProductDTO productDTO) {
+		my.insert("product.insert", productDTO);
+	}
 }

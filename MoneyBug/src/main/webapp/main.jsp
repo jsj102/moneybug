@@ -126,7 +126,7 @@
                 <a href="#" class="btn btn-custom6 btn-lg btn-block mb-3">이벤트</a>
             </div>
             <div class="col-md-6 text-right">
-                <a href="/moneybug/product/Product_test.jsp" class="btn btn-custom5 btn-lg btn-block mb-3">굿즈 판매</a>
+                <a href="product/shoplist" class="btn btn-custom5 btn-lg btn-block mb-3">굿즈 판매</a>
             </div>
         </div>
     </div>
@@ -144,6 +144,7 @@
         } else {
             %>
             <p>사용자 정보가 없습니다.</p>
+            
             <a href="login.jsp" class="btn btn-custom btn-lg btn-block mb-3">로그인 페이지로 이동</a>
             <%
         }
