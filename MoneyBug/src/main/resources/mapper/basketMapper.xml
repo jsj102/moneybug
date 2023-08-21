@@ -15,5 +15,24 @@
         FROM basket
         WHERE user_id = #{userId}
 	</select>
+	
+	 <!-- 장바구니에 상품이 있는지 체크하는 쿼리 -->
+    <select id="checkProductInBasket" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM basket
+        WHERE user_id = #{userId}
+        AND product_id = #{productId}
+    </select>
+    
+     <!-- 장바구니에 상품 업데이트하는 쿼리 -->
+    <update id="updateProductInBasket" parameterType="com.multi.moneybug.product.BasketDTO">
+        UPDATE basket
+        SET product_count = product_count + #{productCount}
+        WHERE user_id = #{userId}
+        AND product_id = #{productId}
+    </update>
 
+	<insert id="addToBasket" parameterType="BasketDTO">
+        INSERT INTO basket (user_id, product_id, product_count) VALUES (#{userId}, #{productId}, #{productCount})
+    </insert>
+    
 </mapper>

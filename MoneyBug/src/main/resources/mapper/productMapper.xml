@@ -3,13 +3,13 @@
 <mapper namespace="product">
 	
 	<resultMap id="productResultMap" type="com.multi.moneybug.product.ProductDTO">
-    <id property="product_id" column="product_id"/>
-    <result property="product_type" column="product_type"/>
-    <result property="product_name" column="product_name"/>
-    <result property="product_img" column="product_img"/>
-    <result property="product_oriprice" column="product_oriprice"/>
-    <result property="product_price" column="product_price"/>
-    <result property="product_info" column="product_info"/>
+    <id property="productId" column="productId"/>
+    <result property="productType" column="productType"/>
+    <result property="productName" column="productName"/>
+    <result property="productImg" column="productImg"/>
+    <result property="productOriprice" column="productOriprice"/>
+    <result property="productPrice" column="productPrice"/>
+    <result property="productInfo" column="productInfo"/>
 </resultMap>
 
 	
@@ -17,10 +17,28 @@
 		select * from product
 	</select>
 	
-	<select id="item" parameterType="int" resultType="productDTO">
+	<select id="product_detail" parameterType="int" resultType="productDTO">
 		select * from
 		product
-		where product_id = #{product_id}
+		where PRODUCT_ID = #{productId} 
 	</select>
+	
+		<select id="getProductsByIds" parameterType="java.util.List" resultMap="productResultMap">
+        SELECT *
+        FROM product
+        WHERE PRODUCT_ID IN
+        <foreach item="productId" collection="list" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+    </select>
+	
+	<select id="manageList" resultMap="productResultMap">
+		select * from product
+	</select>
+	
+	<insert id="insert" parameterType="productDTO" useGeneratedKeys="true" >
+	  insert into product 
+	  values (null,#{productType}, #{productName}, #{productImg}, #{productOriprice}, #{productPrice}, #{productInfo})
+	</insert>
 
 </mapper>
