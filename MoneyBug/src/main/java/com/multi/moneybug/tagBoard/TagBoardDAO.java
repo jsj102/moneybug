@@ -19,8 +19,8 @@ public class TagBoardDAO {
 			my.insert("tagboard.insert", tagBoardDTO);
 		}
 		
-		public List<TagBoardDTO> tagBoardList(TagBoardDTO tagBoardDTO) {
-	        return my.selectList("tagboard.list",tagBoardDTO);
+		public List<TagBoardDTO> list(TagBoardPageDTO pageDTO) {
+	        return my.selectList("tagboard.list",pageDTO);
 	    }
 		
 		public TagBoardDTO one(int seq) {
@@ -35,6 +35,9 @@ public class TagBoardDAO {
 			return my.delete("tagboard.delete", seq);
 		}
 		
+		public int count() {
+			return my.selectOne("tagboard.count");
+		}
 		
 //확인 		
 }

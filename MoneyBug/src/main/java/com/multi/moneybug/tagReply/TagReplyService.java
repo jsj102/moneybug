@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.multi.moneybug.tagBoard.TagBoardPageDTO;
+
 @Service
 public class TagReplyService {
 
@@ -19,8 +21,8 @@ public class TagReplyService {
 		return tagReplyDAO.reinsert(tagReplyDTO);
 	}
 
-	public List<TagReplyDTO> tagreplylist(int boardSeq) {
-		return tagReplyDAO.tagReplyList(boardSeq);
+	public List<TagReplyDTO> tagreplylist(TagReplyPageDTO tagReplyPageDTO) {
+		return tagReplyDAO.tagReplyList(tagReplyPageDTO);
 	}
 	
 	public int update(TagReplyDTO tagReplyDTO) {
@@ -30,7 +32,9 @@ public class TagReplyService {
 	public int delete(int seq) {
 		return tagReplyDAO.delete(seq);
 	}
-	
+	public int count(int boardSeq) {
+		return tagReplyDAO.count(boardSeq);
+	}
 	
 	
 }

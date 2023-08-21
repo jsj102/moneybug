@@ -8,6 +8,6 @@
 </head>
 <body>
 안녕하세요 
-<a href = "TagBoard_list">커뮤니티 리스트 </a>
+<a href = "TagBoard_list?page=1">커뮤니티 리스트 </a>
 </body>
 </html>
