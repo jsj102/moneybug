@@ -21,12 +21,13 @@
 			<select id="month" name="month">
 		</select>
 		<button id="moveReport">이동</button>
-		<button id="reportDownload">다운로드</button>
+		<button id="reportDownloadPDF">다운로드(pdf)</button>
+		<button id="reportDownloadExcel">다운로드(excel)</button>
 	</div>
 	<h3>월간 지출 차트</h3>
-	<div id="chartcontent" style="display: flex; width: 1100px; height: 655px; border: 1px solid #993300;">
+	<div id="monthlyDivPart1" class="MonthlyDiv" >
     	<div style="flex: 1;" id="chartdiv">
-        	<div id="mycharttest" style="width: 600px; height: 655px; border: 1px solid #993300;">
+        	<div id="myChartPart1" style="width: 600px; height: 655px; border: 1px solid #993300;">
             	<canvas id="myChart" style="width: 600px; height: 655px; border: 1px solid #993300;"></canvas>
         	</div>
     	</div>
@@ -35,8 +36,8 @@
 	</div>
 	<br>
 	<h3>최근 사용 내역(5회)</h3>
-	<div id="mycharttest2" style="display: flex; width: 1100px; height: 650px; border: 1px solid #993300;">
-    	<div style="flex: 1;">
+	<div id="monthlyDivPart2" class="MonthlyDiv2">
+    	<div id="myChartPart2" style="flex: 1;">
      	   <canvas id="myChart2" style="width: 600px; height: 650px; border: 1px solid #993300;"></canvas>
     	</div>
    	 <div style="flex: 1;">
@@ -417,11 +418,11 @@
             }); // ajax1차 - 페이지 호출시 자동
 		})
         
-		$('#reportDownload').click(function() {
+		$('#reportDownloadPDF').click(function() {
     		let accountBookId = 0; // 어떻게 accountBookId 값을 가져올지에 따라 설정
     		let year = $('#year').val();
     		let month = $('#month').val();
-    
+    		let chartImage = ctx.toDataURL('image/png'); //base64로 변환
     		$.ajax({
         		url: "downloadPDF",
         		method: "POST",
@@ -429,13 +430,15 @@
             		responseType: "blob" //responseType을 blob으로 설정해 바이너리 데이터를 받아오도록함
         		},
         		data: {
+        			chartImage : chartImage,
             		accountBookId: accountBookId,
             		year: year,
             		month: month
         		},
-		        success: function(data) {
+		        success: function(pdf) {
+		        	
         		    // 다운로드 링크 생성
-            		let file = new File([data], "accountBook_" + accountBookId + "_" + year + "_" + month + ".pdf", { type: "application/pdf" }); //file객체를 이용해 binary데이터(data)를 "~"형태의 이름으로 저장 MIME타입은 application/pdf로 pdf임을 명시
+            		let file = new File([pdf], "accountBook_" + accountBookId + "_" + year + "_" + month + ".pdf", { type: "application/pdf" }); //file객체를 이용해 binary데이터(pdf)를 "~"형태의 이름으로 저장 MIME타입은 application/pdf로 pdf임을 명시
             		let link = document.createElement("a");
             		link.href = URL.createObjectURL(file); //window객체의 하위객체인 URL 객체를 통해 파일 접근링크 생성
             		link.download = file.name; // 파일 다운로드
@@ -447,7 +450,27 @@
             
         		}
     		});
-		}); // reportDownload
+		}); // reportDownloadPDF
+		$('#reportDownloadExcel').click(function() {
+			$.ajax({
+				url : "downloadExcel",
+				method : "POST",
+        		xhrFields: {
+            		responseType: "blob" //responseType을 blob으로 설정해 바이너리 데이터를 받아오도록함
+        		},
+        		data: {
+            		accountBookId: accountBookId,
+            		year: year,
+            		month: month
+        		},
+        		success : function(){
+        			
+        		},
+        		error : function() {
+					
+				}
+			}); //ajax
+		}); // reportDownloadExcel
 
     });//$
 </script>
