@@ -21,8 +21,8 @@
 		<tbody>
 			<c:forEach items="${list}" var="tagBoardDTO">
 				<tr>
-					<td>${tagBoardDTO.seq}</td>
-					<td>[${tagBoardDTO.boardType}] <a href="TagBoard_one?seq=${tagBoardDTO.seq}">${tagBoardDTO.title}</a></td>
+					<td>${tagBoardDTO.rowNo}</td>
+					<td>[${tagBoardDTO.boardType}] <a href="TagBoard_one?seq=${tagBoardDTO.seq}&page=1">${tagBoardDTO.title}</a></td>
 					<td>${tagBoardDTO.writerId}</td>
 					<td>${tagBoardDTO.views}</td>
 					<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
@@ -33,5 +33,16 @@
 	</table>
 	
 	<a href="TagBoard_insert.jsp"><button>글 쓰기</button></a>
+	
+	<%
+	int pages = (int)request.getAttribute("pages");
+	for(int p = 1; p <= pages; p++){
+%>
+	<a href="TagBoard_list?page=<%= p %>">
+		<%= p %>
+	</a>  
+<%		
+	}
+%>
 	
 	<%@ include file="../../../resources/layout/footer.jsp"%>

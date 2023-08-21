@@ -3,16 +3,20 @@
 <mapper namespace="tagboard">
 
 	<insert id="insert" parameterType="tagboardDTO" useGeneratedKeys="true" keyProperty="SEQ">
-		insert into tag_board
-		values (null, #{writerId}, #{title}, #{content}, #{views}, #{image}, now(),#{boardType})
-	</insert>
-	
+    insert into tag_board
+    values (null, #{writerId}, #{title}, #{content}, #{views}, #{image}, now(), #{boardType})
+</insert>
+
 	<select id="one" resultType="tagboardDTO">
 		select * from tag_board where SEQ = #{seq} 
 		
 	</select>
-	<select id="list" resultType="tagboardDTO">
-		select * from tag_board order by SEQ desc
+	<select id="list" resultType="tagboardDTO" parameterType="tagboardpageDTO">
+		select * from 
+		(select ROW_NUMBER() over(order by SEQ asc) as rowNo, SEQ, TITLE, WRITER_ID, VIEWS, CREATE_AT, BOARD_TYPE from tag_board) tb
+		where tb.rowNo BETWEEN #{start} and #{end}
+		order by tb.rowNo desc
+		
 	</select>
 	
 	
@@ -23,6 +27,10 @@
 	<delete id="delete" >
 		delete from tag_board WHERE SEQ = #{seq} 
 	</delete>
+	
+	<select id="count" resultType="Integer">
+		select count(*) from tag_board
+	</select>
 	
 </mapper>
 

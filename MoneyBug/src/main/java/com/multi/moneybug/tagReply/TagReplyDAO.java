@@ -1,6 +1,8 @@
 package com.multi.moneybug.tagReply;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,9 @@ public class TagReplyDAO {
 		return my.insert("tagreply.reinsert", tagReplyDTO);
 	}
 	
-	public List<TagReplyDTO> tagReplyList(int boardSeq) {
-        return my.selectList("tagreply.list",boardSeq);
+	public List<TagReplyDTO> tagReplyList( TagReplyPageDTO tagReplyPageDTO) {
+		
+        return my.selectList("tagreply.list", tagReplyPageDTO);
     }
 	
 	
@@ -35,4 +38,7 @@ public class TagReplyDAO {
 		 return my.delete("tagreply.delete", seq);
 	}
 	
+	public int count(int boardSeq) {
+		return my.selectOne("tagreply.count", boardSeq);
+	}
 }

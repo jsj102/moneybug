@@ -23,4 +23,10 @@
 		<property name="username" value="${jdbc.username}"></property>
 		<property name="password" value="${jdbc.password}"></property>
 	</bean>
+    
+    <!-- 이미지 첨부파일  -->
+        <!-- MultipartResolver 설정 -->
+        <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+            
+        </bean>
 </beans>
