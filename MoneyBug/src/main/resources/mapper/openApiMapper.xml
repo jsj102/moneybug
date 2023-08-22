@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="openApi">
+
+	<insert id="insert" parameterType="openApiDTO">
+		insert into open_api values (#{apiKey}, #{secretKey}, #{expireDate}, #{AccountBookId})
+	</insert>
+	
+	<select id="readOne" parameterType="int" resultType="openApiDTO">
+		select API_KEY from open_api where ACCOUNT_BOOK_ID = #{accountBookId}
+	</select>
+	
+	<select id="readOneKey" parameterType="openApiDTO" resultType="openApiDTO">
+		select ACCOUNT_BOOK_ID from open_api where API_KEY = #{apiKey} and SECRET_KEY = #{secretKey}
+	</select>
+	
+	<select id="list" parameterType="Date" resultType="openAPiDTO">
+		select EXPIRE_DATE FROM open_api where EXPIRE_DATE = #{expireDate};
+	</select>
+	
+	<delete id="delete" parameterType="Date">
+		delete from open_api where EXPIRE_DATE = #{expireDate}
+	</delete>
+</mapper>
