@@ -44,7 +44,7 @@ public class AccountFileDownloadService {
 		}
 	}
 
-	public boolean isPageOverflow(String text, float x, float y) {
+	public boolean isPDFPageOverflow(String text, float x, float y) {
 		float nx = x + text.length() * 15;
 		float ny = y + 15;
 		if ((nx >= PDFWidth) || (ny <= 30)) {
@@ -69,7 +69,7 @@ public class AccountFileDownloadService {
 
 	}
 
-	public PDPageContentStream createContentStreamInNewPage(PDDocument accountBookPDF,
+	public PDPageContentStream createPDFContentStreamInNewPage(PDDocument accountBookPDF,
 			PDPageContentStream contentStream) {
 		try {
 			if (contentStream != null) {
@@ -114,7 +114,7 @@ public class AccountFileDownloadService {
 
 		PDPageContentStream contentStream = null;
 
-		contentStream = createContentStreamInNewPage(accountBookPDF, contentStream);
+		contentStream = createPDFContentStreamInNewPage(accountBookPDF, contentStream);
 		String text = "돈벌레친구들";
 		createAccountBookPDFDetailText(contentStream, fontSize, newX, newY, text);
 		newX = 300;
@@ -127,7 +127,7 @@ public class AccountFileDownloadService {
 		createAccountBookPDFDetailText(contentStream, fontSize, newX, newY, text);
 
 		// 차트 이미지
-		contentStream = createContentStreamInNewPage(accountBookPDF, contentStream);
+		contentStream = createPDFContentStreamInNewPage(accountBookPDF, contentStream);
 		byte[] imageBytes = DatatypeConverter.parseBase64Binary(chartImage.split(",")[1]); // data:image/png;base64,
 																							// 이후부터(인코딩된값)
 		PDImageXObject image = null; // extends PDXObject implements PDImage
@@ -152,9 +152,9 @@ public class AccountFileDownloadService {
 		fontSize = 12;
 		Set<String> keySet = detailMap.keySet();
 		for (String s : keySet) {
-			text = s + " : " + detailMap.get(s) + "원" + "(예산 : " + budgetAndExpensesMap.get(s) + ")";
-			if (isPageOverflow(text, newX, newY)) {
-				contentStream = createContentStreamInNewPage(accountBookPDF, contentStream);
+			text = s + " : " + detailMap.get(s) + "원" + "(예산 : " + budgetAndExpensesMap.get(s) + "원)";
+			if (isPDFPageOverflow(text, newX, newY)) {
+				contentStream = createPDFContentStreamInNewPage(accountBookPDF, contentStream);
 				newX = startX;
 				newY = startY;
 
@@ -165,7 +165,7 @@ public class AccountFileDownloadService {
 		newX = startX;
 		newY = startY;
 
-		contentStream = createContentStreamInNewPage(accountBookPDF, contentStream);
+		contentStream = createPDFContentStreamInNewPage(accountBookPDF, contentStream);
 		// 월간예산
 		text = "월간 예산";
 		fontSize = 15;
@@ -176,8 +176,8 @@ public class AccountFileDownloadService {
 		fontSize = 12;
 		for (int i = 0; i < budgetList.size(); i++) {
 			text = budgetList.get(i).getFixedCategory() + " : " + budgetList.get(i).getPrice() + "원";
-			if (isPageOverflow(text, newX, newY)) {
-				contentStream = createContentStreamInNewPage(accountBookPDF, contentStream);
+			if (isPDFPageOverflow(text, newX, newY)) {
+				contentStream = createPDFContentStreamInNewPage(accountBookPDF, contentStream);
 				newX = startX;
 				newY = startY;
 
@@ -190,8 +190,8 @@ public class AccountFileDownloadService {
 		newX = 50;
 		newY -= stepY;
 		fontSize = 15;
-		if (isPageOverflow(text, newX, newY)) {
-			contentStream = createContentStreamInNewPage(accountBookPDF, contentStream);
+		if (isPDFPageOverflow(text, newX, newY)) {
+			contentStream = createPDFContentStreamInNewPage(accountBookPDF, contentStream);
 			newX = startX;
 			newY = startY;
 
@@ -203,8 +203,8 @@ public class AccountFileDownloadService {
 		fontSize = 12;
 		for (int i = 0; i < expensesList.size(); i++) {
 			text = expensesList.get(i).getFixedCategory() + " : " + expensesList.get(i).getPrice() + "원";
-			if (isPageOverflow(text, newX, newY)) {
-				contentStream = createContentStreamInNewPage(accountBookPDF, contentStream);
+			if (isPDFPageOverflow(text, newX, newY)) {
+				contentStream = createPDFContentStreamInNewPage(accountBookPDF, contentStream);
 				newX = startX;
 				newY = startY;
 
@@ -214,7 +214,7 @@ public class AccountFileDownloadService {
 		}
 
 		// 월간 지출 내역 List
-		contentStream = createContentStreamInNewPage(accountBookPDF, contentStream);// 새 페이지
+		contentStream = createPDFContentStreamInNewPage(accountBookPDF, contentStream);// 새 페이지
 		newX = 50;
 		newY = startY;
 		text = "월간 지출 전체 내역";
@@ -224,10 +224,10 @@ public class AccountFileDownloadService {
 		newY -= stepY;
 		fontSize = 12;
 		for (int i = 0; i < detailList.size(); i++) {
-			text = detailList.get(i).getDescription() + "(" + detailList.get(i).getAccountCategory() + ") : "
+			text = "["+detailList.get(i).getAccountType()+"]"+detailList.get(i).getDescription() + "(" + detailList.get(i).getAccountCategory() +") : "
 					+ detailList.get(i).getPrice() + "원";
-			if (isPageOverflow(text, newX, newY)) {
-				contentStream = createContentStreamInNewPage(accountBookPDF, contentStream);
+			if (isPDFPageOverflow(text, newX, newY)) {
+				contentStream = createPDFContentStreamInNewPage(accountBookPDF, contentStream);
 				newX = startX;
 				newY = startY;
 

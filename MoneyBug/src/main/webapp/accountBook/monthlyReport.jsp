@@ -75,91 +75,127 @@
     	monthSelect.selectedIndex = new Date().getMonth();
     	//사전 설정부  
     	  
+    	let accountBookId = -1;
+		$.ajax({
+			url : "seq",
+			success : function(acountSeq) {//accountBookId seq ajax start
+				accountBookId = acountSeq;
+
+    	
     	  
-        $.ajax({
-            url: "monthlyReportRequestJSON",
-            dataType: "json",
-            method: "POST",
-            data : {
-            	year : $('#year').val(),
-            	month : $('#month').val()
-            },
-            success: function(json) {
-                let list = json.list;
-                let map = json.map;
-                let detailTotalDataList = [];
-                let detailSomeDataPlusList = [];
-                let detailSomeDataMinusList = [];
-                let detailSomeLabelList = [];
+        	$.ajax({
+            	url: "monthlyReportRequestJSON",
+            	dataType: "json",
+            	method: "POST",
+            	data : {
+            		accountBookId : accountBookId,
+            		year : $('#year').val(),
+            		month : $('#month').val()
+            	},
+            	success: function(json) {
+                	let list = json.list;
+                	let map = json.map;
+                	let detailTotalDataList = [];
+                	let detailSomeDataPlusList = [];
+                	let detailSomeDataMinusList = [];
+                	let detailSomeLabelList = [];
                 
-                let listTable = '<table border="1" class="RecentTable"><tr><th>분류</th><th>사용내역</th><th>금액</th></tr>';
-                for (var i = 0; i < list.length; i++) {
-                    let formattedPrice = list[i].price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
-                    listTable += '<tr><td>' + list[i].accountCategory
-                    + '</td><td>' + list[i].description
-                    + '</td><td>' + formattedPrice + '</td></tr>';
-                    detailSomeLabelList.push(list[i].description);
-                    if(list[i].accountType=="지출"){
-                    	detailSomeDataPlusList.push(0);
-                        detailSomeDataMinusList.push(-list[i].price);
-                    }else{
+                	let listTable = '<table border="1" class="RecentTable"><tr><th>분류</th><th>사용내역</th><th>금액</th></tr>';
+                	for (var i = 0; i < list.length; i++) {
+                    	let formattedPrice = list[i].price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
+                    	listTable += '<tr><td>' + list[i].accountCategory
+                    	+ '</td><td>' + list[i].description
+                    	+ '</td><td>' + formattedPrice + '</td></tr>';
+                    	detailSomeLabelList.push(list[i].description);
+                    	if(list[i].accountType=="지출"){
+                    		detailSomeDataPlusList.push(0);
+                        	detailSomeDataMinusList.push(-list[i].price);
+                    	}else{
                     	
-                    detailSomeDataPlusList.push(list[i].price);
-                    detailSomeDataMinusList.push(0);
-                    }
-                }
-                listTable += '</table>';
+                    	detailSomeDataPlusList.push(list[i].price);
+                    	detailSomeDataMinusList.push(0);
+                    	}
+                	}
+                	listTable += '</table>';
                 
 
 
-                $('#RecentTable').html(listTable);
-                //
-				$.ajax({
-					url: "monthlyReportRequestBudgetAndExpenses",
-					method: "POST",
-		            data : {
-		            	year : $('#year').val(),
-		            	month : $('#month').val()
-		            },
-					success : function(budgetMap) {
-		        	    let labelList = [];
-		        	    let budgetDataList = [];
-		                for (var budgetKey in budgetMap) {
-		                    labelList.push(budgetKey);
-		                    budgetDataList.push(budgetMap[budgetKey]);
-		                }
+                	$('#RecentTable').html(listTable);
+
+					$.ajax({
+						url: "monthlyReportRequestBudgetAndExpenses",
+						method: "POST",
+		            	data : {
+		            		accountBookId : accountBookId,
+		            		year : $('#year').val(),
+		            		month : $('#month').val()
+		            	},
+						success : function(budgetMap) {
+		        	    	let labelList = [];
+		        	    	let budgetDataList = [];
+		                	for (var budgetKey in budgetMap) {
+		                    	labelList.push(budgetKey);
+		                    	budgetDataList.push(budgetMap[budgetKey]);
+		                	}
 		                
-		                let mapTable = '<table border="1" class="MonthlyTable"><tr><th>분류</th><th>총액(현재 지출)</th><th>(지출 계획)</th></tr>';
-		                let listInt = 0;
-		                for (var key in map) {
-		                    let formattedTotalPrice = map[key].toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
-		                    let formattedTotalPrice2 = " ( "+(budgetDataList[listInt]).toLocaleString()+ " ) ";
-		                    mapTable += '<tr><td>' + key + '</td><td>'
-		                    + formattedTotalPrice + '</td><td>'+formattedTotalPrice2+'</td></tr>';
-		                    listInt=listInt+1;
-		                    detailTotalDataList.push(map[key]);
-		                }
-		                mapTable += '</table>'; //1차 ajax로부터 데이터
-		                $('#MonthlyTalbe').html(mapTable);//1차 ajax로부터 데이터
+		                	let mapTable = '<table border="1" class="MonthlyTable"><tr><th>분류</th><th>총액(현재 지출)</th><th>(지출 계획)</th></tr>';
+		                	let listInt = 0;
+		                	for (var key in map) {
+		                    	let formattedTotalPrice = map[key].toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' });
+		                    	let formattedTotalPrice2 = " ( "+(budgetDataList[listInt]).toLocaleString()+ " ) ";
+		                   			mapTable += '<tr><td>' + key + '</td><td>'
+		                    		+ formattedTotalPrice + '</td><td>'+formattedTotalPrice2+'</td></tr>';
+		                    		listInt=listInt+1;
+		                    		detailTotalDataList.push(map[key]);
+		                		}
+		                		mapTable += '</table>'; //1차 ajax로부터 데이터
+		                		$('#MonthlyTalbe').html(mapTable);//1차 ajax로부터 데이터
 		                
-					//Chart.js 에서는 getContext('2d') 를 사용하지않아도됨.
-						let chart1Data = {
-							labels : labelList,
-							datasets : [
-								{
-									label : '지출',
-									data : detailTotalDataList,
-									fill : true,
-									backgroundColor : 'rgba(255, 99, 132, 0.2)',
-									borderColor : 'rgb(255, 99, 132)',
-									pointBackgroundColor : 'rgb(255, 99, 132)',
-									pointBorderColor : '#fff',
-									pointHoverBackgroundColor : '#fff',
-									pointHoverBorderColor : 'rgb(255, 99, 132)'
-									},
-								{
-									label : '예산-고정지출',
-									data : budgetDataList,
+								//Chart.js 에서는 getContext('2d') 를 사용하지않아도됨.
+									let chart1Data = {
+									labels : labelList,
+									datasets : [
+										{
+											label : '지출',
+											data : detailTotalDataList,
+											fill : true,
+											backgroundColor : 'rgba(255, 99, 132, 0.2)',
+											borderColor : 'rgb(255, 99, 132)',
+											pointBackgroundColor : 'rgb(255, 99, 132)',
+											pointBorderColor : '#fff',
+											pointHoverBackgroundColor : '#fff',
+											pointHoverBorderColor : 'rgb(255, 99, 132)'
+											},
+										{
+											label : '예산-고정지출',
+											data : budgetDataList,
+											fill : true,
+											backgroundColor : 'rgba(54, 162, 235, 0.2)',
+											borderColor : 'rgb(54, 162, 235)',
+											pointBackgroundColor : 'rgb(54, 162, 235)',
+											pointBorderColor : '#fff',
+											pointHoverBackgroundColor : '#fff',
+											pointHoverBorderColor : 'rgb(54, 162, 235)'
+										} ]
+							}; // graph 데이터 선입력부분
+							let config = {
+								type : 'radar',
+								data : chart1Data,
+								options : {
+									responsive : false,
+									elements : {
+										line : {
+											borderWidth : 3
+										}
+									}
+								},
+							};
+							chart1 = new Chart(ctx, config);
+							let chart2Data = {
+								labels : detailSomeLabelList,
+								datasets : [{
+									label : '수입',
+									data : detailSomeDataPlusList,
 									fill : true,
 									backgroundColor : 'rgba(54, 162, 235, 0.2)',
 									borderColor : 'rgb(54, 162, 235)',
@@ -167,93 +203,76 @@
 									pointBorderColor : '#fff',
 									pointHoverBackgroundColor : '#fff',
 									pointHoverBorderColor : 'rgb(54, 162, 235)'
-								} ]
-					}; // graph 데이터 선입력부분
-					let config = {
-						type : 'radar',
-						data : chart1Data,
-						options : {
-							responsive : false,
-							elements : {
-								line : {
-									borderWidth : 3
-								}
-							}
-						},
-					};
-					chart1 = new Chart(ctx, config);
-					let chart2Data = {
-						labels : detailSomeLabelList,
-						datasets : [{
-							label : '수입',
-							data : detailSomeDataPlusList,
-							fill : true,
-							backgroundColor : 'rgba(54, 162, 235, 0.2)',
-							borderColor : 'rgb(54, 162, 235)',
-							pointBackgroundColor : 'rgb(54, 162, 235)',
-							pointBorderColor : '#fff',
-							pointHoverBackgroundColor : '#fff',
-							pointHoverBorderColor : 'rgb(54, 162, 235)'
-							},
-								{
-									label : '지출',
-									data : detailSomeDataMinusList,
-									fill : true,
-									backgroundColor : 'rgba(255, 99, 132, 0.2)',
-									borderColor : 'rgb(255, 99, 132)',
-									pointBackgroundColor : 'rgb(255, 99, 132)',
-									pointBorderColor : '#fff',
-									pointHoverBackgroundColor : '#fff',
-									pointHoverBorderColor : 'rgb(255, 99, 132)'
-								}
-								 ]
-					};
-					let config2 = {
-						type : 'bar',
-						data : chart2Data,
-						options : {
-							responsive : false,
-							indexAxis : 'y',
-							elements : {
-								line : {
-									borderWidth : 3
-								}
-							}
-						},
-					};
-					chart2 = new Chart(ctx2, config2);
-				},//2차 success
-				error: function(xhr, status, error) {
-	                let errorMessage = "2차 오류 상태 코드: " + xhr.status + "\n"
-	                    + "오류 메시지: " + error + "\n" + "오류 타입: "
-	                    + status;
-	                alert(errorMessage);
-	            }
-				}); // ajax2차
-            },
-            error: function(xhr, status, error) {
-                let errorMessage = "오류 상태 코드: " + xhr.status + "\n"
-                    + "오류 메시지: " + error + "\n" + "오류 타입: "
-                    + status;
-                alert(errorMessage);
-            }
-        }); // ajax1차 - 페이지 호출시 자동
+									},
+										{
+											label : '지출',
+											data : detailSomeDataMinusList,
+											fill : true,
+											backgroundColor : 'rgba(255, 99, 132, 0.2)',
+											borderColor : 'rgb(255, 99, 132)',
+											pointBackgroundColor : 'rgb(255, 99, 132)',
+											pointBorderColor : '#fff',
+											pointHoverBackgroundColor : '#fff',
+											pointHoverBorderColor : 'rgb(255, 99, 132)'
+										}
+								 		]
+							};
+							let config2 = {
+								type : 'bar',
+								data : chart2Data,
+								options : {
+									responsive : false,
+									indexAxis : 'y',
+									elements : {
+										line : {
+											borderWidth : 3
+										}
+									}
+								},
+							};
+							chart2 = new Chart(ctx2, config2);
+						},//2차 success
+						error: function(xhr, status, error) {
+	                		let errorMessage = "2차 오류 상태 코드: " + xhr.status + "\n"
+	                    		+ "오류 메시지: " + error + "\n" + "오류 타입: "
+	                    		+ status;
+	                		alert(errorMessage);
+	            		}
+						}); // ajax2차
+            		},
+            		error: function(xhr, status, error) {
+                		let errorMessage = "오류 상태 코드: " + xhr.status + "\n"
+                    		+ "오류 메시지: " + error + "\n" + "오류 타입: "
+                    		+ status;
+                		alert(errorMessage);
+            		}
+        		}); // ajax1차 - 페이지 호출시 자동
         
         
-        $.ajax({
-        	url : "monthlyGPT",
-            method: "POST",
-            data : {
-            	year : $('#year').val(),
-            	month : $('#month').val()
-            },
-            success: function(answer) {
+       		    $.ajax({
+        			url : "monthlyGPT",
+            		method: "POST",
+            		data : {
+            			accountBookId : accountBookId,
+            			year : $('#year').val(),
+            			month : $('#month').val()
+           		},
+            		success: function(answer) {
             	$('#resultGPT').html(answer);
-            },
-            error : function() {
-            	$('#resultGPT').html("아직 분석되지 않은 레포트입니다.");				
+            		},
+            		error : function() {
+            			$('#resultGPT').html("아직 분석되지 않은 레포트입니다.");				
+					}
+        		});//gpt ajax
+        
+			},
+			error : function(){
+				
 			}
-        });//gpt ajax
+		}) //accountBookId ajax end
+        
+        
+        
         
         
         $('#moveReport').click(function() {
@@ -262,6 +281,7 @@
                 dataType: "json",
                 method: "POST",
                 data : {
+                	accountBookId : accountBookId,
                 	year : $('#year').val(),
                 	month : $('#month').val()
                 },
@@ -299,6 +319,7 @@
     					url: "monthlyReportRequestBudgetAndExpenses",
     					method: "POST",
     		            data : {
+    		            	accountBookId : accountBookId,
     		            	year : $('#year').val(),
     		            	month : $('#month').val()
     		            },
@@ -398,6 +419,7 @@
     		        	url : "monthlyGPT",
     		            method: "POST",
     		            data : {
+    		            	accountBookId : accountBookId,
     		            	year : $('#year').val(),
     		            	month : $('#month').val()
     		            },
@@ -419,7 +441,6 @@
 		})
         
 		$('#reportDownloadPDF').click(function() {
-    		let accountBookId = 0; // 어떻게 accountBookId 값을 가져올지에 따라 설정
     		let year = $('#year').val();
     		let month = $('#month').val();
     		let chartImage = ctx.toDataURL('image/png'); //base64로 변환
@@ -463,7 +484,7 @@
             		year: year,
             		month: month
         		},
-        		success : function(){
+        		success : function(excel){
         			
         		},
         		error : function() {

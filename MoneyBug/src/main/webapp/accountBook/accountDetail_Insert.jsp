@@ -50,7 +50,7 @@
 			</tr>
 			<tr>
 				<td>
-					<input name="accountBookId" type="hidden" value="1">
+					<input name="accountBookId" type="hidden" id = "accountBookId"  value="">
 				</td>
 			</tr>
 			<tr>
@@ -112,6 +112,21 @@
 <%@ include file="../resources/layout/accountAside.jsp"%>
 <%@ include file="../resources/layout/footer.jsp"%>
 
+<script  type="text/javascript">
+$(document).ready(function() {
+                	        // 서버로부터 로그인 상태 값을 확인하여 처리
+                	        $.ajax({
+                	            url: "seq",
+                	            method: "GET",
+                	            success: function(result) {
+                	            	$("#accountBookId").val(result);
+                	               
+                	            }
+                	        });
+                	    });
+</script>
+
+
 <!--  Opencv, OCR 팝업창 -->
 <script>
   function showPopup() {
@@ -125,7 +140,3 @@
 2. 팝업창이 닫힐 때, POST 메세지로 자식창으로 부터 부모창에 결과값을 보여줌
  -->
 <script src="../resources/js/account/accountDetail_Insert.js"></script>
-
-
-
-

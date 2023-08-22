@@ -96,8 +96,7 @@ public class AccountGPTController {
 
 	@RequestMapping(value = "accountBook/monthlyGPT", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public String monthlyGPT(@RequestParam("year") int year, @RequestParam("month") int month) {
-		int accountBookId = 0;
+	public String monthlyGPT(@RequestParam("accountBookId") int accountBookId,@RequestParam("year") int year, @RequestParam("month") int month) {
 		AccountGPTDTO accountGPTDTO = new AccountGPTDTO();
 		accountGPTDTO.setAccountBookId(accountBookId);
 		accountGPTDTO.setCurrentYear(year);

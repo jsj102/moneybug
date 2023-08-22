@@ -36,7 +36,18 @@ public class AccountFileDownloadController {
 	}
 	
 	@RequestMapping("/accountBook/downloadExcel")
-	public void downloadExcel() {
+	public void downloadExcel(HttpServletResponse response,
+            @RequestParam("accountBookId") int accountBookId,
+            @RequestParam("year") int year,
+            @RequestParam("month") int month) {
+		//데이터 가져오는 부분
+		List<AccountBudgetDTO> budgetList = accountBudgetService.getListBudget(accountBookId, year, month);
+		List<AccountExpensesDTO> expensesList = accountExpensesService.getListExpenses(accountBookId);
+		LinkedHashMap<String,Integer> budgetAndExpensesMap = accountBudgetService.sumBudgetAndExpensesToMap(budgetList, expensesList);
+		List<AccountDetailDTO> detailList= accountDetailService.readListMonth(accountDetailService.makeDTOForReadMonth(accountBookId, year, month));
+		LinkedHashMap<String,Integer> detailMap = accountDetailService.sumLabelCategory(detailList);
+		//파일다운로드
+		
 		
 	}
 	
@@ -49,8 +60,6 @@ public class AccountFileDownloadController {
                             @RequestParam("month") int month,
                             @RequestParam("chartImage") String chartImage
     		) {
-		System.out.println("call PDF");
-		System.out.println(chartImage);
 		//데이터 가져오는 부분
 		List<AccountBudgetDTO> budgetList = accountBudgetService.getListBudget(accountBookId, year, month);
 		List<AccountExpensesDTO> expensesList = accountExpensesService.getListExpenses(accountBookId);

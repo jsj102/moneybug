@@ -61,8 +61,7 @@ public class AccountDetailController {
 
 	@RequestMapping("accountBook/monthlyReportRequestJSON")
 	@ResponseBody
-	public HashMap<String,Object> monthlyReportRequestJSON(Model model,@RequestParam("year") int year, @RequestParam("month") int month) {
-		int accountBookId=0; 									//나중에 accountBookId값 넣어주기session으로
+	public HashMap<String,Object> monthlyReportRequestJSON(@RequestParam("accountBookId") int accountBookId,Model model,@RequestParam("year") int year, @RequestParam("month") int month) {									//나중에 accountBookId값 넣어주기session으로
 		AccountDetailDTO accountDetailDTO = new AccountDetailDTO();
 		accountDetailDTO.setAccountBookId(accountBookId);
 		accountDetailDTO.setCurrentYear(year);
