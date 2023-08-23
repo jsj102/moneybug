@@ -134,7 +134,7 @@
      <div class="main-content">
            <% 
         String userNickname = (String) session.getAttribute("userNickname");
-
+		//${sessionScope.userNickname}
         if (userNickname != null && !userNickname.isEmpty()) {
             %>
             <p>안녕하세요, <%= userNickname %>님. 사용자 정보를 확인하세요.</p>
