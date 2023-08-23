@@ -24,7 +24,6 @@ public class AccountBookController {
 	public void getAccountFromPage(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String socialId = (String) session.getAttribute("socialId");
-		System.out.println(socialId);
 		AccountBookDTO accountBookDTO = new AccountBookDTO();
 		accountBookDTO.setSocialId(socialId);
 		accountBookDTO.setCreateAt(new Date(System.currentTimeMillis()));
@@ -41,6 +40,15 @@ public class AccountBookController {
     	String seq = accountBookService.insertAccountDetailFindSeq(socialId);
     	System.out.println(seq);
     	return seq;
+    }
+
+    
+    @GetMapping("accountBook/getUserNickname")
+    @ResponseBody
+    public String getUserNickname(HttpServletRequest request) {
+    	HttpSession session = request.getSession();
+    	String userNickname = (String) session.getAttribute("userNickname");
+    	return userNickname;
     }
 
 }

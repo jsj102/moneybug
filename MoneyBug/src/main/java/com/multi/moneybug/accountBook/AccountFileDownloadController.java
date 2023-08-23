@@ -39,15 +39,18 @@ public class AccountFileDownloadController {
 	public void downloadExcel(HttpServletResponse response,
             @RequestParam("accountBookId") int accountBookId,
             @RequestParam("year") int year,
-            @RequestParam("month") int month) {
+            @RequestParam("month") int month,
+            @RequestParam("userNickname") String userNickname
+            ) throws Exception {
+		System.out.println("Excelcontroller");
 		//데이터 가져오는 부분
 		List<AccountBudgetDTO> budgetList = accountBudgetService.getListBudget(accountBookId, year, month);
 		List<AccountExpensesDTO> expensesList = accountExpensesService.getListExpenses(accountBookId);
-		LinkedHashMap<String,Integer> budgetAndExpensesMap = accountBudgetService.sumBudgetAndExpensesToMap(budgetList, expensesList);
+		//LinkedHashMap<String,Integer> budgetAndExpensesMap = accountBudgetService.sumBudgetAndExpensesToMap(budgetList, expensesList); //예산-고정지출
 		List<AccountDetailDTO> detailList= accountDetailService.readListMonth(accountDetailService.makeDTOForReadMonth(accountBookId, year, month));
 		LinkedHashMap<String,Integer> detailMap = accountDetailService.sumLabelCategory(detailList);
 		//파일다운로드
-		
+		accountFileDownloadService.downloadExcel(response, budgetList, expensesList, detailList, detailMap, year, month, userNickname);
 		
 	}
 	
@@ -58,7 +61,8 @@ public class AccountFileDownloadController {
                             @RequestParam("accountBookId") int accountBookId,
                             @RequestParam("year") int year,
                             @RequestParam("month") int month,
-                            @RequestParam("chartImage") String chartImage
+                            @RequestParam("chartImage") String chartImage,
+                            @RequestParam("userNickname") String userNickname
     		) {
 		//데이터 가져오는 부분
 		List<AccountBudgetDTO> budgetList = accountBudgetService.getListBudget(accountBookId, year, month);
@@ -67,7 +71,7 @@ public class AccountFileDownloadController {
 		List<AccountDetailDTO> detailList= accountDetailService.readListMonth(accountDetailService.makeDTOForReadMonth(accountBookId, year, month));
 		LinkedHashMap<String,Integer> detailMap = accountDetailService.sumLabelCategory(detailList);
 		//파일다운로드
-        accountFileDownloadService.downloadPDF(response,budgetList,expensesList,budgetAndExpensesMap,detailList,detailMap,year,month,chartImage);
+        accountFileDownloadService.downloadPDF(response,budgetList,expensesList,budgetAndExpensesMap,detailList,detailMap,year,month,chartImage,userNickname);
     }
 
 }

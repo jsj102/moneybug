@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 
@@ -15,6 +16,16 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -25,22 +36,154 @@ public class AccountFileDownloadService {
 	private ClassPathResource fontResource = new ClassPathResource("font/NanumGothic.ttf");
 	private PDFont font = null;
 
+	public void downloadExcel(HttpServletResponse response, List<AccountBudgetDTO> budgetList,
+			List<AccountExpensesDTO> expensesList, List<AccountDetailDTO> detailList,
+			LinkedHashMap<String, Integer> detailMap, int year, int month, String userNickname) throws Exception {
+		System.out.println("service");
+		// 파일 조회후 없으면 생성
+		Workbook accountBookExcel = createAccountBookExcel(budgetList, expensesList, detailList, detailMap, year,
+				month);
+
+		/**
+		 * download
+		 */
+		String fileName = "spring_excel_download";
+
+		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+		response.setHeader("Content-Disposition", "attachment; filename=\"accountBook.xlsx\""); // JS에서 파일명설정함
+
+		OutputStream outputStream = response.getOutputStream();
+		accountBookExcel.write(outputStream); // PDF 파일을 클라이언트로 전송
+		accountBookExcel.close();
+		outputStream.flush();
+		outputStream.close();
+	}
+
+	public Workbook createAccountBookExcel(List<AccountBudgetDTO> budgetList, List<AccountExpensesDTO> expensesList,
+			List<AccountDetailDTO> detailList, LinkedHashMap<String, Integer> detailMap, int year, int month) {
+		Workbook accountBookExcel = new XSSFWorkbook();
+		String[] sheetNameArray = { month + "월 예산", "고정 지출", "세부 내역", "카테고리별 내역" };
+		String[] headerData = null;
+		String[][] bodyData = null;
+		//
+		Sheet sheet = accountBookExcel.createSheet(month + "월 예산");
+		sheet.setDefaultColumnWidth(30); // 디폴트 너비 설정
+		headerData = new String[] {"카테고리","금액"};
+		bodyData = new String[budgetList.size()][headerData.length];
+		for(int i = 0;i<budgetList.size();i++) {
+			AccountBudgetDTO accountBudgetDTO = budgetList.get(i);
+			bodyData[i] = new String[] {accountBudgetDTO.getFixedCategory(),Integer.toString(accountBudgetDTO.getPrice())};
+		}
+		createAccountBookExcelSheet(accountBookExcel, year, month, sheet, headerData, bodyData);
+		
+		sheet = accountBookExcel.createSheet("고정 지출");
+		sheet.setDefaultColumnWidth(30); // 디폴트 너비 설정
+		headerData = new String[] {"카테고리","금액"};
+		bodyData = new String[expensesList.size()][headerData.length];
+		for(int i = 0;i<expensesList.size();i++) {
+			AccountExpensesDTO accountExpensesDTO = expensesList.get(i);
+			bodyData[i] = new String[] {accountExpensesDTO.getFixedCategory(),Integer.toString(accountExpensesDTO.getPrice())};
+		}
+		createAccountBookExcelSheet(accountBookExcel, year, month, sheet, headerData, bodyData);
+		
+		sheet = accountBookExcel.createSheet("고정 지출");
+		sheet.setDefaultColumnWidth(30); // 디폴트 너비 설정
+		headerData = new String[] {"카테고리","금액"};
+		bodyData = new String[expensesList.size()][headerData.length];
+		for(int i = 0;i<expensesList.size();i++) {
+			AccountExpensesDTO accountExpensesDTO = expensesList.get(i);
+			bodyData[i] = new String[] {accountExpensesDTO.getFixedCategory(),Integer.toString(accountExpensesDTO.getPrice())};
+		}
+		createAccountBookExcelSheet(accountBookExcel, year, month, sheet, headerData, bodyData);
+		
+		return accountBookExcel;
+	}
+
+	public Sheet createAccountBookExcelSheet(Workbook accountBookExcel, int year, int month, Sheet sheet,
+			String[] headerData, String[][] bodyData) {
+		/**
+		 * header font style
+		 */
+		XSSFFont headerXSSFFont = (XSSFFont) accountBookExcel.createFont();
+		headerXSSFFont.setColor(new XSSFColor(new byte[] { (byte) 255, (byte) 255, (byte) 255 }));
+		
+		/**
+		 * header cell style
+		 */
+		XSSFCellStyle headerXssfCellStyle = (XSSFCellStyle) accountBookExcel.createCellStyle();
+
+		// 테두리 설정
+		headerXssfCellStyle.setBorderLeft(BorderStyle.THIN);
+		headerXssfCellStyle.setBorderRight(BorderStyle.THIN);
+		headerXssfCellStyle.setBorderTop(BorderStyle.THIN);
+		headerXssfCellStyle.setBorderBottom(BorderStyle.THIN);
+
+		// 배경 설정
+		headerXssfCellStyle.setFillForegroundColor(new XSSFColor(new byte[] { (byte) 34, (byte) 37, (byte) 41 }));
+		headerXssfCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		headerXssfCellStyle.setFont(headerXSSFFont);
+
+		/**
+		 * body cell style
+		 */
+		XSSFCellStyle bodyXssfCellStyle = (XSSFCellStyle) accountBookExcel.createCellStyle();
+
+		// 테두리 설정
+		bodyXssfCellStyle.setBorderLeft(BorderStyle.THIN);
+		bodyXssfCellStyle.setBorderRight(BorderStyle.THIN);
+		bodyXssfCellStyle.setBorderTop(BorderStyle.THIN);
+		bodyXssfCellStyle.setBorderBottom(BorderStyle.THIN);
+
+		/**
+		 * header data
+		 */
+		int rowCount = 0; // 데이터가 저장될 행
+		
+
+		Row headerRow = null;
+		Cell headerCell = null;
+
+		headerRow = sheet.createRow(rowCount++);
+		for (int i = 0; i < headerData.length; i++) {
+			headerCell = headerRow.createCell(i);
+			headerCell.setCellValue(headerData[i]); // 데이터 추가
+			headerCell.setCellStyle(headerXssfCellStyle); // 스타일 추가
+		}
+
+
+		Row bodyRow = null;
+		Cell bodyCell = null;
+
+		for (String[] bodyDatas : bodyData) {
+			bodyRow = sheet.createRow(rowCount++);
+
+			for (int i = 0; i < bodyDatas.length; i++) {
+				bodyCell = bodyRow.createCell(i);
+				bodyCell.setCellValue(bodyDatas[i]); // 데이터 추가
+				bodyCell.setCellStyle(bodyXssfCellStyle); // 스타일 추가
+			}
+		}
+		return sheet;
+	}
+
 	public void downloadPDF(HttpServletResponse response, List<AccountBudgetDTO> budgetList,
 			List<AccountExpensesDTO> expensesList, LinkedHashMap<String, Integer> budgetAndExpensesMap,
 			List<AccountDetailDTO> detailList, LinkedHashMap<String, Integer> detailMap, int year, int month,
-			String chartImage) {
+			String chartImage, String userNickname) {
 		try {
-			PDDocument accountBookPDF = createAccountBookPDF(response, budgetList, expensesList, budgetAndExpensesMap,
-					detailList, detailMap, year, month, chartImage); // PDF 문서 생성
+			PDDocument accountBookPDF = createAccountBookPDF(budgetList, expensesList, budgetAndExpensesMap, detailList,
+					detailMap, year, month, chartImage); // PDF 문서 생성
 			response.setContentType("application/pdf");
 			response.setHeader("Content-Disposition", "attachment; filename=\"accountBook.pdf\""); // JS에서 파일명설정함
 
 			OutputStream outputStream = response.getOutputStream();
 			accountBookPDF.save(outputStream); // PDF 파일을 클라이언트로 전송
 			accountBookPDF.close();
+			outputStream.flush();
+			outputStream.close();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("PDF다운로드 에러");
 		}
 	}
 
@@ -88,10 +231,9 @@ public class AccountFileDownloadService {
 		return contentStream;
 	}
 
-	public PDDocument createAccountBookPDF(HttpServletResponse response, List<AccountBudgetDTO> budgetList,
-			List<AccountExpensesDTO> expensesList, LinkedHashMap<String, Integer> budgetAndExpensesMap,
-			List<AccountDetailDTO> detailList, LinkedHashMap<String, Integer> detailMap, int year, int month,
-			String chartImage) { // PDF파일 생성함수
+	public PDDocument createAccountBookPDF(List<AccountBudgetDTO> budgetList, List<AccountExpensesDTO> expensesList,
+			LinkedHashMap<String, Integer> budgetAndExpensesMap, List<AccountDetailDTO> detailList,
+			LinkedHashMap<String, Integer> detailMap, int year, int month, String chartImage) { // PDF파일 생성함수
 		PDDocument accountBookPDF = new PDDocument();
 		try {
 			PDType0Font fontType = PDType0Font.load(accountBookPDF, fontResource.getInputStream());// PDF글꼴설정
@@ -224,8 +366,8 @@ public class AccountFileDownloadService {
 		newY -= stepY;
 		fontSize = 12;
 		for (int i = 0; i < detailList.size(); i++) {
-			text = "["+detailList.get(i).getAccountType()+"]"+detailList.get(i).getDescription() + "(" + detailList.get(i).getAccountCategory() +") : "
-					+ detailList.get(i).getPrice() + "원";
+			text = "[" + detailList.get(i).getAccountType() + "]" + detailList.get(i).getDescription() + "("
+					+ detailList.get(i).getAccountCategory() + ") : " + detailList.get(i).getPrice() + "원";
 			if (isPDFPageOverflow(text, newX, newY)) {
 				contentStream = createPDFContentStreamInNewPage(accountBookPDF, contentStream);
 				newX = startX;

@@ -34,7 +34,7 @@
 			email = naver_id_login.getProfileData('email');
 			name = naver_id_login.getProfileData('name');
 
-				
+			console.log('1');
 			// 절대경로로 변경
 			$.ajax({
 				type: 'POST',
@@ -44,24 +44,32 @@
 					'email': email,
 					'userName': name
 					},
-				success : function(member) {	
-					if(member === 'old') {
-						window.location.href = '../main.do';
-					} else if (member == 'new') {
-						window.location.href = '${pageContext.request.contextPath}/member/myPage.do';
-					} else {
-						console.log('ajax return error');
-					}				
-				},
-				error: function() {
-					alert("ajax error");
-				}
+					success : function(member) {	
+						if(member === 'old') {
+							console.log('old');
+							sendPostRequest('../main.do');
+						} else if (member == 'new') {
+							console.log('new');
+							sendPostRequest('${pageContext.request.contextPath}/member/myPage.do');
+						} else {
+							console.log('ajax return error');
+						}				
+					},
+					error: function() {
+						alert("ajax error");
+					}
 			}) 
 				
 				
 		  }
 		  
-		  
+			function sendPostRequest(url) {
+			    var form = document.createElement('form');
+			    form.method = 'POST';
+			    form.action = url;
+			    document.body.appendChild(form);
+			    form.submit();
+			}
 	</script>
 	
 </body>

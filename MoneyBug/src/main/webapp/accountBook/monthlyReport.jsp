@@ -74,7 +74,14 @@
     	}
     	monthSelect.selectedIndex = new Date().getMonth();
     	//사전 설정부  
-    	  
+    	let userNickname ="";
+    	$.ajax({
+    		url : "getUserNickname",
+    		success : function(nickname) {
+    			userNickname = nickname;
+			}
+    		
+    	})
     	let accountBookId = -1;
 		$.ajax({
 			url : "seq",
@@ -452,6 +459,7 @@
         		},
         		data: {
         			chartImage : chartImage,
+        			userNickname : userNickname,
             		accountBookId: accountBookId,
             		year: year,
             		month: month
@@ -473,24 +481,35 @@
     		});
 		}); // reportDownloadPDF
 		$('#reportDownloadExcel').click(function() {
+			let year = $('#year').val();
+    		let month = $('#month').val();
 			$.ajax({
-				url : "downloadExcel",
-				method : "POST",
+        		url: "downloadExcel",
+        		method: "POST",
         		xhrFields: {
             		responseType: "blob" //responseType을 blob으로 설정해 바이너리 데이터를 받아오도록함
         		},
         		data: {
+        			userNickname : userNickname,
             		accountBookId: accountBookId,
             		year: year,
             		month: month
         		},
-        		success : function(excel){
-        			
+		        success: function(excel) {
+		        	
+        		    // 다운로드 링크 생성
+            		let file = new File([excel], "accountBook_" + accountBookId + "_" + year + "_" + month + ".xlsx", { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+            		let link = document.createElement("a");
+            		link.href = URL.createObjectURL(file); //window객체의 하위객체인 URL 객체를 통해 파일 접근링크 생성
+            		link.download = file.name; // 파일 다운로드
+            		document.body.appendChild(link);
+            		link.click();
+            		document.body.removeChild(link);
         		},
-        		error : function() {
-					
-				}
-			}); //ajax
+        		error: function() {
+            
+        		}
+    		});
 		}); // reportDownloadExcel
 
     });//$

@@ -52,7 +52,6 @@ public class MemberController {
 		if (!selectedMembers.isEmpty()) {
 			MemberDTO selectedMember = selectedMembers.get(0); // 첫 번째 멤버 선택
 			session.setAttribute("userNickname", selectedMember.getUserNickname());
-			setUserNicknameToSession(session, selectedMember.getUserNickname());
 		}	
 		return "redirect:/main.jsp";
 	}
@@ -60,10 +59,10 @@ public class MemberController {
 	@GetMapping("/logout.do")
 	public String logout(HttpSession session) {
 		// 세션을 지워서 로그아웃 처리
-		session.invalidate();
-		
+		session.invalidate();		
 		return "redirect:/main.jsp"; // 로그아웃 후 메인 페이지로 리다이렉트
 	}
+	
 	// 마이페이지로 이동 (신규, 기존회원 모두)
 	@PostMapping("/member/myPage.do")
 	public String myPage(MemberDTO memberDTO, Model model, HttpSession session) {
@@ -79,11 +78,6 @@ public class MemberController {
 			model.addAttribute("socialId", selectedMember.getSocialId());
 		}
 		return "member/myPage";
-	}
-
-
-	private void setUserNicknameToSession(HttpSession session, String userNickname) {
-		session.setAttribute("userNickname", userNickname);
 	}
 
 
