@@ -169,7 +169,7 @@ body {
 			<h1>MoneyBug Shop</h1>
 			<p>돈벌레 사이트에서만 제공하는 다양한 이벤트와 굿즈</p>
 			<!-- 광고 배너 버튼 -->
-			<a href="shoplist" class="btn btn-outline-light">전체상품리스트</a>
+			<a href="shoplist?page=1" class="btn btn-outline-light">전체상품리스트</a>
 		</div>
 	</div>
 

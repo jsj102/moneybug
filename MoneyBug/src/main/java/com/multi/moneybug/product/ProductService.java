@@ -11,10 +11,8 @@ public class ProductService {
     @Autowired
     ProductDAO productDAO; // ProductDAO를 주입
 
-    public List<ProductDTO> getAllProducts(ProductDTO productDTO) {
-        // ProductDAO를 사용하여 상품 리스트를 조회
-        List<ProductDTO> productList = productDAO.getAllProducts(productDTO);
-        return productList;
+    public List<ProductDTO> getAllProducts(ProductPageDTO productpageDTO) {
+        return productDAO.getAllProducts(productpageDTO);
     }
     
     public ProductDTO getProductById(int productId) {
@@ -33,5 +31,9 @@ public class ProductService {
 
 	public void insertNewProduct(ProductDTO productDTO) {
 		productDAO.insert(productDTO);
+	}
+
+	public int count() {
+		return productDAO.count();
 	}
 }

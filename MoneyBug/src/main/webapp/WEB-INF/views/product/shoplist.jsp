@@ -13,12 +13,10 @@
 <meta name="author" content="" />
 <title>돈벌레 Shop</title>
 <!-- 부트스트랩 링크 추가 -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<!-- Bootstrap icons-->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-	rel="stylesheet" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 body {
 	background: #E4D5FF;
@@ -66,9 +64,16 @@ body {
 	background-color: white;
 }
 
-.badge {
+.numbadge {
 	top: 10px;
 	left: 10px;
+	position: absolute;
+	z-index: 2;
+}
+
+.typebadge {
+	top: 10px;
+	right: 10px;
 	position: absolute;
 	z-index: 2;
 }
@@ -98,6 +103,21 @@ body {
 	text-decoration: line-through;
 	color: red;
 }
+
+.pagination {
+  margin: 30px 0 70px 0;
+  justify-content: center;
+  display: flex;
+}
+
+.pagination .page-link {
+    color: #9669FF;
+}
+
+.pagination>li.active>a {
+  background-color: #9669FF !important;
+}
+
 </style>
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -144,6 +164,9 @@ body {
     	        }
     	    });
     	}
+     
+     
+        
     </script>
 </head>
 
@@ -178,9 +201,10 @@ body {
                             <a href="<c:url value='/product/shopDetail?productId=${product.productId}' />">
                                 <img src="${product.productImg}" alt="Product Image" />
                             </a>
-                            <h4><span class="badge bg-light badge-lg">${product.productType}</span></h4>
+                            <h4><span class="badge typebadge bg-light badge-lg">${product.productType}</span></h4>
                             <!-- Shopping cart-->
-                            <button type="button" class="btn btn-dark bi bi-cart-plus" onclick="location.href='basketlist'"></button>
+                            <button type="button" class="btn btn-dark bi bi-cart-plus" onclick="goToBasket(${product.productId})"></button>
+                            <h4><span class="badge numbadge rounded-pill bg-light badge-lg">${product.rowNum}</span></h4>
                         </div>
                         <!-- Product details-->
                         <div class="product-text">
@@ -204,8 +228,24 @@ body {
     </div>
 </section>
 
+<c:set var="currentPage" value="${param.page}" />
 
-<!-- Bootstrap core JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<div>
+  <ul class="pagination pagination-lg">
+    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+      <a class="page-link" href="shoplist?page=${currentPage - 1}" ${currentPage == 1 ? 'aria-disabled="true"' : ''}>«</a>
+    </li>
+    <c:forEach begin="1" end="${pages}" varStatus="status">
+      <li class="page-item">
+        <a class="page-link" href="shoplist?page=${status.index}">${status.index}</a>
+      </li>
+    </c:forEach>
+    <li class="page-item ${currentPage == pages ? 'disabled' : ''}">
+      <a class="page-link" href="shoplist?page=${currentPage + 1}" ${currentPage == pages ? 'aria-disabled="true"' : ''}>»</a>
+    </li>
+  </ul>
+</div>
+
+
 </body>
 </html>

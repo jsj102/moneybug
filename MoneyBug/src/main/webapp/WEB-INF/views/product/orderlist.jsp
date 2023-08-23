@@ -14,8 +14,9 @@
 		background: #E4D5FF;
 	}
 	
-	.basket-container {
-		margin: 200px; display : flex;
+	.order-container {
+		margin: 200px;
+		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
@@ -26,7 +27,7 @@
 		justify-content: center;
 	}
 	
-	.order-container {
+	.pay-container {
 		margin-top: 30px;
 		flex-direction: column;
 		align-items: center;
@@ -45,16 +46,22 @@
 		background-color: #764dff;
 		color: white;
 		width: 70%;
-		align-self: center; /* Add this line */
+		align-self: center;
+	}
+	
+	.btn-custom:hover {
+		background-color: black; 
+		color: white;
 	}
 	
 	#idconfirm, #logout {
 		margin-right: 10px; 
 	}
+	
 	</style>
 	
-	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
         function updateTotalAmount() {
             var totalAmount = 0;
@@ -78,17 +85,28 @@
                 updateTotalAmount();
             });
         });
+        
+        
+	      function execDaumPostcode() {
+	        new daum.Postcode( {
+	          oncomplete: function( data ) {
+	            document.getElementById( 'zip-code' ).value = data.zonecode;
+	            document.getElementById( 'address-1' ).value = data.address;
+	          }
+	        } ).open();
+	      }
+	      
     </script>
 </head>
 <body>
-	<div class="basket-container">
+	<div class="order-container">
 		<div class="user-container d-flex flex-column align-items-center">
 			<% 
         String userNickname = (String) session.getAttribute("userNickname");
 
         if (userNickname != null && !userNickname.isEmpty()) {
             %>
-			<h2><%= userNickname %>님의 장바구니
+			<h2><%= userNickname %>님의 결제주문서
 			</h2>
 			<div class="d-flex justify-content-center mt-2">
 				<button class="btn btn-outline-dark" id="idconfirm"
@@ -106,8 +124,8 @@
         }
         %>
 		</div>
-		<div class="order-container">
-			<form action="submitOrder" method="post">
+		<div class="pay-container">
+			<form action="payOrder" method="post">
 				<table
 					class="table table-light table-hover table-striped text-center">
 					<thead>
@@ -118,7 +136,6 @@
 							<th>가격</th>
 							<th>수량</th>
 							<th>합계</th>
-							<th>선택</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -133,23 +150,37 @@
 										<td id="productPrice_${product.productId}">${product.productPrice}</td>
 										<td id="productCount_${product.productId}">${basket.productCount}</td>
 										<td>${product.productPrice * basket.productCount}</td>
-										<td><input type="checkbox" name="selectedProducts"
-											value="${basket.productId}" /></td>
 									</tr>
 								</c:if>
 							</c:forEach>
 						</c:forEach>
 					</tbody>
 				</table>
+				
+				<blockquote class="blockquote">
+					<p id="paySum"><strong>결제하실 금액은 ${totalAmount} 원입니다.</strong></p>
+				</blockquote>
+				<div class="mb-3">
+	        	<label for="userName">주문자 성함:</label><br>
+	        	<input type="text" class="form-control" id="userName" name="userName" readonly></div>
+	        	
+				<div class="mb-3">
+	        	<label for="userAddress">배송지 전화번호:</label><br>
+	        	<input type="text" class="form-control" id="userAddress" name="userAddress" required></div>
+	        	
+			  	<div class="mb-3">      	
+		     	<button class="btn btn btn-custom" id="postSearch" onclick="execDaumPostcode()">우편번호 찾기</button>
+		        <input type="text" class="form-control" id="zip-code" placeholder="우편번호">
+		        </div>
+		        <div class="mb-3"> <input type="text" class="form-control" id="address-1" placeholder="도로명주소"></div>
+		        <div class="mb-3"> <input type="text" class="form-control" id="address-2" placeholder="상세주소" ></div>
+	    
 				<div class="d-flex justify-content-center mt-3">
-					<button type="submit" class="btn btn-lg btn-custom">주문하기</button>
+					<button type="submit" class="btn btn-lg btn-custom">결제하기</button>
 				</div>
 			</form>
 		</div>
 		<hr>
-		<div class="orderSum">
-			총 주문 금액: <span id="totalAmount">${totalAmount}원</span>
-		</div>
 	</div>
 
 <!-- Bootstrap JavaScript -->

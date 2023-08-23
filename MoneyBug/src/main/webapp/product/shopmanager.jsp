@@ -28,7 +28,10 @@
     }
     
     .result {
+    	background: white;
+    	width: 80%;
     	border: 1px;
+    	margin-bottom: 50px;
     }
 </style>
     <script type="text/javascript">
@@ -57,7 +60,7 @@
         <button class="btn btn-dark btn-lg btn-long" onclick="location.href='../product/manageOrder'">주문 관리</button>
     </div>
     <hr>
-    <div id="result"></div>
+    <div class="result" id="result"></div>
     
 
 </body>
