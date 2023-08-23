@@ -44,11 +44,6 @@ public class AccountFileDownloadService {
 		Workbook accountBookExcel = createAccountBookExcel(budgetList, expensesList, detailList, detailMap, year,
 				month);
 
-		/**
-		 * download
-		 */
-		String fileName = "spring_excel_download";
-
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		response.setHeader("Content-Disposition", "attachment; filename=\"accountBook.xlsx\""); // JS에서 파일명설정함
 
@@ -62,92 +57,96 @@ public class AccountFileDownloadService {
 	public Workbook createAccountBookExcel(List<AccountBudgetDTO> budgetList, List<AccountExpensesDTO> expensesList,
 			List<AccountDetailDTO> detailList, LinkedHashMap<String, Integer> detailMap, int year, int month) {
 		Workbook accountBookExcel = new XSSFWorkbook();
-		String[] sheetNameArray = { month + "월 예산", "고정 지출", "세부 내역", "카테고리별 내역" };
+		XSSFCellStyle headerStyle = accountBookExcelHeaderSetting(accountBookExcel);
+		XSSFCellStyle bodyStyle = accountBookExcelBodySetting(accountBookExcel);
+		
+		
 		String[] headerData = null;
 		String[][] bodyData = null;
 		//
 		Sheet sheet = accountBookExcel.createSheet(month + "월 예산");
-		sheet.setDefaultColumnWidth(30); // 디폴트 너비 설정
+		sheet.setDefaultColumnWidth(20); // 디폴트 너비 설정
 		headerData = new String[] {"카테고리","금액"};
 		bodyData = new String[budgetList.size()][headerData.length];
 		for(int i = 0;i<budgetList.size();i++) {
 			AccountBudgetDTO accountBudgetDTO = budgetList.get(i);
 			bodyData[i] = new String[] {accountBudgetDTO.getFixedCategory(),Integer.toString(accountBudgetDTO.getPrice())};
 		}
-		createAccountBookExcelSheet(accountBookExcel, year, month, sheet, headerData, bodyData);
+		createAccountBookExcelSheet(accountBookExcel,sheet, headerData, bodyData, headerStyle, bodyStyle);
 		
 		sheet = accountBookExcel.createSheet("고정 지출");
-		sheet.setDefaultColumnWidth(30); // 디폴트 너비 설정
+		sheet.setDefaultColumnWidth(30);
 		headerData = new String[] {"카테고리","금액"};
 		bodyData = new String[expensesList.size()][headerData.length];
 		for(int i = 0;i<expensesList.size();i++) {
 			AccountExpensesDTO accountExpensesDTO = expensesList.get(i);
 			bodyData[i] = new String[] {accountExpensesDTO.getFixedCategory(),Integer.toString(accountExpensesDTO.getPrice())};
 		}
-		createAccountBookExcelSheet(accountBookExcel, year, month, sheet, headerData, bodyData);
+		createAccountBookExcelSheet(accountBookExcel, sheet, headerData, bodyData, headerStyle, bodyStyle);
 		
-		sheet = accountBookExcel.createSheet("고정 지출");
-		sheet.setDefaultColumnWidth(30); // 디폴트 너비 설정
-		headerData = new String[] {"카테고리","금액"};
-		bodyData = new String[expensesList.size()][headerData.length];
-		for(int i = 0;i<expensesList.size();i++) {
-			AccountExpensesDTO accountExpensesDTO = expensesList.get(i);
-			bodyData[i] = new String[] {accountExpensesDTO.getFixedCategory(),Integer.toString(accountExpensesDTO.getPrice())};
+		sheet = accountBookExcel.createSheet(month+"월 전체 내역");
+		sheet.setDefaultColumnWidth(30);
+		headerData = new String[] {"카테고리","수입/지출","사용내역","금액"};
+		bodyData = new String[detailList.size()][headerData.length];
+		for(int i = 0;i<detailList.size();i++) {
+			AccountDetailDTO accountDetailDTO = detailList.get(i);
+			bodyData[i] = new String[] {accountDetailDTO.getAccountCategory(),accountDetailDTO.getAccountType(),accountDetailDTO.getDescription(),Integer.toString(accountDetailDTO.getPrice())};
 		}
-		createAccountBookExcelSheet(accountBookExcel, year, month, sheet, headerData, bodyData);
+		createAccountBookExcelSheet(accountBookExcel, sheet, headerData, bodyData, headerStyle, bodyStyle);
+		
+		
+		sheet = accountBookExcel.createSheet(month+"카테고리별 내역");
+		sheet.setDefaultColumnWidth(30);
+		headerData = new String[] {"카테고리","금액"};
+		Set<String> keys = detailMap.keySet();
+		bodyData = new String[detailMap.size()][headerData.length];
+		int detailMapI = 0;
+		for(String key : keys) {
+			bodyData[detailMapI++] = new String[] {key,Integer.toString(detailMap.get(key))};
+		}
+		createAccountBookExcelSheet(accountBookExcel, sheet, headerData, bodyData, headerStyle, bodyStyle);
 		
 		return accountBookExcel;
 	}
+	
+	public XSSFCellStyle accountBookExcelHeaderSetting(Workbook accountBookExcel) {
+		XSSFCellStyle headerStyle = (XSSFCellStyle) accountBookExcel.createCellStyle();
+		XSSFFont headerFont = (XSSFFont) accountBookExcel.createFont();
+		headerFont.setColor(new XSSFColor(new byte[] { (byte) 255, (byte) 255, (byte) 255 }));
 
-	public Sheet createAccountBookExcelSheet(Workbook accountBookExcel, int year, int month, Sheet sheet,
-			String[] headerData, String[][] bodyData) {
-		/**
-		 * header font style
-		 */
-		XSSFFont headerXSSFFont = (XSSFFont) accountBookExcel.createFont();
-		headerXSSFFont.setColor(new XSSFColor(new byte[] { (byte) 255, (byte) 255, (byte) 255 }));
-		
-		/**
-		 * header cell style
-		 */
-		XSSFCellStyle headerXssfCellStyle = (XSSFCellStyle) accountBookExcel.createCellStyle();
+		headerStyle.setBorderLeft(BorderStyle.THIN);
+		headerStyle.setBorderRight(BorderStyle.THIN);
+		headerStyle.setBorderTop(BorderStyle.THIN);
+		headerStyle.setBorderBottom(BorderStyle.THIN);
 
-		// 테두리 설정
-		headerXssfCellStyle.setBorderLeft(BorderStyle.THIN);
-		headerXssfCellStyle.setBorderRight(BorderStyle.THIN);
-		headerXssfCellStyle.setBorderTop(BorderStyle.THIN);
-		headerXssfCellStyle.setBorderBottom(BorderStyle.THIN);
+		headerStyle.setFillForegroundColor(new XSSFColor(new byte[] { (byte) 34, (byte) 37, (byte) 41 }));
+		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		headerStyle.setFont(headerFont);
+		return headerStyle;
 
-		// 배경 설정
-		headerXssfCellStyle.setFillForegroundColor(new XSSFColor(new byte[] { (byte) 34, (byte) 37, (byte) 41 }));
-		headerXssfCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		headerXssfCellStyle.setFont(headerXSSFFont);
+	}
+	public XSSFCellStyle accountBookExcelBodySetting(Workbook accountBookExcel) {
+		XSSFCellStyle bodyStyle = (XSSFCellStyle) accountBookExcel.createCellStyle();
 
-		/**
-		 * body cell style
-		 */
-		XSSFCellStyle bodyXssfCellStyle = (XSSFCellStyle) accountBookExcel.createCellStyle();
+		bodyStyle.setBorderLeft(BorderStyle.THIN);
+		bodyStyle.setBorderRight(BorderStyle.THIN);
+		bodyStyle.setBorderTop(BorderStyle.THIN);
+		bodyStyle.setBorderBottom(BorderStyle.THIN);
+		return bodyStyle;
+	}
+	
+	public Sheet createAccountBookExcelSheet(Workbook accountBookExcel, Sheet sheet,
+			String[] headerData, String[][] bodyData,XSSFCellStyle headerStyle, XSSFCellStyle bodyStyle) {
 
-		// 테두리 설정
-		bodyXssfCellStyle.setBorderLeft(BorderStyle.THIN);
-		bodyXssfCellStyle.setBorderRight(BorderStyle.THIN);
-		bodyXssfCellStyle.setBorderTop(BorderStyle.THIN);
-		bodyXssfCellStyle.setBorderBottom(BorderStyle.THIN);
-
-		/**
-		 * header data
-		 */
-		int rowCount = 0; // 데이터가 저장될 행
-		
-
+		int rowCount = 0;
 		Row headerRow = null;
 		Cell headerCell = null;
 
 		headerRow = sheet.createRow(rowCount++);
 		for (int i = 0; i < headerData.length; i++) {
 			headerCell = headerRow.createCell(i);
-			headerCell.setCellValue(headerData[i]); // 데이터 추가
-			headerCell.setCellStyle(headerXssfCellStyle); // 스타일 추가
+			headerCell.setCellValue(headerData[i]);
+			headerCell.setCellStyle(headerStyle);
 		}
 
 
@@ -159,8 +158,8 @@ public class AccountFileDownloadService {
 
 			for (int i = 0; i < bodyDatas.length; i++) {
 				bodyCell = bodyRow.createCell(i);
-				bodyCell.setCellValue(bodyDatas[i]); // 데이터 추가
-				bodyCell.setCellStyle(bodyXssfCellStyle); // 스타일 추가
+				bodyCell.setCellValue(bodyDatas[i]);
+				bodyCell.setCellStyle(bodyStyle);
 			}
 		}
 		return sheet;
