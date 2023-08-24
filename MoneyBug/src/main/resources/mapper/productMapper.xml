@@ -51,5 +51,5 @@
 	  insert into product 
 	  values (null,#{productType}, #{productName}, #{productImg}, #{productOriprice}, #{productPrice}, #{productInfo})
 	</insert>
-
+	
 </mapper>

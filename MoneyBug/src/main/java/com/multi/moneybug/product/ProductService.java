@@ -36,4 +36,5 @@ public class ProductService {
 	public int count() {
 		return productDAO.count();
 	}
+
 }

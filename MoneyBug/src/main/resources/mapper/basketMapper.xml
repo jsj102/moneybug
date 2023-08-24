@@ -35,4 +35,14 @@
         INSERT INTO basket (user_id, product_id, product_count) VALUES (#{userId}, #{productId}, #{productCount})
     </insert>
     
+    <select id="order_List" parameterType="java.util.List" resultMap="basketResultMap">
+    SELECT *
+    FROM basket
+    WHERE seq IN
+    <foreach collection="list" item="seq" open="(" separator="," close=")">
+        #{seq}
+    </foreach>
+</select>
+    
+    
 </mapper>
