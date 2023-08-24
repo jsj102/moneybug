@@ -11,15 +11,14 @@
     width: 15%;
     height: 90%;
     float: left;
-    background-color: rgba(255, 255, 255, 0.472);
+    background-color: #C4D7B2;
 }
 
 #section {
     width: 65%;
     height: 90%;
     float: left;
-    background: linear-gradient(to bottom, #CA61FF, hsl(265, 100%, 72%),
-		#945FFF);
+    background: #A0C49D;
     overflow-y: auto;
 }
 
@@ -84,17 +83,7 @@
 /* ㄴ> nav 버튼 구조 */
 
 
-body {
-	background: linear-gradient(to bottom, #CA61FF, hsl(265, 100%, 72%),
-		#945FFF);
-	min-height: 100vh; /* 최소한 화면 높이만큼 높이 설정 */
-}
 
-div {
-	background-color: rgba(255, 255, 255, 0.472);
-}
-
-/* ㄴ> 전체적인 색상 통일 */
 
 .popup-content {
     background: linear-gradient(to bottom, #CA61FF, hsl(265, 100%, 72%), #945FFF);
@@ -119,8 +108,9 @@ div {
 
 .RecentTable th,
 .RecentTable td {
-	color: white;
-    border: 1px solid #993300;
+	color: purple;
+	font-weight: bold;
+    border: 1px solid #F7FFE5;
     padding: 8px; /* 셀 내용과 테두리 사이의 간격 */
 }
 
@@ -131,7 +121,8 @@ div {
 .MonthlyTable{width:500px; height:655px; background-color: rgba(255, 255, 255, 0.472);  text-align: center; border: 1px solid #993300;}
 .MonthlyTable th,
 .MonthlyTable td {
-	color: white;
+	color: purple;
+	font-weight: bold;
     border: 1px solid #993300;
     padding: 8px; /* 셀 내용과 테두리 사이의 간격 */
 }
@@ -140,5 +131,8 @@ div {
 	font-weight: bold;
     background-color: rgba(200, 200, 200, 0.472); /* 테이블 헤더 배경색 */
 }
-.MonthlyDiv{display: flex; width:1100px; height:655px; background-color: rgba(200, 200, 200, 0.472);  text-align: center; border: 1px solid #993300;}
-.MonthlyDiv2{display: flex; width:1100px; height:655px; background-color: rgba(200, 200, 200, 0.472);  text-align: center; border: 1px solid #993300;}
+.MonthlyDiv{display: flex; width:1100px; height:655px; background-color: #F7FFE5;  text-align: center; border: 1px solid #E1ECC8;}
+.MonthlyDiv2{display: flex; width:1100px; height:340px; background-color: #F7FFE5;  text-align: center; border: 1px solid #E1ECC8;}
+.MonthlyDiv3{display: flex; width:1100px; height:340px; background-color: #F7FFE5;  text-align: left; border: 1px solid #993300; position: relative; 	color: purple;
+	font-weight: bold; padding: 5px;
+    }

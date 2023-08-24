@@ -44,6 +44,14 @@ public class AccountDetailDAO {
 	public List<AccountDetailDTO> readListMonth(AccountDetailDTO accountDetailDTO) {
 		return my.selectList("accountDetail.listMonth",accountDetailDTO);
 	}
+
+	public List<AccountDetailDTO> readListMonthAllUser(AccountDetailDTO accountDetailDTO) {
+		return my.selectList("accountDetail.listMonthAllUser",accountDetailDTO);
+	}
+	
+	public int countListMonthUseUser(AccountDetailDTO accountDetailDTO) {
+		return my.selectOne("accountDetail.listMonthCountUseUser",accountDetailDTO);
+	}
 	
 	
 }

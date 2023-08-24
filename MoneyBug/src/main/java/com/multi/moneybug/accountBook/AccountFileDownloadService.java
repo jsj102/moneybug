@@ -112,15 +112,15 @@ public class AccountFileDownloadService {
 	public XSSFCellStyle accountBookExcelHeaderSetting(Workbook accountBookExcel) {
 		XSSFCellStyle headerStyle = (XSSFCellStyle) accountBookExcel.createCellStyle();
 		XSSFFont headerFont = (XSSFFont) accountBookExcel.createFont();
-		headerFont.setColor(new XSSFColor(new byte[] { (byte) 255, (byte) 255, (byte) 255 }));
+		headerFont.setColor(new XSSFColor(new byte[] { (byte) 125, (byte) 255, (byte) 120 }));//글자 rgb
 
-		headerStyle.setBorderLeft(BorderStyle.THIN);
-		headerStyle.setBorderRight(BorderStyle.THIN);
-		headerStyle.setBorderTop(BorderStyle.THIN);
-		headerStyle.setBorderBottom(BorderStyle.THIN);
+		headerStyle.setBorderLeft(BorderStyle.MEDIUM);
+		headerStyle.setBorderRight(BorderStyle.MEDIUM);
+		headerStyle.setBorderTop(BorderStyle.MEDIUM);
+		headerStyle.setBorderBottom(BorderStyle.MEDIUM);
 
-		headerStyle.setFillForegroundColor(new XSSFColor(new byte[] { (byte) 34, (byte) 37, (byte) 41 }));
-		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		headerStyle.setFillForegroundColor(new XSSFColor(new byte[] { (byte) 125, (byte) 150, (byte) 30 })); //배경rgb
+		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND); //채우기
 		headerStyle.setFont(headerFont);
 		return headerStyle;
 
