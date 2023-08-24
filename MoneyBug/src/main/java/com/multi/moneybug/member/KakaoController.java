@@ -28,8 +28,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class KakaoController {
-
-
 	@GetMapping("member/kakaocallback")
 	
 	public MemberDTO kakaoCallback(Model model,@RequestParam("code")String code, MemberDTO memberDTO) {
