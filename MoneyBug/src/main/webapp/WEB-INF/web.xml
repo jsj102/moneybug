@@ -48,10 +48,6 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping> 
-    <!--첨부파일 용량 -->
-        <multipart-config>
-            <max-file-size>31457280</max-file-size>   <!-- 30mb -->
-            <max-request-size>1004857600</max-request-size>  <!-- 100mb -->
-        </multipart-config>
+
 
 </web-app>

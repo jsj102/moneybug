@@ -19,9 +19,11 @@
             },
             success : function(member) {	
 				if(member === 'old') {
-					window.location.href = '${pageContext.request.contextPath}/main.do';
+					console.log('old');
+					sendPostRequest('../main.do');
 				} else if (member == 'new') {
-					window.location.href = '${pageContext.request.contextPath}/member/myPage.do';
+					console.log('new');
+					sendPostRequest('${pageContext.request.contextPath}/member/myPage.do');
 				} else {
 					console.log('ajax return error');
 				}				
@@ -29,9 +31,17 @@
 			error: function() {
 				alert("ajax error");
 			}
-
         });
     });
+	
+	function sendPostRequest(url) {
+	    var form = document.createElement('form');
+	    form.method = 'POST';
+	    form.action = url;
+	    document.body.appendChild(form);
+	    form.submit();
+	}
 </script>
+
 </body>
 </html>
