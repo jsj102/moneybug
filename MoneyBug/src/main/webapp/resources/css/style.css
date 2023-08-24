@@ -1,0 +1,143 @@
+@charset "UTF-8";
+
+#header, #footer {
+	width: 100%;
+	height: 5%;
+	clear: both;
+	background: #ffffff;
+}
+
+#nav {
+    width: 15%;
+    height: 90%;
+    float: left;
+    background-color: rgba(255, 255, 255, 0.472);
+}
+
+#section {
+    width: 65%;
+    height: 90%;
+    float: left;
+    background: linear-gradient(to bottom, #CA61FF, hsl(265, 100%, 72%),
+		#945FFF);
+    overflow-y: auto;
+}
+
+ #aside {
+    width: 20%; 
+    height: 90%; 
+    float: left;
+    background: transparent; /* 배경색을 투명하게 설정 */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+   
+}
+/* ㄴ> html 구조  */
+
+
+.header-btn{
+	background: #ffffff;
+	padding : 10px;
+	border: 0px;
+	width: 100px;
+	height: 40px;
+}
+/*ㄴ> 헤더 버튼 */
+
+.dropbtn {
+  width: 200px;
+  height: 50px;
+  border: none;
+  cursor: pointer;
+  background-color: #E6E6FA;
+  text-color: #DDA0DD;
+  font-weight: bold;
+}
+
+.dropdown {
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover { }
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+}
+/* ㄴ> nav 버튼 구조 */
+
+
+body {
+	background: linear-gradient(to bottom, #CA61FF, hsl(265, 100%, 72%),
+		#945FFF);
+	min-height: 100vh; /* 최소한 화면 높이만큼 높이 설정 */
+}
+
+div {
+	background-color: rgba(255, 255, 255, 0.472);
+}
+
+/* ㄴ> 전체적인 색상 통일 */
+
+.popup-content {
+    background: linear-gradient(to bottom, #CA61FF, hsl(265, 100%, 72%), #945FFF);
+    min-height: 100vh;
+    background-color: rgba(255, 255, 255, 0.472);
+}
+
+/* ㄴ> 팝업창 색상 */
+
+
+.budget-table{background-color: rgba(255, 255, 255, 0.472); width:400px;}
+.expenses-table{background-color: rgba(255, 255, 255, 0.472); width:400px;}
+.addline{background-color: rgba(255, 255, 255, 0.472); width:350px;}
+.moneyinput{width:250px;}
+.RecentTable {
+    width: 500px;
+    height: 340px;
+    background-color: rgba(255, 255, 255, 0.472);
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.RecentTable th,
+.RecentTable td {
+	color: white;
+    border: 1px solid #993300;
+    padding: 8px; /* 셀 내용과 테두리 사이의 간격 */
+}
+
+.RecentTable th {
+	font-weight: bold;
+    background-color: rgba(200, 200, 200, 0.472); /* 테이블 헤더 배경색 */
+}
+.MonthlyTable{width:500px; height:655px; background-color: rgba(255, 255, 255, 0.472);  text-align: center; border: 1px solid #993300;}
+.MonthlyTable th,
+.MonthlyTable td {
+	color: white;
+    border: 1px solid #993300;
+    padding: 8px; /* 셀 내용과 테두리 사이의 간격 */
+}
+
+.MonthlyTable th {
+	font-weight: bold;
+    background-color: rgba(200, 200, 200, 0.472); /* 테이블 헤더 배경색 */
+}
+

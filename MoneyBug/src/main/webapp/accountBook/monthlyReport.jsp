@@ -12,29 +12,16 @@
 	<!-- 일별그래프 - 내역 -->
 	<!-- GPT -->
 	<!-- 선언만 먼저 해두고 ajax후에 success의 result로 chart생성 -->
-<<<<<<< HEAD
-	<div align="left">
-		<label for="year">년 : </label>
-			<select id="year" name="year">
-  			<!-- 여기에 년도 옵션을 추가 -->
-=======
 	<div align="right">
 		<label for="year">년 : </label>
 			<select id="year" name="year">
->>>>>>> f652f4ae2c87244a90919d542c28dc1bf6b1d75a
 		</select>
 
 		<label for="month">월 : </label>
 			<select id="month" name="month">
-<<<<<<< HEAD
-  			<!-- 여기에 월 옵션을 추가 -->
-		</select>
-		<button id="moveReport">이동</button>
-=======
 		</select>
 		<button id="moveReport">이동</button>
 		<button id="reportDownload">다운로드</button>
->>>>>>> f652f4ae2c87244a90919d542c28dc1bf6b1d75a
 	</div>
 	<h3>월간 지출 차트</h3>
 	<div id="chartcontent" style="display: flex; width: 1100px; height: 655px; border: 1px solid #993300;">
@@ -63,26 +50,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript">
     $(function() {
-<<<<<<< HEAD
-    	  // 년도 옵션 추가
-    	  const yearSelect = document.getElementById("year");
-    	  const currentYear = new Date().getFullYear();
-    	  for (let year = currentYear; year >= currentYear - 10; year--) {
-    	    const option = document.createElement("option");
-    	    option.value = year;
-    	    option.textContent = year;
-    	    yearSelect.appendChild(option);
-    	  }
-    	  console.log(document.getElementById("year"));
-    	  // 월 옵션 추가
-    	  const monthSelect = document.getElementById("month");
-    	  for (let month = 1; month <= 12; month++) {
-    	    const option = document.createElement("option");
-    	    option.value = month;
-    	    option.textContent = month;
-    	    monthSelect.appendChild(option);
-    	  }
-=======
 		const ctx = document.getElementById('myChart');
 		const ctx2 = document.getElementById('myChart2');
 		let chart1;
@@ -108,7 +75,6 @@
     	//사전 설정부  
     	  
     	  
->>>>>>> f652f4ae2c87244a90919d542c28dc1bf6b1d75a
         $.ajax({
             url: "monthlyReportRequestJSON",
             dataType: "json",

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,15 +19,16 @@ public class AccountDetailController {
 
 	@Autowired
 	private AccountDetailService accountDetailService;
-	
+	@Autowired
+	private AccountBookService accountBookService;
+
 	@RequestMapping("insert.accountDetail")
 	public String insert(AccountDetailDTO accountDetailDTO, Model model) {
-		System.out.println("hello");
 		int result = accountDetailService.insert(accountDetailDTO);
 		model.addAttribute("result", result);
 		return "redirect: accountBook/accountDetail_List.jsp";
 	}
-
+	
 	@RequestMapping("readSeq.accountDetail")
 	public String readSeq(Model model, String seq) {
 		AccountDetailDTO account = accountDetailService.readOne(seq);
@@ -34,9 +37,12 @@ public class AccountDetailController {
 	}
 
 	@RequestMapping("readAll.accountDetail")
-	public String readAll(Model model,@RequestParam String accountBookId) {
+	public String readAll(Model model,HttpSession session) {
+		String convert = (String) session.getAttribute("socialId");
+		String accountBookId = accountBookService.insertAccountDetailFindSeq(convert);
 		List<AccountDetailDTO> list = accountDetailService.readList(accountBookId);
 		model.addAttribute("list", list);
+		model.addAttribute("accountBookId", accountBookId);
 		return "accountBook/accountDetail_read";
 	}
 	
@@ -49,7 +55,6 @@ public class AccountDetailController {
 	@RequestMapping("update.accountDeatil")
 	public String update(@ModelAttribute AccountDetailDTO account) {
 		accountDetailService.update(account);
-		System.out.println(account.toString());
 		return "accountBook/accountDetail_read";
 	}
 	
@@ -61,10 +66,12 @@ public class AccountDetailController {
 
 	@RequestMapping("accountBook/monthlyReportRequestJSON")
 	@ResponseBody
-	public HashMap<String,Object> monthlyReportRequestJSON(Model model,@RequestParam("year") int year, @RequestParam("month") int month) {
-		int accountBookId=0; 									//나중에 accountBookId값 넣어주기session으로
+	public HashMap<String,Object> monthlyReportRequestJSON(Model model,@RequestParam("year") int year, @RequestParam("month") int month,HttpSession session) {
+		String convert = (String) session.getAttribute("socialId");
+		String accountBookId = accountBookService.insertAccountDetailFindSeq(convert);
+		
 		AccountDetailDTO accountDetailDTO = new AccountDetailDTO();
-		accountDetailDTO.setAccountBookId(accountBookId);
+		accountDetailDTO.setAccountBookId(Integer.parseInt(accountBookId));
 		accountDetailDTO.setCurrentYear(year);
 		accountDetailDTO.setCurrentMonth(month);
 		
@@ -83,20 +90,18 @@ public class AccountDetailController {
 	
 	@RequestMapping("readListPage.accountDetail")
 	public String readListPage(AccountDetailDTO searchDTO,Model model) {
-		System.out.println(searchDTO.toString());
 		List<AccountDetailDTO> list = accountDetailService.readListPage(searchDTO);
-		System.out.println("리스트 :"  + list.toString());
 		model.addAttribute("list", list);
 		model.addAttribute("offset", searchDTO.getOffset());
 		return "accountBook/accountDetail_read";
 	}
 	
 	@RequestMapping("readListSearch.accountDetail")
-	public String readListSearch(AccountDetailSearchDTO account,Model model) {
-		account.setAccountBookId(1);
+	public String readListSearch(AccountDetailSearchDTO account,Model model,HttpSession session) {
+		String convert = (String) session.getAttribute("socialId");
+		String accountBookId = accountBookService.insertAccountDetailFindSeq(convert);
+		account.setAccountBookId(Integer.parseInt(accountBookId));
 		List<AccountDetailDTO> list = accountDetailService.readListSearch(account);
-		System.out.println(account.toString());
-		System.out.println(list.toString());
 		model.addAttribute("list", list);
 		model.addAttribute("data", account);
 		return "accountBook/accountDetail_search";
