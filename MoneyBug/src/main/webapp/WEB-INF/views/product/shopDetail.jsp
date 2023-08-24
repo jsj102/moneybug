@@ -21,12 +21,12 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
 body {
-	background: #E4D5FF;
+	background: #F9F5E7;
 }
 
 .banner-container {
 	height: 250px;
-	background-color: #9669FF;
+	background-color: #F3969A;
 	background-position: center;
 	display: flex;
 	flex-direction: column;
@@ -97,7 +97,7 @@ body {
 	color: red;
 }
 </style>
-	
+<%@ include file="../../../resources/layout/header.jsp" %>	
 <script>
 	$(document).ready(function() {
 	    // 수량 증가 버튼 클릭 시
@@ -169,7 +169,7 @@ body {
 			<h1>MoneyBug Shop</h1>
 			<p>돈벌레 사이트에서만 제공하는 다양한 이벤트와 굿즈</p>
 			<!-- 광고 배너 버튼 -->
-			<a href="shoplist" class="btn btn-outline-light">전체상품리스트</a>
+			<a href="shoplist?page=1" class="btn btn-outline-light">전체상품리스트</a>
 		</div>
 	</div>
 
@@ -224,5 +224,7 @@ body {
 	<!-- Bootstrap core JS -->
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+		
+<%@ include file="../../../resources/layout/footer.jsp" %>
 </body>
 </html>

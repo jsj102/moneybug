@@ -13,8 +13,19 @@
 </resultMap>
 
 	
-	<select id="product_List" resultMap="productResultMap">
+<!-- 	<select id="product_List" resultMap="productResultMap">
 		select * from product
+	</select> -->
+	
+	<select id="product_List" resultMap="productResultMap" parameterType="productpageDTO">
+		select * from 
+		(select row_number() over(order by PRODUCT_ID asc) as rowNum, p.*
+		from product p ) as p2
+		where rowNum between #{start} and #{end}
+	</select>
+	
+	<select id="count" resultType="Integer">
+		select count(*) from product
 	</select>
 	
 	<select id="product_detail" parameterType="int" resultType="productDTO">
@@ -40,5 +51,5 @@
 	  insert into product 
 	  values (null,#{productType}, #{productName}, #{productImg}, #{productOriprice}, #{productPrice}, #{productInfo})
 	</insert>
-
+	
 </mapper>

@@ -56,11 +56,14 @@ public class BasketController {
     public String addToCart(@RequestParam int productId, @RequestParam String userNickname, @RequestParam int count) {
         // 세션의 닉네임 값으로 user_id 조회하기
         String userId = memberService.getUserIdByUserNickname(userNickname);
+
         // productId와 userId를 이용하여 장바구니에 해당 상품이 있는지 확인
         boolean productInBasket = basketService.checkProductInBasket(userId, productId);
         
+        System.out.println(productInBasket);
         if (productInBasket == true) {
             // 이미 장바구니에 있는 경우 업데이트 로직 실행
+        	System.out.println("업데이트실행");
             basketService.updateProductInBasket(userId, productId, count);
         } else {
             // 장바구니에 없는 경우 새로운 레코드 삽입 로직 실행

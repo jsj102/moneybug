@@ -1,5 +1,6 @@
 package com.multi.moneybug.product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -11,8 +12,8 @@ public class ProductDAO {
 	@Autowired
 	SqlSessionTemplate my;
 	
-	public List<ProductDTO> getAllProducts(ProductDTO productDTO) {
-		return my.selectList("product.product_List", productDTO);
+	public List<ProductDTO> getAllProducts(ProductPageDTO productpageDTO) {
+		return my.selectList("product.product_List", productpageDTO);
 	}
 	
 	public ProductDTO getProductById(int productId) {
@@ -31,4 +32,9 @@ public class ProductDAO {
 	public void insert(ProductDTO productDTO) {
 		my.insert("product.insert", productDTO);
 	}
+
+	public int count() {
+		return my.selectOne("product.count");
+	}
+
 }

@@ -29,9 +29,12 @@ public class BasketDAO {
         int count = my.selectOne("basket.checkProductInBasket", parameters);
         return count > 0;
     }
-
-
+    
     public void updateProductInBasket(BasketDTO basket) {
         my.update("basket.updateProductInBasket", basket);
     }
+
+	public List<BasketDTO> getOrderlists(List<Integer> selectedSeqs) {
+		return my.selectList("basket.order_List", selectedSeqs);
+	}
 }
