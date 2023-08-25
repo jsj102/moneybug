@@ -7,7 +7,7 @@
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet">
 <style>
 	body {
 		margin: 0;
@@ -54,7 +54,7 @@
     <p>관리자만 접속이 가능합니다.</p>
 
     <div class="form-floating">
-      <input type="email" class="form-control" id="floatingInput" placeholder="TEAM_moneybug">
+      <input type="email" class="form-control" id="floatingInput" value="TEAM_moneybug" readonly>
     </div>
     <div class="form-floating">
       <input type="password" class="form-control" id="floatingPassword" placeholder="Password">

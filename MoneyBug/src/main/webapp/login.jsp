@@ -1,46 +1,38 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>돈벌레 로그인</title>
-<meta name="google-signin-client_id"
-	content="35118497195-tvjc4c2qpdtq95148f8evc7o2ko3v72u.apps.googleusercontent.com">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<meta name="google-signin-client_id" content="35118497195-tvjc4c2qpdtq95148f8evc7o2ko3v72u.apps.googleusercontent.com">
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script type="text/javascript"
-	src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js"
-	charset="utf-8"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+
 
 <style>
 body {
 	height: 100vh;
-	background: linear-gradient(to bottom, #96A0FF, #9669FF);
+
+	background: #F9F5E7;
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
+
 .login-container {
 	background-color: #fff;
-	border-radius: 50px;
+	border-radius: 10px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-	padding: 20px;
+	padding: 30px;
 	text-align: center;
-	height: 350px;
-}
 
-.container {
-	background-color: rgba(255, 255, 255, 0.472);
-	border-radius: 15px;
-	padding: 20px;
 }
 
 .social-group {
@@ -54,7 +46,9 @@ body {
 	margin-bottom: 10px;
 }
 
-h2 {
+
+h1 {
+
 	margin-bottom: 10px;
 }
 
@@ -71,8 +65,8 @@ p {
 	<!-- 로그인 컨테이너 login  -->
 
 	<div class="login-container">
-		<h2 class="mb-2">로그인</h2>
-		<p>소셜로그인을 통해서만 입장 가능합니다.</p>
+		<h1 class="mb-2">Login</h1>
+		<p>소셜로그인을 통해서만 서비스 이용이 가능합니다.</p>
 		<hr>
 		<div class="social-group">
 
@@ -97,6 +91,8 @@ p {
 				data-logo_alignment="left" data-width="230"></div>
 
 		</div>
+		<hr>
+		<a class="btn btn-sm btn-outline-secondary" role="button" href="member/managerlogin.jsp">관리자로 로그인</a>
 	</div>
 
 	<script type="text/javascript">
