@@ -1,11 +1,11 @@
 
 /* 자식창을 닫으면서 값을 넘겨줌 */
 
-function closePopup() { //자식창(팝업창) 닫기
-	const priceInput = document.getElementById('price_input');
-	const valueToSend = priceInput.value;
-	const parentOrigin = "http://localhost:8181";
-	window.opener.postMessage(valueToSend, parentOrigin);
+function closePopup() { // 자식창(팝업창) 닫기
+    const priceInput = document.getElementById('price_input');
+    const valueToSend = priceInput.value;
+    const parentOrigin = "http://localhost:8181";
+    window.opener.postMessage(valueToSend, parentOrigin);
     window.close(); // 팝업 창 닫기
 }
 
@@ -44,7 +44,11 @@ function closePopup() { //자식창(팝업창) 닫기
 
   // OpenCV 준비가 되었을 때 실행되는 함수
   function onOpenCvReady() {
-      inputElement.addEventListener("change", handleFileUpload, false);  // 파일 업로드 시 처리 함수 연결
+      inputElement.addEventListener("change", handleFileUpload, false);  // 파일
+                                                                            // 업로드
+                                                                            // 시 처리
+                                                                            // 함수
+                                                                            // 연결
       canvas.addEventListener("click", handleCanvasClick);  // 캔버스 클릭 시 처리 함수 연결
   }
 
@@ -59,7 +63,8 @@ function closePopup() { //자식창(팝업창) 닫기
               img.onload = () => {
                   canvas.width = img.width;
                   canvas.height = img.height;
-                  ctx.drawImage(img, 0, 0, img.width, img.height);  // 이미지를 캔버스에 그리기
+                  ctx.drawImage(img, 0, 0, img.width, img.height);  // 이미지를 캔버스에
+                                                                    // 그리기
                   transformationMatrix = null;  // 변환 행렬 초기화
                   pts = [];  // 클릭한 포인트 배열 초기화
               };
@@ -70,25 +75,25 @@ function closePopup() { //자식창(팝업창) 닫기
 
   // 캔버스 클릭 처리 함수
   function handleCanvasClick(e) {
-	    if (pts.length < 4) {
-	      const rect = canvas.getBoundingClientRect(); // 캔버스 사각형 정보 가져오기
-	      const scaleX = img.width / rect.width;
-	      const scaleY = img.height / rect.height;
-	      const x = (e.clientX - rect.left) * scaleX;
-	      const y = (e.clientY - rect.top) * scaleY;
-	      
-	      pts.push({ x, y });
+        if (pts.length < 4) {
+          const rect = canvas.getBoundingClientRect(); // 캔버스 사각형 정보 가져오기
+          const scaleX = img.width / rect.width;
+          const scaleY = img.height / rect.height;
+          const x = (e.clientX - rect.left) * scaleX;
+          const y = (e.clientY - rect.top) * scaleY;
+          
+          pts.push({ x, y });
 
-	      ctx.beginPath();
-	      ctx.arc(x, y, 5, 0, Math.PI * 2);
-	      ctx.fillStyle = "red";
-	      ctx.fill();
+          ctx.beginPath();
+          ctx.arc(x, y, 5, 0, Math.PI * 2);
+          ctx.fillStyle = "red";
+          ctx.fill();
 
-	      if (pts.length === 4) {
-	        processButton.disabled = false;
-	      }
-	    }
-	  }
+          if (pts.length === 4) {
+            processButton.disabled = false;
+          }
+        }
+      }
 
   // 이미지 처리 및 전송 함수
   function performImageProcessingAndSend() {
@@ -114,7 +119,7 @@ function closePopup() { //자식창(팝업창) 닫기
       dstPoints.data32F[4] = canvasWidth;
       dstPoints.data32F[5] = canvasHeight;
       dstPoints.data32F[6] = 0;
-      dstPoints.data32F[7] = canvasHeight;
+ dstPoints.data32F[7] = canvasHeight;
 
       transformationMatrix = cv.getPerspectiveTransform(srcPoints, dstPoints);
 
@@ -154,7 +159,7 @@ function closePopup() { //자식창(팝업창) 닫기
       .then(result => {
           // 서버로부터 받은 결과(result) 처리
           $("#price_input").val(result);  // 결과를 입력란에 채움
-    	  
+          
       })
       .catch(error => {
           // 오류 처리

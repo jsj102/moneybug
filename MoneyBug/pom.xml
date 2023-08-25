@@ -255,7 +255,12 @@
     		<version>1.56</version>
 		</dependency>
 		
-
+		<!-- 실시간 채팅 -->
+  <dependency>
+        <groupId>com.google.firebase</groupId>
+        <artifactId>firebase-admin</artifactId>
+        <version>8.0.0</version>
+    </dependency>
 
   
 

@@ -6,13 +6,14 @@
 <%@ include file="/resources/layout/header.jsp"%>
 
 <style>
+
  body {
-    background: linear-gradient(to bottom, #CA61FF, hsl(265, 100%, 72%), #945FFF);
+    background: #E1ECC8;
     min-height: 100vh;
   }
 
 #section {
-  background-color: rgba(255, 255, 255, 0.472);
+  background-color: #C4D7B2;
   padding: 20px;
   border-radius: 30px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
@@ -54,6 +55,13 @@
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
     }
   
+  #section {
+    display: flex;
+    justify-content: center; /* 수평 가운데 정렬 */
+    width: 100%; /* 가로 너비 100%로 설정 */
+    height: 100vh; /* 화면 전체 높이를 차지하도록 설정 */
+}
+  
 </style>
 <div id="section" >
 
@@ -75,12 +83,17 @@
 						<button onclick="closePopup()">확인</button>
 				</td>
 			</tr>
+			<tr>
+				<td>
+					 <div id="imageContainer" align="center">
+						<canvas id="canvas"></canvas>
+					</div>
+				</td>
+			</tr>
 			</table>
 		</div>
 	</form>
- <div id="imageContainer" align="center">
-<canvas id="canvas"></canvas>
-</div>
+
   
   
 
