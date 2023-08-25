@@ -21,8 +21,8 @@ public class TagReplyService {
 		return tagReplyDAO.reinsert(tagReplyDTO);
 	}
 
-	public List<TagReplyDTO> tagreplylist(TagReplyPageDTO tagReplyPageDTO) {
-		return tagReplyDAO.tagReplyList(tagReplyPageDTO);
+	public List<TagReplyDTO> tagreplylist(int boardSeq) {
+		return tagReplyDAO.tagReplyList(boardSeq);
 	}
 	
 	public int update(TagReplyDTO tagReplyDTO) {

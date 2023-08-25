@@ -4,61 +4,7 @@
 <%@ include file="../../../resources/layout/header.jsp"%>
 <%@ include file="../../../resources/layout/TagBoardNav.jsp"%>
 	<h3>커뮤니티</h3>
-	<div class="container">
-<div class="row">
-<div class="col-md-6">
-<div class="today">
-<table class="table table-sm mx-auto">
-		<thead>
-		<h4>Today Best 3!</h4>
-			<tr>
-				<th>No.</th>
-				<th>제목</th>
-				<th>조회수</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${todaylist}" var="tagBoardDTO">
-				<tr>
-					<td>${tagBoardDTO.rowNo}</td>
-					<td>[${tagBoardDTO.boardType}] <a href="TagBoard_one?seq=${tagBoardDTO.seq}">${tagBoardDTO.title}</a></td>
-					<td>${tagBoardDTO.views}</td>
-				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
-</div>
-</div>
-
-<div class="col-md-6">
-<div class="weekly">
-<table class="table table-sm mx-auto">
-		<thead>
-		<h4>Weekly Best 3!</h4>
-			<tr>
-				<th>No.</th>
-				<th>제목</th>
-				<th>조회수</th>
-				<th>작성일</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${weeklylist}" var="tagBoardDTO">
-				<tr>
-					<td>${tagBoardDTO.rowNo}</td>
-					<td>[${tagBoardDTO.boardType}] <a href="TagBoard_one?seq=${tagBoardDTO.seq}">${tagBoardDTO.title}</a></td>
-					<td>${tagBoardDTO.views}</td>
-					<td><fmt:formatDate pattern="yyyy-MM-dd"
-							value="${tagBoardDTO.createAt}" /></td>
-				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
-</div>
-</div>
-</div>
-
-
+<div class="container">
 	 
 	<br>
 	<input type="text" id="searchInput" placeholder="게시글 검색">
@@ -95,7 +41,7 @@
 	int pages = (int)request.getAttribute("pages");
 	for(int p = 1; p <= pages; p++){
 %>
-	<a href="TagBoard_list?page=<%= p %>">
+	<a href="TagBoard_searchlist?searchKeyword=${param.searchKeyword}&page=<%= p %>">
 		<%= p %>
 	</a>  
 <%		
@@ -147,6 +93,7 @@
         }
     });
 });
+
 
         
 

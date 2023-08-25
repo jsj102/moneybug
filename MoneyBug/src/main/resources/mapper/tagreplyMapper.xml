@@ -36,17 +36,14 @@
 
 
 
-	<select id="list" resultType="tagreplyDTO" parameterType="tagreplypageDTO">
-    select * from 
-    (select ROW_NUMBER() 
-    over(order by GROUP_SEQ asc,
+	<select id="list" resultType="tagreplyDTO">
+    select * from tag_reply
+    where
+    BOARD_SEQ = #{boardSeq}
+    order by GROUP_SEQ asc,
     CASE WHEN SEQ = ORIGIN_SEQ THEN REPLY_ORDER ELSE SEQ END asc,
     REPLY_ORDER asc,
-    SEQ asc) as rowNo, 
-    SEQ, WRITER_ID, CONTENT, CREATE_AT, BOARD_SEQ, ORIGIN_SEQ, REPLY_LEVEL, REPLY_ORDER, GROUP_SEQ from tag_reply
-    ) tr
-    where tr.rowNo BETWEEN #{start} and #{end}
-    and tr.BOARD_SEQ = #{seq}
+    SEQ asc
 </select>
 
 
