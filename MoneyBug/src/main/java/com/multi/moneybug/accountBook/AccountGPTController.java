@@ -45,7 +45,6 @@ public class AccountGPTController {
 		AccountDetailDTO account = new AccountDetailDTO();
 		AccountGPTDTO accountGPTDTO = new AccountGPTDTO();
 		LocalDate today = LocalDate.now();
-		gptService.deleteAll();
 		// 데이터 삽입
 		for (Integer accountBookId : idList) {
 			account.setAccountBookId(accountBookId);
