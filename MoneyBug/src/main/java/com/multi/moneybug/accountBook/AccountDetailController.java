@@ -69,7 +69,7 @@ public class AccountDetailController {
 
 	public HashMap<String,Object> monthlyReportRequestJSON(@RequestParam("accountBookId") int accountBookId,Model model,@RequestParam("year") int year, @RequestParam("month") int month) {	
 		AccountDetailDTO accountDetailDTO = new AccountDetailDTO();
-		accountDetailDTO.setAccountBookId(Integer.parseInt(accountBookId));
+		accountDetailDTO.setAccountBookId(accountBookId);
 		accountDetailDTO.setCurrentYear(year);
 		accountDetailDTO.setCurrentMonth(month);
 		
