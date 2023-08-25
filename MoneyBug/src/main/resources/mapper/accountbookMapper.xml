@@ -10,4 +10,7 @@
 	<select id="find" parameterType="String" resultType="String">
 		select SEQ from account_book where SOCIAL_ID = #{socialId}
 	</select>
+	<select id="list" resultType="int">
+		select SEQ from account_book
+	</select>
 </mapper>

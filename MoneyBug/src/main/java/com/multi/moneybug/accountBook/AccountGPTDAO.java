@@ -17,4 +17,8 @@ public class AccountGPTDAO {
 	public AccountGPTDTO readOne(AccountGPTDTO accountGPTDTO) {
 		return my.selectOne("accountGPT.one",accountGPTDTO);
 	}
+	
+	public void deleteAll() {
+		my.delete("accountGPT.deleteAll");
+	}
 }

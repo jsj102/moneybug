@@ -1,5 +1,7 @@
 package com.multi.moneybug.accountBook;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,5 +29,7 @@ public class AccountBookService {
     	return seq;
     }
     
-
+    public List<Integer> readList() {
+    	return accountBookDAO.readList();
+    }
 }
