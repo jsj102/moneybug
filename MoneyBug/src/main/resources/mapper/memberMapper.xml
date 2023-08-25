@@ -31,5 +31,11 @@
 		select count(*) from user_member
 		where USER_NICKNAME = #{userNickname}
 	</select>
+	
+	<select id="getUserIdByUserNickname" parameterType="String" resultType="String">
+        SELECT user_id
+        FROM user_member
+        WHERE user_nickname = #{userNickname}
+    </select>
 
 </mapper>

@@ -1,57 +1,61 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
-<script type="text/javascript">  //입력란 예외처리
-        function checkWrite() {
-            const priceInput = document.getElementById("price_input");
-            const descriptionInput = document.getElementById("description");
+<script type="text/javascript">
+    //입력란 예외처리
+    function checkWrite() {
+        const priceInput = document.getElementById("price_input");
+        const descriptionInput = document.getElementById("description");
 
-            if (priceInput.value === "") {
-                alert("금액을 입력하십시오!");
-            } else if (isNaN(priceInput.value)) {
-                alert("금액에는 숫자만 입력하십시오!");
-            } else if (descriptionInput.value === "") {
-                alert("내용을 입력하십시오!");
-            } else {
-                document.getElementById("writeForm").submit();
-            }
+        if (priceInput.value === "") {
+            alert("금액을 입력하십시오!");
+        } else if (isNaN(priceInput.value)) {
+            alert("금액에는 숫자만 입력하십시오!");
+        } else if (descriptionInput.value === "") {
+            alert("내용을 입력하십시오!");
+        } else {
+            document.getElementById("writeForm").submit();
         }
+    }
 </script>
-<%@ include file="../resources/layout/header.jsp"%>  <!-- header -->
-<%@ include file="../resources/layout/accountNav.jsp"%> <!-- Nav -->
+<%@ include file="../resources/layout/header.jsp"%>
+<!-- header -->
+<%@ include file="../resources/layout/accountNav.jsp"%>
+<!-- Nav -->
 
 <!-- 입력 테이블 스타일 -->
 <style>
-    #section table {  
-        width: 500px;
-        height: 500px;
-        background-color: rgba(255, 255, 255, 0.295);
-		border-radius: 30px;
-		border: 1px transparent solid;
-		border-spacing: 0px;
-    }
-    
-    #section td {
-        font-size: 16px; /* 필요한대로 글꼴 크기 조정 */
-        font-weight: bold; /* 텍스트를 굵게 표시 */
-        padding: 10px;
-       
-    }
+#section table {
+	width: 500px;
+	height: 500px;
+	background-color: rgba(255, 255, 255, 0.295);
+	border-radius: 30px;
+	border: 1px transparent solid;
+	border-spacing: 0px;
+}
+
+#section td {
+	font-size: 16px; /* 필요한대로 글꼴 크기 조정 */
+	font-weight: bold; /* 텍스트를 굵게 표시 */
+	padding: 10px;
+}
 </style>
 
-<div id="section" align="center">  <!--  section -->
+<div id="section" align="center">
+	<!--  section -->
 	<form action="/moneybug/insert.accountDetail" id="writeForm">
 		<!-- ../insert.accountDetail -->
-	
-		<br>
-		<br>
+
+		<br> <br>
 		<table style="width: 500px; height: 500px">
 			<tr>
 				<td colspan="2" style="text-align: center">입력</td>
 			</tr>
 			<tr>
-				<td>
-					<input name="accountBookId" type="hidden" id = "accountBookId"  value="">
-				</td>
+
+				<td><input name="accountBookId" type="hidden"
+					id="accountBookId" value=""></td>
+
 			</tr>
 			<tr>
 				<td><input type='date' name="usedAt" id="usedAt" /></td>
@@ -63,10 +67,11 @@
 				</select></td>
 			</tr>
 			<tr>
-				<td>금액<input type="button" value="영수증 OCR" onclick="showPopup();"/></td>
-			</tr>			
+				<td>금액<input type="button" value="영수증 OCR"
+					onclick="showOCRPopup();" /></td>
+			</tr>
 			<tr>
-			
+
 
 				<td><input type="text" name="price" id="price_input" value="" />원</td>
 			</tr>
@@ -96,14 +101,14 @@
 				<td>내용</td>
 			</tr>
 			<tr>
-				<td><textarea name="description" cols="30" rows="3" placeholder="내용을 작성해주세요..." id="description" value=""></textarea>
-					 
+				<td><textarea name="description" cols="30" rows="3"
+						placeholder="내용을 작성해주세요..." id="description" value=""></textarea>
+
 				</td>
 			</tr>
 			<tr>
-				<td>
-					<input type="button" value="저장" onclick="javascript:checkWrite()">
-				</td>
+				<td><input type="button" value="저장"
+					onclick="javascript:checkWrite()"></td>
 			</tr>
 		</table>
 	</form>
@@ -112,26 +117,28 @@
 <%@ include file="../resources/layout/accountAside.jsp"%>
 <%@ include file="../resources/layout/footer.jsp"%>
 
-<script  type="text/javascript">
-$(document).ready(function() {
-                	        // 서버로부터 로그인 상태 값을 확인하여 처리
-                	        $.ajax({
-                	            url: "seq",
-                	            method: "GET",
-                	            success: function(result) {
-                	            	$("#accountBookId").val(result);
-                	               
-                	            }
-                	        });
-                	    });
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // 서버로부터 로그인 상태 값을 확인하여 처리
+        $.ajax({
+            url : "seq",
+            method : "GET",
+            success : function(result) {
+                $("#accountBookId").val(result);
+
+            }
+        });
+    });
+
 </script>
 
 
 <!--  Opencv, OCR 팝업창 -->
 <script>
-  function showPopup() {
-	  window.open("opencvPopUp.jsp", "_blank", "width=500, height=1000, left=100, top=50");
-  }
+    function showOCRPopup() {
+        window.open("opencvPopUp.jsp", "_blank", "width=500, height=800, left=100, top=50");
+    }
 </script>
 
 <!-- 

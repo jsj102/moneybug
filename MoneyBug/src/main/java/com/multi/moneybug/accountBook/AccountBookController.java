@@ -12,14 +12,15 @@ import java.sql.Date;
 @Controller
 public class AccountBookController {
 
-    private final AccountBookService accountBookService;
 
-    @Autowired
-    public AccountBookController(AccountBookService accountBookService) {
-        this.accountBookService = accountBookService;
-    }
+	private final AccountBookService accountBookService;
 
-    @GetMapping("/duplicateCheck")
+	@Autowired
+	public AccountBookController(AccountBookService accountBookService) {
+		this.accountBookService = accountBookService;
+	}
+
+	@GetMapping("/duplicateCheck")
 	@ResponseBody
 	public void getAccountFromPage(HttpServletRequest request) {
 		HttpSession session = request.getSession();
@@ -29,8 +30,7 @@ public class AccountBookController {
 		accountBookDTO.setCreateAt(new Date(System.currentTimeMillis()));
 		accountBookService.insertAccountBookIfNotExists(accountBookDTO); // 이메일이 중복되지 않게 생성
 	}
-    
-    
+        
     @GetMapping("accountBook/seq")
     @ResponseBody
     public String getSeq(HttpServletRequest request) {
@@ -50,5 +50,6 @@ public class AccountBookController {
     	String userNickname = (String) session.getAttribute("userNickname");
     	return userNickname;
     }
+
 
 }

@@ -53,5 +53,8 @@ public class AccountDetailDAO {
 		return my.selectOne("accountDetail.listMonthCountUseUser",accountDetailDTO);
 	}
 	
+	public List<AccountDetailDTO> readListAll(int accountBookId){
+		return my.selectList("accountDetail.listAll", accountBookId);
+	}
 	
 }

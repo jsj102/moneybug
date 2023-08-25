@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.multi.moneybug.tagBoard.TagBoardPageDTO;
+
 @Controller
 public class TagReplyController {
 	
@@ -36,8 +38,7 @@ public class TagReplyController {
 	
 	@RequestMapping("tagReply/TagReply_update")
 	public void update(TagReplyDTO tagReplyDTO, Model model) {
-System.out.println(tagReplyDTO);
-		model.addAttribute("tagBoardDTO", tagReplyDTO);
+		model.addAttribute("tagReplyDTO", tagReplyDTO);
 		tagReplyService.update(tagReplyDTO);
 	}
 	

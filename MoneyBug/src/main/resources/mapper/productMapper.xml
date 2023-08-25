@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="product">
+	
+	<resultMap id="productResultMap" type="com.multi.moneybug.product.ProductDTO">
+    <id property="productId" column="productId"/>
+    <result property="productType" column="productType"/>
+    <result property="productName" column="productName"/>
+    <result property="productImg" column="productImg"/>
+    <result property="productOriprice" column="productOriprice"/>
+    <result property="productPrice" column="productPrice"/>
+    <result property="productInfo" column="productInfo"/>
+</resultMap>
+
+	
+<!-- 	<select id="product_List" resultMap="productResultMap">
+		select * from product
+	</select> -->
+	
+	<select id="product_List" resultMap="productResultMap" parameterType="productpageDTO">
+		select * from 
+		(select row_number() over(order by PRODUCT_ID asc) as rowNum, p.*
+		from product p ) as p2
+		where rowNum between #{start} and #{end}
+	</select>
+	
+	<select id="count" resultType="Integer">
+		select count(*) from product
+	</select>
+	
+	<select id="product_detail" parameterType="int" resultType="productDTO">
+		select * from
+		product
+		where PRODUCT_ID = #{productId} 
+	</select>
+	
+		<select id="getProductsByIds" parameterType="java.util.List" resultMap="productResultMap">
+        SELECT *
+        FROM product
+        WHERE PRODUCT_ID IN
+        <foreach item="productId" collection="list" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+    </select>
+	
+	<select id="manageList" resultMap="productResultMap">
+		select * from product
+	</select>
+	
+	<insert id="insert" parameterType="productDTO" useGeneratedKeys="true" >
+	  insert into product 
+	  values (null,#{productType}, #{productName}, #{productImg}, #{productOriprice}, #{productPrice}, #{productInfo})
+	</insert>
+	
+</mapper>

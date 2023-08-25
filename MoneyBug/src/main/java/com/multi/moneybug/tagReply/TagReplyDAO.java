@@ -1,6 +1,8 @@
 package com.multi.moneybug.tagReply;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,4 +37,7 @@ public class TagReplyDAO {
 		 return my.delete("tagreply.delete", seq);
 	}
 	
+	public int count(int boardSeq) {
+		return my.selectOne("tagreply.count", boardSeq);
+	}
 }
