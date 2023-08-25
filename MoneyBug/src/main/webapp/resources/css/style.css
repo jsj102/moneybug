@@ -83,7 +83,6 @@
 /* ㄴ> nav 버튼 구조 */
 
 
-
 .popup-content {
     background: linear-gradient(to bottom, #CA61FF, hsl(265, 100%, 72%), #945FFF);
     min-height: 100vh;
@@ -129,9 +128,11 @@
 .MonthlyTable th {
 	font-weight: bold;
     background-color: rgba(200, 200, 200, 0.472); /* 테이블 헤더 배경색 */
+
 }
 .MonthlyDiv{display: flex; width:1100px; height:655px; background-color: #F7FFE5;  text-align: center; border: 1px solid #E1ECC8;}
 .MonthlyDiv2{display: flex; width:1100px; height:340px; background-color: #F7FFE5;  text-align: center; border: 1px solid #E1ECC8;}
 .MonthlyDiv3{display: flex; width:1100px; height:340px; background-color: #F7FFE5;  text-align: left; border: 1px solid #993300; position: relative; 	color: purple;
 	font-weight: bold; padding: 5px;
     }
+

@@ -4,21 +4,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-<title>돈벌레 닉네임 정하기</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
 <style>
 body {
-	height: 150vh;
-	background: linear-gradient(to bottom, #96A0FF, #9669FF);
+	background: #F9F5E7;
 	display: flex;
 	justify-content: center;
+	align-items: center;
 }
 
 .page-container {
@@ -38,6 +34,7 @@ body {
 }
 
 .card-body {
+
 	padding-left: 50px;
 	padding-right: 50px;
 }
@@ -47,12 +44,6 @@ form {
 	flex-direction: column;
 }
 
-h1 {
-	font-size: 60px;
-	font-weight: 100;
-	text-align: center;
-	color: white;
-}
 
 .nick-container {
 	padding: 50px;
@@ -63,22 +54,19 @@ h1 {
 
 .btn-custom {
 	margin-top: 30px;
-	background-color: #764dff;
-	color: white;
 	width: 70%;
-	align-self: center; /* Add this line */
+	align-self: center;
 }
 </style>
 </head>
 <body>
 	<div class="page-container">
-		<h1>MoneyBug MyPage</h1>
 
 		<div class="info-container">
 			<div class="card">
+				<h1 class="text-center">MyPage</h1>
 				<div class="card-header text-center">
-					닉네임만 수정하실 수 있습니다.<br /> 닉네임은 최초 가입시 반드시 입력해야합니다.<br /> 글쓰기 및 돈벌레
-					미션에 노출됩니다.
+					닉네임만 수정하실 수 있습니다.<br /> 닉네임은 최초 가입시 반드시 입력해야합니다.<br />
 				</div>
 				<div class="card-body">
 					<div class="form-group">
@@ -110,9 +98,9 @@ h1 {
 							class="form-control" />
 
 						<button type="button" id="checkIdButton"
-							class="btn btn-custom btn-lg">중복확인하기</button>
+							class="btn btn-custom btn-secondary btn-lg">중복확인하기</button>
 						<button type="submit" id="updateButton"
-							class="btn btn-custom btn-lg">등록하기</button>
+							class="btn btn-custom btn-outline-secondary btn-lg">등록하기</button>
 					</form>
 				</div>
 			</div>
