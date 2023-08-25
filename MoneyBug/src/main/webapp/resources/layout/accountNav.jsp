@@ -1,10 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
 <meta charset="UTF-8">
-</head>
-<body>
+<style>
+
+#viewport {
+  padding-left: 250px;
+}
+
+#sidebar {
+  z-index: 500;
+  position: fixed;
+  left: 250px;
+  width: 250px;
+  height: 100%;
+  margin-left: -250px;
+  overflow-y: auto;
+  background: #F9F5E7;
+  transition: all 0.5s ease;
+}
+
+.account-side {
+	height: 50px;
+}
+
+
+</style>
 <script>
         $(document).ready(function() {
             // 서버로부터 로그인 상태 값을 확인하여 처리
@@ -20,7 +39,7 @@
                         $(document).ready(function() {
                             // 서버로부터 로그인 상태 값을 확인하여 처리
                             $.ajax({
-                                url : "../duplicateCheck",
+                                url : "/moneybug/duplicateCheck",
                                 method : "GET",
                                 success : function(response) {
                                 },
@@ -34,31 +53,15 @@
             });
         });
 </script>
-	<div id="nav" align="center">
-		<br>
-		<h6>가계부</h6>
-		<div class="dropdown">
-			<a href="/moneybug/accountBook/accountDetail_List.jsp">
-				<button class="dropbtn">내역작성</button>
-			</a>
-		</div>
-		<br>
-		<br>
-		<div class="dropdown">
-			<button class="dropbtn">보고서</button>
-			<div class="dropdown-content">
-				<a href="index.jsp">▶월별보고서</a>
-			</div>
-		</div>
-		<br>
-		<br>
-		<div class="dropdown">
-			<button class="dropbtn">설정</button>
-			<div class="dropdown-content">
-				<a href="index.jsp">▶목표설정</a>
-			</div>
-		</div>
+
+
+<div id="viewport">
+	<div id="sidebar">
+		<ul class="nav nav-pills flex-column">
+			<li class="nav-item account-side"><a class="nav-link active" href="/moneybug/accountBook/accountDetail_List.jsp">가계부 작성</a></li>
+			<li class="nav-item account-side"><a class="nav-link active" href="#">월별 보고서</a></li>
+			<li class="nav-item account-side"><a class="nav-link active" href="#">목표 설정</a></li>
+		</ul>
 	</div>
-</body>
-</html>
+</div>
 

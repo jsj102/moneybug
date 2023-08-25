@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <title>검색</title>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function() {
         $("#searchButton").click(function() { // 수정된 부분: click 이벤트 핸들러 추가
@@ -29,7 +30,7 @@
 </script>
 </head>
 <body>
-	<div id="accountDetail"></div>
+	<div class="accountDetail"></div>
 	<select id="searchYear" name="searchYear">
 		<option value="2024">2024년</option>
 		<option value="2023">2023년</option>
@@ -68,6 +69,6 @@
 		<option value="반려동물">반려동물</option>
 		<option value="기타">기타</option>
 	</select>
-	<button type="submit" id="searchButton">검색</button>
+	<button class="btn btn-secondary" type="submit" id="searchButton">검색</button>
 </body>
 </html>
