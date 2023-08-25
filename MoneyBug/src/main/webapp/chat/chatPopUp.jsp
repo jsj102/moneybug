@@ -97,7 +97,7 @@ body {
 
 </div>
 <%@ include file="../resources/layout/footer.jsp"%>
-
+<!-- 
 <script>
 $(document).ready(function() {
   $("#chat-form").submit(function(e) {
@@ -163,6 +163,6 @@ $(document).ready(function() {
 });
 </script>
 
-
+ -->
 
 
