@@ -1,7 +1,10 @@
 package com.multi.moneybug.openApi;
 
 import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -99,8 +102,21 @@ public class OpenApiService {
 		key.put("secretKey", secretKey);
 		return key;
 	}
-
-	public void insert(OpenApiDTO openApiDTO) {
+	
+	public void userApiInsert() {
+		
+	}
+	
+	public void insert(String apiKey,String secretKey,int accountBookId) {
+		// 발급날짜 -> 일주일 후 API키 폐기
+		LocalDate expireDate = LocalDate.now();
+		expireDate = expireDate.plusDays(7);
+		Date date = java.sql.Date.valueOf(expireDate);
+		OpenApiDTO openApiDTO = new OpenApiDTO();
+		openApiDTO.setApiKey(apiKey);
+		openApiDTO.setSecretKey(secretKey);
+		openApiDTO.setExpireDate(date);
+		openApiDTO.setAccountBookId(accountBookId);
 		openApiDAO.insert(openApiDTO);
 	}
 
@@ -118,5 +134,9 @@ public class OpenApiService {
 
 	public List<OpenApiDTO> readList(OpenApiDTO openApiDTO) {
 		return openApiDAO.readList(openApiDTO);
+	}
+
+	public void deleteId(int accountBookId) {
+		openApiDAO.deleteId(accountBookId);
 	}
 }

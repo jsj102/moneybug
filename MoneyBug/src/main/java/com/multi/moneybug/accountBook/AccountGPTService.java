@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -23,14 +25,16 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @PropertySource("classpath:key.properties")
-@Log
+@Slf4j
 public class AccountGPTService {
 
 	@Value("${open.ai}")
 	private String key;
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	AccountDetailService accountDetailService;
@@ -52,7 +56,7 @@ public class AccountGPTService {
 		requestBody.put("model", "text-davinci-003");
 		requestBody.put("max_tokens", 3500);
 		HttpEntity<HashMap<String, Object>> request = new HttpEntity<HashMap<String, Object>>(requestBody, headers);
-		
+
 		try {
 			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 			log.info(LocalDate.now() + "요청 전달됨" + request.toString());
@@ -82,7 +86,7 @@ public class AccountGPTService {
 	}
 
 	// 월별 데이터 소비,수입으로 나눠서 가져오기
-	public HashMap<String, List<AccountDetailDTO>> accountSort(String text, AccountDetailDTO accountDetailDTO) {
+	public HashMap<String, List<AccountDetailDTO>> accountSort(AccountDetailDTO accountDetailDTO) {
 		List<AccountDetailDTO> list = accountDetailService.readListMonth(accountDetailDTO);
 		List<AccountDetailDTO> income = new ArrayList<AccountDetailDTO>();
 		List<AccountDetailDTO> consumption = new ArrayList<AccountDetailDTO>();
@@ -125,6 +129,11 @@ public class AccountGPTService {
 
 	public AccountGPTDTO readOne(AccountGPTDTO accountGPTDTO) {
 		return accountGPTDAO.readOne(accountGPTDTO);
+	}
+
+	public void deleteAll() {
+		accountGPTDAO.deleteAll();
+		log.info("데이터 전체삭제 완료");
 	}
 
 }

@@ -65,4 +65,8 @@ public class OpenApiDAO {
 	public List<OpenApiDTO> readList(OpenApiDTO openApiDTO){
 		return my.selectList("openApi.list", openApiDTO);
 	}
+	
+	public void deleteId(int accountBookId) {
+		my.delete("openApi.deleteId", accountBookId);
+	}
 }

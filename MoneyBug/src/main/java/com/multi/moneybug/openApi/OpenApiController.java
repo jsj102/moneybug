@@ -10,19 +10,24 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.multi.moneybug.accountBook.AccountBookService;
 
-@RestController
+import lombok.extern.java.Log;
+
+@Controller
 @RequestMapping("/api")
+@Log
 public class OpenApiController {
 
 	Gson gson = new Gson();
@@ -30,35 +35,40 @@ public class OpenApiController {
 	@Autowired
 	OpenApiService openApiService;
 	@Autowired
-	AccountBookService accountBookService;
-	
+	private AccountBookService accountBookService;
+
 	@RequestMapping("/key")
-	public void keyGenerator(HttpSession session) {
+	@ResponseBody
+	public String keyGenerator(HttpSession session, @RequestParam String type, Model model) {
+		OpenApiDTO openApiDTO = new OpenApiDTO();
 		String convert = (String) session.getAttribute("socialId");
 		String accountBookId = accountBookService.insertAccountDetailFindSeq(convert);
-		
-		OpenApiDTO openApiDTO = openApiService.readOne(Integer.parseInt(accountBookId));
-		// 발급날짜 -> 1달 후 API키 폐기
-		LocalDate expireDate = LocalDate.now();
-		expireDate = expireDate.plusDays(7);
-		Date date = java.sql.Date.valueOf(expireDate);
-		
-		
-		// 값이 들어있으면 재발급 X
-		if (openApiDTO == null || openApiDTO.getApiKey() == null) {
+		int id = Integer.parseInt(accountBookId);
+		openApiDTO = openApiService.readOne(id);
+
+		// 값이 들어있으면 발급 X
+		if (openApiDTO == null && type.equals("발급")) {
 			HashMap<String, String> key = openApiService.userApiGenerator();
 			String apiKey = key.get("apiKey");
 			String sercetKey = key.get("secretKey");
-			OpenApiDTO sendDTO = new OpenApiDTO();
+			openApiService.insert(apiKey, sercetKey, id);
+			String result = "APIKEY : " + apiKey + "<br>SERCETKEY : " + sercetKey;
+			return result;
 
-			sendDTO.setApiKey(apiKey);
-			sendDTO.setSecretKey(sercetKey);
-			sendDTO.setAccountBookId(Integer.parseInt(accountBookId));
-			sendDTO.setExpireDate(date);
-
-			openApiService.insert(sendDTO);
+		} else if (openApiDTO != null && type.equals("발급")) {
+			String result = "Exist Key";
+			return result;
+		} else if (openApiDTO != null && type.equals("재발급")) {
+			openApiService.deleteId(id);
+			HashMap<String, String> key = openApiService.userApiGenerator();
+			String apiKey = key.get("apiKey");
+			String sercetKey = key.get("secretKey");
+			openApiService.insert(apiKey, sercetKey, id);
+			String result = "APIKEY : " + apiKey + "<br>SERCETKEY : " + sercetKey;
+			return result;
 		} else {
-			System.out.println("키가 존재");
+			String result = "No Exist Key";
+			return result;
 		}
 	}
 
@@ -149,5 +159,10 @@ public class OpenApiController {
 		} else {
 			System.out.println("만료일 apiKey없음");
 		}
+	}
+	
+	@GetMapping("/showButton")
+	public String show() {
+		return "open";
 	}
 }
