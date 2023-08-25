@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.multi.moneybug.tagBoard.TagBoardPageDTO;
+
 @Controller
 public class TagReplyController {
 	
@@ -28,15 +30,17 @@ public class TagReplyController {
 	
 	
 	@RequestMapping("tagReply/TagReply_list")
-	public void list(int boardSeq, Model model) {
-		List<TagReplyDTO> tagreplylist = tagReplyService.tagreplylist(boardSeq);
-		model.addAttribute("tagReplylist", boardSeq);
+	public void list(TagReplyPageDTO tagReplyPageDTO, Model model) {
+		tagReplyPageDTO.setStartEnd(tagReplyPageDTO.getPage());
+		//확인
 		
+		List<TagReplyDTO> tagreplylist = tagReplyService.tagreplylist(tagReplyPageDTO);			
+		model.addAttribute("tagreplylist", tagreplylist);
+	
 	}
 	
 	@RequestMapping("tagReply/TagReply_update")
 	public void update(TagReplyDTO tagReplyDTO, Model model) {
-System.out.println(tagReplyDTO);
 		model.addAttribute("tagBoardDTO", tagReplyDTO);
 		tagReplyService.update(tagReplyDTO);
 	}

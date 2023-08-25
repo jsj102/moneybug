@@ -1,12 +1,14 @@
 package com.multi.moneybug.tagBoard;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
 
 @Data
 public class TagBoardDTO {
+	private int rowNo;
 	private int seq;
 	private String writerId;
 	private String title;

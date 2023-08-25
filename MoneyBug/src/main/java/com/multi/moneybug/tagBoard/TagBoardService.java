@@ -16,12 +16,12 @@ public class TagBoardService {
 		tagBoardDAO.insert(tagBoardDTO);
 	}
 
-	public List<TagBoardDTO> list(TagBoardDTO tagBoardDTO) {
-		return tagBoardDAO.tagBoardList(tagBoardDTO);
+	public List<TagBoardDTO> list(TagBoardPageDTO pageDTO) {
+		return tagBoardDAO.list(pageDTO);
 	}
 	
-	public TagBoardDTO one(int SEQ) {
-		return tagBoardDAO.one(SEQ);
+	public TagBoardDTO one(int seq) {
+		return tagBoardDAO.one(seq);
 	}
 	
 	public int update(TagBoardDTO tagBoardDTO) {
@@ -31,6 +31,10 @@ public class TagBoardService {
 	public int delete(int seq) {
 		return tagBoardDAO.delete(seq);
 		
+	}
+	
+	public int count() {
+		return tagBoardDAO.count();
 	}
 	
 	

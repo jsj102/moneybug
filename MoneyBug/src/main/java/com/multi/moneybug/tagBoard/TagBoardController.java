@@ -1,6 +1,7 @@
 package com.multi.moneybug.tagBoard;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.multi.moneybug.tagReply.TagReplyDTO;
+import com.multi.moneybug.tagReply.TagReplyPageDTO;
 import com.multi.moneybug.tagReply.TagReplyService;
 
 
@@ -28,8 +31,10 @@ public class TagBoardController {
 	@RequestMapping("tagBoard/TagBoard_insert")
 	public String insert(TagBoardDTO tagBoardDTO, HttpServletRequest request, MultipartFile file, Model model)
 	        throws Exception {
-	    if (!file.isEmpty()) {
-	        String savedName = file.getOriginalFilename();
+	    String savedName = null; // 초기화
+
+	    if (file != null && !file.isEmpty()) {
+	        savedName = file.getOriginalFilename();
 	        String uploadPath = request.getSession().getServletContext().getRealPath("resources/upload");
 	        File target = new File(uploadPath + "/" + savedName);
 	        file.transferTo(target);
@@ -38,23 +43,44 @@ public class TagBoardController {
 	        tagBoardDTO.setImage(savedName);
 	    }
 
-	    tagBoardService.insert(tagBoardDTO);
-	    return "redirect:TagBoard_list";
+	    tagBoardService.insert(tagBoardDTO); // 파일이 null이든 아니든 데이터 삽입 시도
+
+	    return "redirect:TagBoard_list?Page=1";
 	}
 
 	@RequestMapping("tagBoard/TagBoard_list")
-	public void list(TagBoardDTO tagBoardDTO, Model model) {
-		List<TagBoardDTO> list = tagBoardService.list(tagBoardDTO);
+	public void list(TagBoardPageDTO tagBoardPageDTO, Model model) {
+		int count = tagBoardService.count();
+		int pages = count / 10 + 1;
+		tagBoardPageDTO.setStartEnd(tagBoardPageDTO.getPage(),count);
+		List<TagBoardDTO> list = tagBoardService.list(tagBoardPageDTO);
 		model.addAttribute("list", list);
+		model.addAttribute("count", count);
+		model.addAttribute("pages", pages);
 	}
 
 	@RequestMapping("tagBoard/TagBoard_one")
-	public void one(int seq, Model model) throws Exception {
-		TagBoardDTO tagBoardDTO = tagBoardService.one(seq); // 게시물 읽기.
+	public void one(TagReplyPageDTO tagReplyPageDTO, Model model) throws Exception {
+		TagBoardDTO tagBoardDTO = tagBoardService.one(tagReplyPageDTO.getSeq()); // 게시물 읽기.
 		model.addAttribute("tagBoardDTO", tagBoardDTO);
 
-		List<TagReplyDTO> tagreplylist = tagReplyService.tagreplylist(seq); // 게시글 번호에 연결된 댓글들 목록 읽기.
+		tagReplyPageDTO.setStartEnd(tagReplyPageDTO.getPage());
+		System.out.println(tagReplyPageDTO);
+		List<TagReplyDTO> tagreplylist = tagReplyService.tagreplylist(tagReplyPageDTO); //해당 게시글의 댓글 목록 불러오기.
 		model.addAttribute("tagreplylist", tagreplylist);
+		System.out.println(tagreplylist.size());
+		int count = tagReplyService.count(tagReplyPageDTO.getSeq());
+		int pages = 0;
+		if(count % 3 == 0) {
+			pages = count / 3;
+		}else {
+			pages = count / 3 +1;
+		}
+		
+		
+		model.addAttribute("count", count);
+		model.addAttribute("pages", pages);
+		
 
 	}
 
