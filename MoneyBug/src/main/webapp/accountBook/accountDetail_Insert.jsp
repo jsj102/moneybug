@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 <script type="text/javascript">
     //입력란 예외처리
@@ -45,14 +46,14 @@
 	<form action="/moneybug/insert.accountDetail" id="writeForm">
 		<!-- ../insert.accountDetail -->
 
-		<br>
-		<br>
+		<br> <br>
 		<table style="width: 500px; height: 500px">
 			<tr>
 				<td colspan="2" style="text-align: center">입력</td>
 			</tr>
 			<tr>
-				<td><input name="accountBookId" type="hidden" id="accountBookId" value=""></td>
+				<td><input name="accountBookId" type="hidden"
+					id="accountBookId" value=""></td>
 			</tr>
 			<tr>
 				<td><input type='date' name="usedAt" id="usedAt" /></td>
@@ -64,7 +65,8 @@
 				</select></td>
 			</tr>
 			<tr>
-				<td>금액<input type="button" value="영수증 OCR" onclick="showPopup();" /></td>
+				<td>금액<input type="button" value="영수증 OCR"
+					onclick="showOCRPopup();" /></td>
 			</tr>
 			<tr>
 
@@ -97,10 +99,14 @@
 				<td>내용</td>
 			</tr>
 			<tr>
-				<td><textarea name="description" cols="30" rows="3" placeholder="내용을 작성해주세요..." id="description" value=""></textarea></td>
+				<td><textarea name="description" cols="30" rows="3"
+						placeholder="내용을 작성해주세요..." id="description" value=""></textarea>
+
+				</td>
 			</tr>
 			<tr>
-				<td><input type="button" value="저장" onclick="javascript:checkWrite()"></td>
+				<td><input type="button" value="저장"
+					onclick="javascript:checkWrite()"></td>
 			</tr>
 		</table>
 	</form>
@@ -126,8 +132,8 @@
 
 <!--  Opencv, OCR 팝업창 -->
 <script>
-    function showPopup() {
-        window.open("opencvPopUp.jsp", "_blank", "width=500, height=1000, left=100, top=50");
+    function showOCRPopup() {
+        window.open("opencvPopUp.jsp", "_blank", "width=500, height=800, left=100, top=50");
     }
 </script>
 
@@ -137,3 +143,7 @@
 2. 팝업창이 닫힐 때, POST 메세지로 자식창으로 부터 부모창에 결과값을 보여줌
  -->
 <script src="../resources/js/account/accountDetail_Insert.js"></script>
+
+
+
+

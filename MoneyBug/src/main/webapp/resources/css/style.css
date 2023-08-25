@@ -11,15 +11,14 @@
     width: 15%;
     height: 90%;
     float: left;
-    background-color: rgba(255, 255, 255, 0.472);
+    background-color: #C4D7B2;
 }
 
 #section {
     width: 65%;
     height: 90%;
     float: left;
-    background: linear-gradient(to bottom, #CA61FF, hsl(265, 100%, 72%),
-		#945FFF);
+    background: #A0C49D;
     overflow-y: auto;
 }
 
@@ -83,18 +82,6 @@
 }
 /* ㄴ> nav 버튼 구조 */
 
-
-body {
-	background: linear-gradient(to bottom, #CA61FF, hsl(265, 100%, 72%),
-		#945FFF);
-	min-height: 100vh; /* 최소한 화면 높이만큼 높이 설정 */
-}
-
-div {
-	background-color: rgba(255, 255, 255, 0.472);
-}
-
-/* ㄴ> 전체적인 색상 통일 */
 
 .popup-content {
     background: linear-gradient(to bottom, #CA61FF, hsl(265, 100%, 72%), #945FFF);
