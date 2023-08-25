@@ -12,6 +12,7 @@ import java.sql.Date;
 @Controller
 public class AccountBookController {
 
+
 	private final AccountBookService accountBookService;
 
 	@Autowired
@@ -24,22 +25,31 @@ public class AccountBookController {
 	public void getAccountFromPage(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String socialId = (String) session.getAttribute("socialId");
-		System.out.println(socialId);
 		AccountBookDTO accountBookDTO = new AccountBookDTO();
 		accountBookDTO.setSocialId(socialId);
 		accountBookDTO.setCreateAt(new Date(System.currentTimeMillis()));
 		accountBookService.insertAccountBookIfNotExists(accountBookDTO); // 이메일이 중복되지 않게 생성
 	}
+        
+    @GetMapping("accountBook/seq")
+    @ResponseBody
+    public String getSeq(HttpServletRequest request) {
+    	HttpSession session = request.getSession();
+    	String socialId = (String) session.getAttribute("socialId");
 
-	@GetMapping("accountBook/seq")
-	@ResponseBody
-	public String getSeq(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		String socialId = (String) session.getAttribute("socialId");
+    	String seq = accountBookService.insertAccountDetailFindSeq(socialId);
+    	System.out.println(seq);
+    	return seq;
+    }
 
-		String seq = accountBookService.insertAccountDetailFindSeq(socialId);
-		System.out.println(seq);
-		return seq;
-	}
+    
+    @GetMapping("accountBook/getUserNickname")
+    @ResponseBody
+    public String getUserNickname(HttpServletRequest request) {
+    	HttpSession session = request.getSession();
+    	String userNickname = (String) session.getAttribute("userNickname");
+    	return userNickname;
+    }
+
 
 }

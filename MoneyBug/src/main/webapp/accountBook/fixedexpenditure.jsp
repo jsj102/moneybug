@@ -7,19 +7,34 @@
 <script type="text/javascript">
 	$(function() {
 		let countinput = 1;
+		let accountBookId = -1;
+		$.ajax({
+			url : "seq",
+			success : function(acountSeq) {
+				accountBookId = acountSeq;
+				$.ajax({
+					url : "expensesfirst",
+					method : "POST",
+					data : {
+						accountBookId : accountBookId
+					},
+					success : function(result) {
+						$('#resultexpenses').html(result);
+					}
+				});//ajax
+			},
+			error : function(){
+				
+			}
+		}) //accountBookId
+		
+		
 		$('#moneyinput1').on('input', function() {
             this.value = this.value.replace(/[^\d]/g, '');
-   		});//인풋에 입력시 숫자외의 값 제거
+   		});//인풋에 입력시 숫자외의 값 제거 (정규식)
 		
 		//ajax로 resultexpenses에 고정지출값 조회
 
-		$.ajax({
-			url : "expensesfirst",
-			method : "POST",
-			success : function(result) {
-				$('#resultexpenses').html(result);
-			}
-		});//ajax
 
 		$('#addLine')
 				.click(
@@ -67,6 +82,7 @@
 				url : "expensesupdate",
 				method : "POST",
 				data : {
+					accountBookId : accountBookId,
 					expensesList : JSON.stringify(expensesList),
 					moneyList : JSON.stringify(moneyList),
 				},
@@ -74,6 +90,9 @@
 					$.ajax({
 						url : "expensesfirst",
 						method : "POST",
+						data : {
+							accountBookId : accountBookId
+						},
 						success : function(result) {
 							$('#resultexpenses').html(result);
 						}

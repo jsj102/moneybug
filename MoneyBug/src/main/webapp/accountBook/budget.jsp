@@ -8,20 +8,34 @@
 	<script type="text/javascript">
 $(function() {
 	let countinput = 1;
+	
+	let accountBookId = -1;
+	$.ajax({
+		url : "seq",
+		success : function(acountSeq) {
+			accountBookId = acountSeq;
+			$.ajax({
+    			url: "budgetfirst",
+    			method: "POST",
+				data : {
+					accountBookId : accountBookId
+				},
+    			success: function(result) {
+       				// 결과를 resultbudget 요소에 삽입
+        			$('#resultbudget').html(result);
+
+    			}
+			});//ajax
+		},
+		error : function(){
+			
+		}
+	}) //accountBookId
 	//ajax로 resultbudget에 월간 입력값 조회
 	$('#moneyinput1').on('input', function() {
             this.value = this.value.replace(/[^\d]/g, ''); //정규식) ^-> 제외한 문자를 찾음. d-> 숫자 = 숫자를 제외한 문자를 찾음  / g->this.value의 전역에서 / ''로 replace
     });//인풋에 입력시 숫자외의 값 제거
 	
-	$.ajax({
-    	url: "budgetfirst",
-    	method: "POST",
-    	success: function(result) {
-       		// 결과를 resultbudget 요소에 삽입
-        	$('#resultbudget').html(result);
-
-    	}
-	});//ajax
 	
 	$('#addLine').click(function() {
 		countinput = countinput+1;
@@ -67,6 +81,7 @@ $(function() {
         	 url: "budgetupdate",
        		 method: "POST",
        		 data: {
+       			accountBookId : accountBookId,
           		budgetList: JSON.stringify(budgetList),
           		moneyList: JSON.stringify(moneyList),
         	},
@@ -74,6 +89,9 @@ $(function() {
         		$.ajax({
         	    	url: "budgetfirst",
         	    	method: "POST",
+        			data : {
+        				accountBookId : accountBookId
+        			},
         	    	success: function(result) {
         	       		// 결과를 resultbudget 요소에 삽입
         	        	$('#resultbudget').html(result);

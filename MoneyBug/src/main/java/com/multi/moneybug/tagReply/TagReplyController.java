@@ -30,18 +30,15 @@ public class TagReplyController {
 	
 	
 	@RequestMapping("tagReply/TagReply_list")
-	public void list(TagReplyPageDTO tagReplyPageDTO, Model model) {
-		tagReplyPageDTO.setStartEnd(tagReplyPageDTO.getPage());
-		//확인
+	public void list(int boardSeq, Model model) {
+		List<TagReplyDTO> tagreplylist = tagReplyService.tagreplylist(boardSeq);
+		model.addAttribute("tagReplylist", boardSeq);
 		
-		List<TagReplyDTO> tagreplylist = tagReplyService.tagreplylist(tagReplyPageDTO);			
-		model.addAttribute("tagreplylist", tagreplylist);
-	
 	}
 	
 	@RequestMapping("tagReply/TagReply_update")
 	public void update(TagReplyDTO tagReplyDTO, Model model) {
-		model.addAttribute("tagBoardDTO", tagReplyDTO);
+		model.addAttribute("tagReplyDTO", tagReplyDTO);
 		tagReplyService.update(tagReplyDTO);
 	}
 	

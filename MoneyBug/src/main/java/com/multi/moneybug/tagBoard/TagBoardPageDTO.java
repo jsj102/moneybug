@@ -7,6 +7,9 @@ public class TagBoardPageDTO {
     private int start;
     private int end;
     private int page;
+    private String searchKeyword;
+    private String boardType;
+    
 
     public void setStartEnd(int page, int totalCount) {
         // 페이지당 표시할 게시글 수

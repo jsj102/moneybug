@@ -58,5 +58,11 @@
 	<select id="listAll" resultType="accountDetailDTO">
 		select * from account_detail where ACCOUNT_BOOK_ID = #{accountBookId} ORDER BY SEQ DESC
 	</select>
+	<select id="listMonthAllUser" resultType="accountDetailDTO">
+		select * from account_detail where MONTH(USED_AT) = #{currentMonth} AND YEAR(USED_AT) = #{currentYear} ORDER BY SEQ DESC
+	</select>
+	<select id="listMonthCountUseUser" resultType="int">
+		select COUNT(distinct ACCOUNT_BOOK_ID) from account_detail where MONTH(USED_AT) = #{currentMonth} AND YEAR(USED_AT) = #{currentYear}
+	</select>
 	
 </mapper>

@@ -4,6 +4,7 @@
 <html>
 <head>
 <title>돈벌레 로그인</title>
+
 <meta name="google-signin-client_id" content="35118497195-tvjc4c2qpdtq95148f8evc7o2ko3v72u.apps.googleusercontent.com">
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -12,14 +13,18 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 
+
 <style>
 body {
 	height: 100vh;
+
 	background: #F9F5E7;
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
+
 
 .login-container {
 	background-color: #fff;
@@ -27,6 +32,7 @@ body {
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 	padding: 30px;
 	text-align: center;
+
 }
 
 .social-group {
@@ -40,7 +46,9 @@ body {
 	margin-bottom: 10px;
 }
 
+
 h1 {
+
 	margin-bottom: 10px;
 }
 
@@ -160,5 +168,6 @@ p {
 			
 	
 </script>
+
 </body>
 </html>
