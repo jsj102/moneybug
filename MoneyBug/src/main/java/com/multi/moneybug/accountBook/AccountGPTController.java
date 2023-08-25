@@ -11,59 +11,60 @@ import java.util.List;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@EnableScheduling
+@Slf4j
 public class AccountGPTController {
 
 	private AccountGPTService gptService;
 	private AccountBookService accountBookService;
+
 	@Autowired
-	public AccountGPTController(AccountGPTService gptService,AccountBookService accountBookService) {
+	public AccountGPTController(AccountGPTService gptService, AccountBookService accountBookService) {
 		this.gptService = gptService;
 		this.accountBookService = accountBookService;
 	}
 
-	@RequestMapping("accountBook/data")
-	public String power(Model model,HttpSession session) throws ParseException {
-		String convert = (String) session.getAttribute("socialId");
-		String accountBookId = accountBookService.insertAccountDetailFindSeq(convert);
-		
+	// try catch
+	@Scheduled(cron = "0 0 0 * 1 * ") //초 분 시 
+	public void montlyGptInsert() {
+		List<Integer> idList = accountBookService.readList();
 		AccountDetailDTO account = new AccountDetailDTO();
-		// 날짜 설정
-		LocalDate localDate = LocalDate.now();
-		account.setAccountBookId(Integer.parseInt(accountBookId));
-		account.setCurrentMonth(localDate.getMonthValue());
-		account.setCurrentYear(localDate.getYear());
-		// 데이터 가져와 gpt로 전송
-		HashMap<String, List<AccountDetailDTO>> data = gptService.accountSort("", account);
-		String consumption = gptService.prompt(gptService.cosumptionSort(data.get("consumption")));
-		String gptData = gptService.sendRequest(consumption);
-		String result = gptService.jsonParsing(gptData);
-		
 		AccountGPTDTO accountGPTDTO = new AccountGPTDTO();
-		accountGPTDTO.setAccountBookId(Integer.parseInt(accountBookId));
-		accountGPTDTO.setContent(result);
-		Date date = new Date();
-		String local = localDate.toString();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		date = dateFormat.parse(local);
-
-		accountGPTDTO.setCreateAt(date);
-		gptService.insert(accountGPTDTO);
-		return "redirect:/accountBook/accountbookFrom.jsp";
+		LocalDate today = LocalDate.now();
+		gptService.deleteAll();
+		// 데이터 삽입
+		for (Integer accountBookId : idList) {
+			account.setAccountBookId(accountBookId);
+			HashMap<String, List<AccountDetailDTO>> data = gptService.accountSort(account);
+			HashMap<String, Integer> sendData = gptService.cosumptionSort(data.get("consumption"));
+			String request = gptService.prompt(sendData);
+			String gptResponse = gptService.sendRequest(request);
+			String finalData = gptService.jsonParsing(gptResponse);
+			accountGPTDTO.setAccountBookId(accountBookId);
+			accountGPTDTO.setContent(finalData);
+			gptService.insert(accountGPTDTO);
+		}
 	}
 
 	@RequestMapping("accountBook/OpenApiRead")
-	public String readOne(AccountGPTDTO accountGPTDTO, Model model,HttpSession session) {
+	public String readOne(AccountGPTDTO accountGPTDTO, Model model, HttpSession session) {
 		String convert = (String) session.getAttribute("socialId");
 		String accountBookId = accountBookService.insertAccountDetailFindSeq(convert);
-		
+
 		Date start = new Date();
 		Date end = new Date();
 		LocalDate today = LocalDate.now();
