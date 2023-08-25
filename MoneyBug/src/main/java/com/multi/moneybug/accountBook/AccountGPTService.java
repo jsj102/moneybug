@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -21,10 +23,12 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+
 public class AccountGPTService {
 
 	@Value("#{key['open.ai']}")
 	private String key;
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	AccountDetailService accountDetailService;
@@ -68,7 +72,7 @@ public class AccountGPTService {
 	}
 
 	// 월별 데이터 소비,수입으로 나눠서 가져오기
-	public HashMap<String, List<AccountDetailDTO>> accountSort(String text, AccountDetailDTO accountDetailDTO) {
+	public HashMap<String, List<AccountDetailDTO>> accountSort(AccountDetailDTO accountDetailDTO) {
 		List<AccountDetailDTO> list = accountDetailService.readListMonth(accountDetailDTO);
 		List<AccountDetailDTO> income = new ArrayList<AccountDetailDTO>();
 		List<AccountDetailDTO> consumption = new ArrayList<AccountDetailDTO>();
@@ -111,6 +115,11 @@ public class AccountGPTService {
 	
 	public AccountGPTDTO readOne(AccountGPTDTO accountGPTDTO) {
 		return accountGPTDAO.readOne(accountGPTDTO);
+	}
+
+	public void deleteAll() {
+		accountGPTDAO.deleteAll();
+		log.info("데이터 전체삭제 완료");
 	}
 
 }

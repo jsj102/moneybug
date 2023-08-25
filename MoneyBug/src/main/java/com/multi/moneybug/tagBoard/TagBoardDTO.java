@@ -18,4 +18,8 @@ public class TagBoardDTO {
 	private Date createAt;
 	private String boardType;
 	
+	private int start;
+    private int end;
+    private int page;
+	
 }

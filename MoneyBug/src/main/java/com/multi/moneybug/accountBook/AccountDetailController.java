@@ -66,10 +66,8 @@ public class AccountDetailController {
 
 	@RequestMapping("accountBook/monthlyReportRequestJSON")
 	@ResponseBody
-	public HashMap<String,Object> monthlyReportRequestJSON(Model model,@RequestParam("year") int year, @RequestParam("month") int month,HttpSession session) {
-		String convert = (String) session.getAttribute("socialId");
-		String accountBookId = accountBookService.insertAccountDetailFindSeq(convert);
-		
+
+	public HashMap<String,Object> monthlyReportRequestJSON(@RequestParam("accountBookId") int accountBookId,Model model,@RequestParam("year") int year, @RequestParam("month") int month) {	
 		AccountDetailDTO accountDetailDTO = new AccountDetailDTO();
 		accountDetailDTO.setAccountBookId(Integer.parseInt(accountBookId));
 		accountDetailDTO.setCurrentYear(year);

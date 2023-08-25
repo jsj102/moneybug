@@ -19,5 +19,9 @@ public class AccountBookDAO {
 	 public String readfind(String socialId) {
 		 return my.selectOne("accountBook.find", socialId);
 	 }
-	
+
+	 public List<Integer>readList() {
+		 return my.selectList("accountBook.list");
+	 }
+
 }

@@ -45,6 +45,14 @@ public class AccountDetailService {
 		return accountDetailDAO.readListMonth(accountDetailDTO);
 	}
 	
+	public List<AccountDetailDTO> readListMonthAllUser(AccountDetailDTO accountDetailDTO){
+		return accountDetailDAO.readListMonthAllUser(accountDetailDTO);
+	}
+	
+	public int countListMonthUseUser(AccountDetailDTO accountDetailDTO) {
+		return accountDetailDAO.countListMonthUseUser(accountDetailDTO);
+	}
+	
 	public AccountDetailDTO makeDTOForReadMonth(int accountBookId, int currentYear, int currentMonth) {
 		AccountDetailDTO accountDetailDTO = new AccountDetailDTO();
 		accountDetailDTO.setAccountBookId(accountBookId);

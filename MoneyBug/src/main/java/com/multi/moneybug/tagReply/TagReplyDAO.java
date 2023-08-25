@@ -23,9 +23,8 @@ public class TagReplyDAO {
 		return my.insert("tagreply.reinsert", tagReplyDTO);
 	}
 	
-	public List<TagReplyDTO> tagReplyList( TagReplyPageDTO tagReplyPageDTO) {
-		
-        return my.selectList("tagreply.list", tagReplyPageDTO);
+	public List<TagReplyDTO> tagReplyList(int boardSeq) {
+        return my.selectList("tagreply.list",boardSeq);
     }
 	
 	
