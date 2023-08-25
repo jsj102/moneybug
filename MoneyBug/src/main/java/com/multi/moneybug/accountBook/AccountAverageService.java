@@ -17,7 +17,14 @@ public class AccountAverageService {
 	
 	public void insertAvgList(HashMap<String,Integer> accountDetailMap,int year,int month) {
 		AccountAverageDTO accountAverageDTO = new AccountAverageDTO();
-		//accountAverageDTO.setAccountCategory(accountCategory);
+		Set<String> keys = accountDetailMap.keySet();
+		accountAverageDTO.setCurrentYear(year);
+		accountAverageDTO.setCurrentMonth(month);
+		for(String key : keys) {
+			accountAverageDTO.setAccountCategory(key);
+			accountAverageDTO.setPrice(accountDetailMap.get(key));
+			
+		}
 	}
 	
 	public HashMap<String,Integer> divideUserAvg(HashMap<String,Integer> accountDetailMap, int users) {
