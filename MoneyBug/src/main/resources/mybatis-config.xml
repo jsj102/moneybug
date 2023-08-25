@@ -3,42 +3,53 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <settings>
-        <setting name="mapUnderscoreToCamelCase" value="true" />
-    </settings>
-    <!-- SQL문 정의할 때 VO표현을 간단하게 하고 싶은 경우. 별명을 지어서 사용 -->
-    <typeAliases>
-        <typeAlias type="com.multi.moneybug.accountBook.AccountBookDTO" alias="accountBookDTO"></typeAlias>
-         <typeAlias type="com.multi.moneybug.accountBook.AccountDetailDTO" alias="accountDetailDTO"></typeAlias>
-        <typeAlias type="com.multi.moneybug.accountBook.AccountExpensesDTO" alias="accountExpensesDTO"></typeAlias>
-        <typeAlias type="com.multi.moneybug.accountBook.AccountBudgetDTO" alias="accountBudgetDTO"></typeAlias>
-        <typeAlias type="com.multi.moneybug.accountBook.AccountGPTDTO" alias="accountGPTDTO"></typeAlias>
-        <typeAlias type="com.multi.moneybug.tagBoard.TagBoardDTO" alias="tagboardDTO"></typeAlias>
-        <typeAlias type="com.multi.moneybug.tagBoard.TagBoardPageDTO" alias="tagboardpageDTO"></typeAlias>
-        <typeAlias type="com.multi.moneybug.tagReply.TagReplyDTO" alias="tagreplyDTO"></typeAlias>
-        <typeAlias type="com.multi.moneybug.member.MemberDTO" alias="memberDTO"></typeAlias>
-        <typeAlias type="com.multi.moneybug.accountBook.AccountDetailSearchDTO" alias="accountDetailSearchDTO"></typeAlias>
-        
-        <typeAlias type="com.multi.moneybug.bonBoard.BonBoardDTO" alias="bonboardDTO"></typeAlias>
-        <typeAlias type="com.multi.moneybug.bonBoard.BonReplyDTO" alias="bonreplyDTO"></typeAlias>
-        <typeAlias type="com.multi.moneybug.bonBoard.BonVoteDTO" alias="bonvoteDTO"></typeAlias>
-    </typeAliases>
-    <mappers>
-        <!-- SQL문 정의하는 파일들의 목록을 지정. 테이블당 한개 사용 -->
-          
-        <mapper resource="mapper/accountbookMapper.xml" />
-        <mapper resource="mapper/accountdetailMapper.xml" />
-        <mapper resource="mapper/accountexpensesMapper.xml" />
-        <mapper resource="mapper/accountgptMapper.xml" />
-        <mapper resource="mapper/tagboardMapper.xml" />
-        <mapper resource="mapper/tagreplyMapper.xml" />
-       <mapper resource="mapper/memberMapper.xml" />
-       <mapper resource="mapper/accountbudgetMapper.xml" />
-       <mapper resource="mapper/bonboardMapper.xml" />
-        
-        
-    </mappers>
-    <!-- 여기에 mapUnderscoreToCamelCase 설정 추가 -->
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+	</settings>
+	<!-- SQL문 정의할 때 VO표현을 간단하게 하고 싶은 경우. 별명을 지어서 사용 -->
+	<typeAliases>
+		<!--가계부 mybatis -->
+		<typeAlias type="com.multi.moneybug.accountBook.AccountBookDTO" alias="accountBookDTO"></typeAlias>
+		<typeAlias type="com.multi.moneybug.accountBook.AccountDetailDTO" alias="accountDetailDTO"></typeAlias>
+		<typeAlias type="com.multi.moneybug.accountBook.AccountExpensesDTO" alias="accountExpensesDTO"></typeAlias>
+		<typeAlias type="com.multi.moneybug.accountBook.AccountBudgetDTO" alias="accountBudgetDTO"></typeAlias>
+		<typeAlias type="com.multi.moneybug.accountBook.AccountGPTDTO" alias="accountGPTDTO"></typeAlias>
+		<typeAlias type="com.multi.moneybug.accountBook.AccountDetailSearchDTO" alias="AccountDetailSearchDTO"></typeAlias>
 
-    
+		<!--게시판 mybatis -->
+		<typeAlias type="com.multi.moneybug.tagBoard.TagBoardDTO" alias="tagboardDTO"></typeAlias>
+		<typeAlias type="com.multi.moneybug.tagBoard.TagBoardPageDTO" alias="tagboardpageDTO"></typeAlias>
+		<typeAlias type="com.multi.moneybug.tagReply.TagReplyDTO" alias="tagreplyDTO"></typeAlias>
+
+		<!--살까말까 mybatis -->
+		<typeAlias type="com.multi.moneybug.bonBoard.BonBoardDTO" alias="bonboardDTO"></typeAlias>
+		<typeAlias type="com.multi.moneybug.bonBoard.BonReplyDTO" alias="bonreplyDTO"></typeAlias>
+		<typeAlias type="com.multi.moneybug.bonBoard.BonVoteDTO" alias="bonvoteDTO"></typeAlias>
+
+		<!--맴버 mybatis -->
+		<typeAlias type="com.multi.moneybug.member.MemberDTO" alias="memberDTO"></typeAlias>
+
+		<!--openApi mybatis -->
+		<typeAlias type="com.multi.moneybug.openApi.OpenApiDTO" alias="openApiDTO"></typeAlias>
+
+		<!--log mybatis -->
+		<typeAlias type="com.multi.moneybug.log.LogDTO" alias="LogDTO"></typeAlias>
+	</typeAliases>
+	<mappers>
+		<mapper resource="mapper/accountbookMapper.xml" />
+		<mapper resource="mapper/accountdetailMapper.xml" />
+		<mapper resource="mapper/accountexpensesMapper.xml" />
+		<mapper resource="mapper/accountbudgetMapper.xml" />
+		<mapper resource="mapper/accountgptMapper.xml" />
+		<mapper resource="mapper/tagboardMapper.xml" />
+		<mapper resource="mapper/tagreplyMapper.xml" />
+		<mapper resource="mapper/bonboardMapper.xml" />
+		<mapper resource="mapper/memberMapper.xml" />
+		<mapper resource="mapper/openApiMapper.xml" />
+		<mapper resource="mapper/logMapper.xml" />
+
+	</mappers>
+	<!-- 여기에 mapUnderscoreToCamelCase 설정 추가 -->
+
+
 </configuration>
