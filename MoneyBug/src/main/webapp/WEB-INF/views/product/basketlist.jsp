@@ -6,19 +6,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-	rel="stylesheet">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>돈벌레 장바구니</title>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet">
+
 <style>
 body {
 	background: #F9F5E7;
 }
 
 .basket-container {
-	margin: 200px;
+	margin: 100px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -45,16 +47,9 @@ body {
 	background-color: white;
 }
 
-.btn-custom {
-	background-color: #F3969A;
-	color: white;
-	width: 70%;
-	align-self: center; /* Add this line */
-}
+
 </style>
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
     $('input[name="selectedProducts"]').on('change', function() {
@@ -164,7 +159,7 @@ $(document).ready(function() {
 						id="selectedId_" name="selectedId" value="${productId}" /> <input
 						type="hidden" id="seletedSeq_" name="seletedSeq"
 						value="${basket.seq}" />
-					<button type="submit" class="btn btn-lg btn-custom">주문하기</button>
+					<button type="submit" class="btn btn-lg btn-secondary">주문하기</button>
 				</div>
 			</form>
 		</div>
@@ -174,10 +169,6 @@ $(document).ready(function() {
 			총 주문 금액: <span id="totalAmount">${totalAmount}원</span>
 		</div>
 	</div>
-
-	<!-- Bootstrap JavaScript -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <%@ include file="../../../resources/layout/footer.jsp" %>
 </body>

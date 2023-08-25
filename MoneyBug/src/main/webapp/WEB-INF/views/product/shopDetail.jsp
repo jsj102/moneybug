@@ -6,19 +6,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<meta name="description" content="" />
-<meta name="author" content="" />
-<title>돈벌레 Shop</title>
-<!-- 부트스트랩 링크 추가 -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<!-- Bootstrap icons-->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-	rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>돈벌레 상세페이지</title>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet">
+
 <style>
 body {
 	background: #F9F5E7;
@@ -40,6 +34,7 @@ body {
 }
 
 .banner-text {
+	color: white;
 	font-size: 22px;
 	text-align: center;
 }
@@ -47,7 +42,7 @@ body {
 .detail-container {
 	display: flex;
 	justify-content: center;
-	margin: 20px 100px;
+	margin: 50px 0 50px 0;
 }
 
 .product-image>img {
@@ -78,19 +73,6 @@ body {
 	gap: 10px;
 }
 
-.cart-button, .buy-button {
-	padding: 10px 20px;
-	background-color: #9669FF;
-	color: white;
-	border: none;
-	cursor: pointer;
-	font-size: 1rem;
-	border-radius: 5px;
-}
-
-.cart-button {
-	background-color: #2AD2D3;
-}
 
 .red-strike {
 	text-decoration: line-through;
@@ -169,7 +151,7 @@ body {
 			<h1>MoneyBug Shop</h1>
 			<p>돈벌레 사이트에서만 제공하는 다양한 이벤트와 굿즈</p>
 			<!-- 광고 배너 버튼 -->
-			<a href="shoplist?page=1" class="btn btn-outline-light">전체상품리스트</a>
+			<a href="shoplist?page=1" class="btn btn-light">전체상품리스트</a>
 		</div>
 	</div>
 
@@ -179,7 +161,7 @@ body {
 			<img src="${productDTO.productImg}" alt="Product Image">
 		</div>
 		<div class="product-details">
-			<div class="product-category badge bg-light">
+			<div class="product-category badge rounded-pill bg-success">
 				${productDTO.productType}
 			</div>
 			<div class="product-name">${productDTO.productName}</div>
@@ -212,18 +194,12 @@ body {
 
 			<hr>
 			<div class="buttons">
-			    <button class="cart-button">장바구니</button>
-			    <button class="buy-button" onclick="location.href='#'">바로 주문하기</button>
+			    <button class="btn btn-success cart-button">장바구니</button>
+			    <button class="btn btn-info buy-button" onclick="location.href='#'">바로 주문하기</button>
 			</div>
 
 		</div>
 	</div>
-
-	<!-- jQuery -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<!-- Bootstrap core JS -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 		
 <%@ include file="../../../resources/layout/footer.jsp" %>
 </body>

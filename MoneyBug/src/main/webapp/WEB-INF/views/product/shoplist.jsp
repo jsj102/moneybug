@@ -7,17 +7,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<meta name="description" content="" />
-<meta name="author" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <title>돈벌레 Shop</title>
-<!-- 부트스트랩 링크 추가 -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<link href="resources/css/main.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet">
 
 <style>
 body {
@@ -113,17 +108,8 @@ body {
   display: flex;
 }
 
-.pagination .page-link {
-    color: #F3969A;
-}
-
-.pagination>li.active>a {
-  background-color: #F3969A !important;
-}
-
 </style>
 <%@ include file="../../../resources/layout/header.jsp" %>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     function goToBasket(productId) {
         // 세션에 userNickname 정보가 있는지 확인
@@ -184,9 +170,9 @@ body {
 
 			<!-- 광고 배너 버튼 -->
 			<a href="../product/shopDetail?productId=1"
-				class="btn btn-outline-light">오늘의 특가</a>
+				class="btn btn-light">오늘의 특가</a>
 				
-			<a href="${pageContext.request.contextPath}/product/basketlist" class="btn btn-outline-light">장바구니</a>
+			<a href="${pageContext.request.contextPath}/product/basketlist" class="btn btn-light">장바구니</a>
 			
 		</div>
 	</div>

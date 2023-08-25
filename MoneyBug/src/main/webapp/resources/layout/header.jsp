@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../resources/css/header.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/header.css" rel="stylesheet">
 <script>
 $(document).ready(function() {
     $('.mypage').click(function(event) {
@@ -50,7 +50,7 @@ $(document).ready(function() {
             <li class="nav-item active"><a class="nav-link" href="/Moneybug/board/list.brd">커뮤니티</a></li>
             <li class="nav-item active"><a class="nav-link" href="/moneybug/accountBook/accountbookFrom.jsp">가계부</a></li>
             <li class="nav-item active"><a class="nav-link" href="/Moneybug/board2/list.brd">살까말까</a></li>
-            <li class="nav-item active"><a class="nav-link" href="product/shoplist?page=1">상품Shop</a></li>
+            <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/product/shoplist?page=1">상품Shop</a></li>
             <!-- <li class="nav-item active"><a class="nav-link" href="/Moneybug/event/list.brd">이벤트</a></li> -->
             <li class="nav-item active"><a class="nav-link" href="/Moneybug/CS/list.brd">고객센터</a></li>
 
