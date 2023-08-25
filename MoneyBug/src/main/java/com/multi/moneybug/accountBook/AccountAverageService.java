@@ -23,7 +23,7 @@ public class AccountAverageService {
 		for(String key : keys) {
 			accountAverageDTO.setAccountCategory(key);
 			accountAverageDTO.setPrice(accountDetailMap.get(key));
-			
+			accountAverageDAO.insert(accountAverageDTO);
 		}
 	}
 	

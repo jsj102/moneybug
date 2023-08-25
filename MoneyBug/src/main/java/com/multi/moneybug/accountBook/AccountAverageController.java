@@ -34,6 +34,6 @@ public class AccountAverageController {
 		//accountAverageService.insertAvgList(accountDetailMap);
 	}
 	
-	
+	@RequestMapping("/accountBook/getAvginfo")
 	public void monthlyAccountBookAvgRead() {}
 }
