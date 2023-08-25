@@ -1,7 +1,5 @@
 package com.multi.moneybug.accountBook;
 
-import java.util.List;
-
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,8 +19,9 @@ public class AccountBookDAO {
 	 public String readfind(String socialId) {
 		 return my.selectOne("accountBook.find", socialId);
 	 }
+
 	 public List<Integer>readList() {
 		 return my.selectList("accountBook.list");
 	 }
-	
+
 }

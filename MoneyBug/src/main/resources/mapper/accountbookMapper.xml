@@ -12,5 +12,6 @@
 	</select>
 	<select id="list" resultType="int">
 		select SEQ from account_book
+
 	</select>
 </mapper>

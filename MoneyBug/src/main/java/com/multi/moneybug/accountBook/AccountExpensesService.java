@@ -76,7 +76,7 @@ public class AccountExpensesService {
 			accountExpensesDTO.getFixedCategory();
 			return false;
 		} catch (NullPointerException e) {
-			
+			System.out.println("expenses null에러발생");
 			return true;
 		}
 		
