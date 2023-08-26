@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
 <link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet">
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
 body {
 	background: #F9F5E7;
@@ -195,7 +195,7 @@ body {
                             </a>
                             <h4><span class="badge typebadge bg-light badge-lg">${product.productType}</span></h4>
                             <!-- Shopping cart-->
-                            <button type="button" class="btn btn-dark bi bi-cart-plus" onclick="goToBasket(${product.productId})"></button>
+                            <button type="button" class="btn btn-light bi bi-cart-plus" onclick="goToBasket(${product.productId})"></button>
                             <h4><span class="badge numbadge rounded-pill bg-light badge-lg">${product.rowNum}</span></h4>
                         </div>
                         <!-- Product details-->
