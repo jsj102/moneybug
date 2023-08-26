@@ -28,6 +28,15 @@ public class BonVoteDAO {
 		return my.insert("bonvote.insert", bonVoteDTO);
 	}
 
+
+
+
+
+	public int calculateTotalVotes(int boardSeq) {
+	    // MyBatis의 매퍼를 사용하여 총 투표 수를 계산하는 쿼리를 실행합니다.
+	    return my.selectOne("bonvote.calculateTotalVotes", boardSeq);
+	}
+
 	
 
 
