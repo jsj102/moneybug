@@ -1,20 +1,13 @@
 @charset "UTF-8";
 
-#header, #footer {
-	width: 100%;
-	height: 5%;
-	clear: both;
-	background: #ffffff;
-}
-
-#nav {
+/* .account_nav {
     width: 15%;
     height: 90%;
     float: left;
     background-color: #C4D7B2;
 }
 
-#section {
+.account_section {
     width: 65%;
     height: 90%;
     float: left;
@@ -22,65 +15,19 @@
     overflow-y: auto;
 }
 
- #aside {
+.account_aside {
     width: 20%; 
     height: 90%; 
     float: left;
-    background: transparent; /* 배경색을 투명하게 설정 */
+    background: transparent; 배경색을 투명하게 설정
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
    
-}
+} */
 /* ㄴ> html 구조  */
 
 
-.header-btn{
-	background: #ffffff;
-	padding : 10px;
-	border: 0px;
-	width: 100px;
-	height: 40px;
-}
-/*ㄴ> 헤더 버튼 */
-
-.dropbtn {
-  width: 200px;
-  height: 50px;
-  border: none;
-  cursor: pointer;
-  background-color: #E6E6FA;
-  text-color: #DDA0DD;
-  font-weight: bold;
-}
-
-.dropdown {
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-content a:hover { }
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-.dropdown:hover .dropbtn {
-}
-/* ㄴ> nav 버튼 구조 */
 
 
 .popup-content {

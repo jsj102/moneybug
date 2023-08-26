@@ -27,8 +27,15 @@
         });
     });
 </script>
+<style>
+.account_search {
+	padding: 30px 0 0 280px;
+}
+</style>
 </head>
 <body>
+	
+	<div class="account_search">
 	<select id="searchYear" name="searchYear">
 		<option value="2024">2024년</option>
 		<option value="2023">2023년</option>
@@ -67,6 +74,7 @@
 		<option value="반려동물">반려동물</option>
 		<option value="기타">기타</option>
 	</select>
-	<button type="submit" id="searchButton">검색</button>
+	<button class="btn btn-secondary" type="submit" id="searchButton">검색</button>
+	</div>
 </body>
 </html>

@@ -6,7 +6,26 @@
 <%@ include file="../resources/layout/accountNav.jsp"%>
 <%@ include file="../resources/layout/accountDetail_Search.jsp"%>
 
-<div id="section" align="center">
+<style>
+body {
+	margin: 0;
+}
+
+  .account_section {
+    width: 80vw;
+    text-align: center;
+    padding: 100px 0 0 250px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 250px; 
+  }
+  
+</style>
+
+<div class="account_section">
 
 	<h3>가계부 내역 페이지</h3>
 	<br>
