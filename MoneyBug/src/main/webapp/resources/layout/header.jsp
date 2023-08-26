@@ -74,7 +74,7 @@ $(document).ready(function() {
 									</form>
 								</li>
 								<li><a class="dropdown-item" href="/moneybug/logout.do">로그아웃</a></li>
-							<li><a class="dropdown-item" href="member/managerlogin.jsp">관리자 로그인</a></li>
+							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/member/managerlogin.jsp">관리자 로그인</a></li>
 							<li><a class="dropdown-item" href="/moneybug/api/showButton">API키 관리</a></li>
 						</ul>
 					</li>
@@ -94,11 +94,11 @@ $(document).ready(function() {
 			</c:choose>
 
 			</ul>
-			<form class="d-flex align-items-center ms-auto">
+<!-- 			<form class="d-flex align-items-center ms-auto">
 				<input class="form-control me-sm-2" type="search"
 					placeholder="Search">
 				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-			</form>
+			</form> -->
 		</div>
 		</div>
 </nav>

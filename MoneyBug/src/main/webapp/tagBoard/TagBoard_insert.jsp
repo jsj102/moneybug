@@ -17,9 +17,13 @@
 				<td>제목</td>
 				<td><select id="boardType" name="boardType">
 						<option value="">말머리</option>
-						<option value="교통">교통</option>
-						<option value="식비">식비</option>
 						<option value="공과금">공과금</option>
+						<option value="교통">교통</option>
+						<option value="데이트">데이트</option>
+						<option value="생활꿀팁">생활꿀팁</option>
+						<option value="식비">식비</option>
+						<option value="일상">일상</option>
+						<option value="플렉스">플렉스</option>
 				</select> <input id="title" name="title" type="text" placeholder=" 제목을 입력하세요.."
 					style="width: 507px; height: 25px; font-size: 15px;"></td>
 			</tr>
@@ -94,5 +98,3 @@
 	    return false;
 	});
 </script>
-
-
