@@ -19,12 +19,20 @@
 			<td>제목</td>
 			
 			<td><select id="boardType" name="boardType">
-					<option value="교통"
-						<c:if test="${param.boardType	 == '교통'}">selected</c:if>>교통</option>
-					<option value="식비"
-						<c:if test="${param.boardType == '식비'}">selected</c:if>>식비</option>
 					<option value="공과금"
 						<c:if test="${param.boardType == '공과금'}">selected</c:if>>공과금</option>
+					<option value="교통"
+						<c:if test="${param.boardType == '교통'}">selected</c:if>>교통</option>
+					<option value="데이트"
+						<c:if test="${param.boardType == '데이트'}">selected</c:if>>공과금</option>
+					<option value="생활꿀팁"
+						<c:if test="${param.boardType == '생활꿀팁'}">selected</c:if>>공과금</option>
+					<option value="식비"
+						<c:if test="${param.boardType == '식비'}">selected</c:if>>식비</option>
+					<option value="일상"
+						<c:if test="${param.boardType == '일상'}">selected</c:if>>공과금</option>
+					<option value="플렉스"
+						<c:if test="${param.boardType == '플렉스'}">selected</c:if>>공과금</option>
 			</select> <input id="title" name="title" type="text" value="${param.title}"
 				style="width: 507px; height: 25px; font-size: 15px;"></td>
 
