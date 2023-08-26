@@ -59,9 +59,9 @@
 	<div id="sidebar">
 		<ul class="nav nav-pills flex-column">
 			<li class="nav-item account-side"><a class="nav-link active" href="/moneybug/accountBook/accountDetail_List.jsp">가계부 작성</a></li>
-			<li class="nav-item account-side"><a class="nav-link active" href="#">월별 보고서</a></li>
-			<li class="nav-item account-side"><a class="nav-link active" href="#">목표 설정</a></li>
+			<li class="nav-item account-side"><a class="nav-link active" href="/moneybug/accountBook/monthlyReport.jsp">월간 가계부</a></li>
+			<li class="nav-item account-side"><a class="nav-link active" href="/moneybug/accountBook/budget.jsp">예산 설정</a></li>
+			<li class="nav-item account-side"><a class="nav-link active" href="/moneybug/accountBook/fixedexpenditure.jsp">고정지출</a></li>
 		</ul>
 	</div>
 </div>
-

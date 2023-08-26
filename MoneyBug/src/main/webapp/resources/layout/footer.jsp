@@ -8,8 +8,20 @@
 </footer>
 
 <style>
+.footer {
+    bottom: 0;
+    width: 100%;
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    text-align: center;
+}
+
 .footer-icon {
-filter: grayscale(100%);
+    filter: grayscale(100%);
 }
 </style>
 
+
+
+</body>
+</html>

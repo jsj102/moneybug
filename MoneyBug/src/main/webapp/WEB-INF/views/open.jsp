@@ -113,5 +113,8 @@ b {
 		<button id="issued" class="btn btn-custom btn-lg">api 발급</button>
 		<button id="reissued" class="btn btn-custom btn-lg">api 재발급</button>
 	</div>
+	<div>
+		<a href="/moneybug/main.jsp">뒤로 가기</a>
+	</div>
 </body>
 </html>

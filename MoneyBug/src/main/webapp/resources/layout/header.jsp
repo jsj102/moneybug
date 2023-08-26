@@ -52,12 +52,12 @@ $(document).ready(function() {
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item active"><a class="nav-link" href="/moneybug/main.jsp">Home<span class="sr-only">(current)</span></a></li>
-            <li class="nav-item active"><a class="nav-link" href="/Moneybug/board/list.brd">커뮤니티</a></li>
+            <li class="nav-item active"><a class="nav-link" href="/moneybug/tagBoard/TagBoard_list?page=1">커뮤니티</a></li>
             <li class="nav-item active"><a class="nav-link" href="/moneybug/accountBook/accountbookFrom.jsp">가계부</a></li>
-            <li class="nav-item active"><a class="nav-link" href="/Moneybug/board2/list.brd">살까말까</a></li>
+            <li class="nav-item active"><a class="nav-link" href="/moneybug/bonBoard/BonBoard_list?page=1">살까말까</a></li>
             <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/product/shoplist?page=1">상품Shop</a></li>
             <!-- <li class="nav-item active"><a class="nav-link" href="/Moneybug/event/list.brd">이벤트</a></li> -->
-            <li class="nav-item active"><a class="nav-link" href="/Moneybug/CS/list.brd">고객센터</a></li>
+            <!-- <li class="nav-item active"><a class="nav-link" href="/Moneybug/CS/list.brd">고객센터</a></li> -->
 
 			<c:choose>
 				<c:when
@@ -75,6 +75,7 @@ $(document).ready(function() {
 								</li>
 								<li><a class="dropdown-item" href="/moneybug/logout.do">로그아웃</a></li>
 							<li><a class="dropdown-item" href="member/managerlogin.jsp">관리자 로그인</a></li>
+							<li><a class="dropdown-item" href="/moneybug/api/showButton">API키 관리</a></li>
 						</ul>
 					</li>
 				</c:when>
@@ -86,7 +87,7 @@ $(document).ready(function() {
 						data-toggle="dropdown" aria-expanded="false">로그인해주세요</a>
 						<ul class="dropdown-menu">
 							<li><a class="dropdown-item" href="login.jsp">회원 로그인</a></li>
-							<li><a class="dropdown-item" href="#">관리자 로그인</a></li>
+							<li><a class="dropdown-item" href="member/managerlogin.jsp">관리자 로그인</a></li>
 						</ul>
 					</li>
 				</c:otherwise>
