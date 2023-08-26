@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ include file="../../../resources/layout/header.jsp"%>
 <%@ include file="../../../resources/layout/TagBoardNav.jsp"%>
-	<h3>커뮤니티</h3>
+
 <div class="container">
 	 
 	<br>
@@ -38,7 +38,7 @@
 	<button id='newinsert'>글 쓰기</button>
 	
 	<%
-	int pages = (int)request.getAttribute("pages");
+	int pages = Integer.parseInt(request.getAttribute("pages").toString());
 	for(int p = 1; p <= pages; p++){
 %>
 	<a href="TagBoard_searchlist?searchKeyword=${param.searchKeyword}&page=<%= p %>">
