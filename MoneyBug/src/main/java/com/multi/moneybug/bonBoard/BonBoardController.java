@@ -6,70 +6,108 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
-@RequestMapping("BonBoard/*")
 public class BonBoardController {
-	@Autowired
-	BonBoardService bonBoardService;  //본보드 서비스를 변수에 담음
 	
-
-    public BonBoardController(BonBoardService bonBoardService) {
+    private final BonBoardService bonBoardService;
+    private final BonReplyService bonReplyService;
+    
+    @Autowired
+    public BonBoardController(BonBoardService bonBoardService, BonReplyService bonReplyService) {
         this.bonBoardService = bonBoardService;
+        this.bonReplyService = bonReplyService;
+        
+    
     }
-	//새 게시물 등록 처리하는 핸들러메서드
-	@RequestMapping("/insert") //URL 경로 "/BonBoard_insert"에 대한 요청을 처리하는 메서드
+
+	@RequestMapping("bonBoard/BonBoard_insert") //URL 寃쎈줈 "�뿉 ���븳 �슂泥��쓣 泥섎━�븯�뒗 硫붿꽌�뱶
 	public String insert(BonBoardDTO bonBoardDTO) {
 		bonBoardService.insert(bonBoardDTO);
-		return "BonBoard/insert";  // 등록 후 보여줄 뷰의 이름 반환 ( 해당 뷰 페이지로 이동됨)
+		return "bonBoard/BonBoard_one";  // �벑濡� �썑 蹂댁뿬以� 酉곗쓽 �씠由� 諛섑솚 ( �빐�떦 酉� �럹�씠吏�濡� �씠�룞�맖)
 	}
 	
-	@RequestMapping("/list")//"BonBoard_list"에 대한 요청 처리하는 메서드
+	
+	//파일첨부 수정중 
+//	@RequestMapping("bonBoard/BonBoard_insert2") //URL 寃쎈줈 "�뿉 ���븳 �슂泥��쓣 泥섎━�븯�뒗 硫붿꽌�뱶
+//	public String insert2(BonBoardDTO bonBoardDTO, MultipartFile[] upfile) {
+//		bonBoardService.insert(bonBoardDTO);
+//		
+//		
+//		BonFileDTO bonFileDTO = new BonFileDTO();
+//		bonFileDTO.setFileName(filename);
+//		return "bonBoard/BonBoard_one";  // �벑濡� �썑 蹂댁뿬以� 酉곗쓽 �씠由� 諛섑솚 ( �빐�떦 酉� �럹�씠吏�濡� �씠�룞�맖)
+//	}
+//	
+	
+	/*
+	 
+	@RequestMapping("/list")//"BonBoard_list"�뿉 ���븳 �슂泥� 泥섎━�븯�뒗 硫붿꽌�뱶
 	public void list(BonBoardDTO bonBoardDTO, Model model) {
-		
-		
 		
 		List<BonBoardDTO> list = bonBoardService.list(bonBoardDTO);
 		model.addAttribute("list", list);
 	
 	}
+	*/
+	
+	@RequestMapping("/bonBoard/BonBoard_list")
+	public void all2(BonBoardPageDTO bonBoardPageDTO, Model model) {
+		bonBoardPageDTO.setStartEnd(bonBoardPageDTO.getPage());
+		List<BonBoardDTO> list =bonBoardService.list(bonBoardPageDTO);
+		int count = bonBoardService.count();
+		System.out.println("all count>> " + count);
+		int pages = count / 10 + 1; //�쟾泥� �럹�씠吏� 媛쒖닔 援ы븯湲� 
+		model.addAttribute("list", list);
+		model.addAttribute("count", count);
+		model.addAttribute("pages", pages);
+		
+		System.out.println(list);
+	}
+	
+
 	
 	
 	
-	
-	
-	
-	@RequestMapping("/one")
+	@RequestMapping("/bonBoard/BonBoard_one")
 	public String one(int seq, Model model) throws Exception{
 		BonBoardDTO bonBoardDTO = bonBoardService.one(seq);
+		//one 내용
+		//REPLY LIST(BOARD SEQ)
+		List<BonReplyDTO> list = bonReplyService.list(seq);
+	System.out.println(list.size());
+	
 		model.addAttribute("bonBoardDTO", bonBoardDTO);
-		return "bonBoard/BonBoard_one";
+	//REPLY LIST MODEL
+		model.addAttribute("list", list);
+		return "/bonBoard/BonBoard_one";
 	}
 	
-	
-	@RequestMapping("/update") //"/BonBoard_one"에 대한 요청을 처리하는 메서드
-	public String update(int seq, String title, String content, String itemLink, Model model) {
+	@RequestMapping("/bonBoard/BonBoard_update") //"/BonBoard_one"�뿉 ���븳 �슂泥��쓣 泥섎━�븯�뒗 硫붿꽌�뱶
+	public String update(BonBoardDTO bonBoardDTO, Model model) {
 		
-		BonBoardDTO bonBoardDTO = new BonBoardDTO();
-		bonBoardDTO.setSeq(seq);      //수정할 게시물 번호
-		bonBoardDTO.setTitle(title);  //수정할 게시물 제목
-		bonBoardDTO.setContent(content);   //수정할 게시물 ㄴ용
-		bonBoardDTO.setItemLink(itemLink);  // 수정할 상품 링크-----여기까지 bonBoardDTO set함 
-		bonBoardService.update(bonBoardDTO);  //본보드 서비스의  update 메소드 이용하여ㅛ bonBoardDTO를 업데이트함 
-		//"bonBoardDTO"라는 이름으로 가져온 게시물 정보(DTO)를 Model에 add
-		model.addAttribute("bonBoardDTO", bonBoardDTO);
-	
-		return "redirect:/BonBoard/list";//"bonBoard/BonBoard_one" 뷰 페이지로 이동
-		
-	}
-	
-	
-	@RequestMapping("/delete")
-	@ResponseBody
-	public int delete(int seq) {
-		int result = bonBoardService.delete(seq);
-		return result;    //삭제 성공시 1, 실패시 0 반환됨   >이에대한 처리는  뷰 페이지에서  ㅇㅇ
-	}
 
+		bonBoardService.update(bonBoardDTO);  //蹂몃낫�뱶 �꽌鍮꾩뒪�쓽  update 硫붿냼�뱶 �씠�슜�븯�뿬�뀤 bonBoardDTO瑜� �뾽�뜲�씠�듃�븿 
+		//"bonBoardDTO"�씪�뒗 �씠由꾩쑝濡� 媛��졇�삩 寃뚯떆臾� �젙蹂�(DTO)瑜� Model�뿉 add
+		model.addAttribute("bonBoardDTO", bonBoardDTO);
+	
+		return "redirect:/bonBoard/BonBoard_one?seq=" + bonBoardDTO.getSeq();//"bonBoard/BonBoard_one" 酉� �럹�씠吏�濡� �씠�룞
+		
+	}
+	
+	
+	@RequestMapping("/bonBoard/BonBoard_delete")
+	public String delete(int seq) {
+		 bonBoardService.delete(seq);
+	 return "/bonBoard/BonBoard_list";
+	
+	}
+	
+	
+	
+	
+
+	
+	
 }
