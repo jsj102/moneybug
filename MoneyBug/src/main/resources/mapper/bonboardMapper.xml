@@ -7,25 +7,32 @@
 
 
 	<!-- 살까말까 게시물 작성 -->
-	<insert id="insert" parameterType="bonboardDTO" useGeneratedKeys="true" keyProperty="SEQ">
-		INSERT INTO bon_board VALUES (#{writerId}, #{title}, #{content}, #{views}, #{itemLink}, #{voteCount}, now(), #{voteEndAt})
+	<insert id="insert" parameterType="bonboardDTO"
+		useGeneratedKeys="true" keyProperty="SEQ">
+		INSERT INTO bon_board(writerId, title, content, views, itemLink, createAt, voteEndAt) VALUES
+		(#{writerId}, #{title}, #{content}, #{views}, #{itemLink},
+		 now(), #{voteEndAt})
 	</insert>
 
 	<!-- 게시물 상세보기 -->
-	<select id="one" resultType="bonboardDTO">
+	<select id="one" resultType="bonboardDTO" parameterType="int" >
 		SELECT * FROM bon_board
-		WHERE SEQ = #{seq}
+		WHERE SEQ =	#{seq}
 	</select>
 
 	<!-- 게시물 리스트 가져오기 -->
-	<select id="list" resultType="bonboardDTO">
-		SELECT * FROM bon_board
+	<select id="list" resultType="bonboardDTO" parameterType="bonboardpageDTO" >
+		select * from (
+		select ROW_NUMBER() over(order by seq desc) as rowNo, b.*
+		from bon_board b) bbs2
+		where bbs2.rowNo between #{start} and #{end}
 	</select>
 
 	<!-- 게시물 업데이트 -->
 	<update id="update" parameterType="bonboardDTO">
-		UPDATE bon_board SET TITLE = #{title}, CONTENT = #{content},
-		ITEM_LINK=#{itemLink} where SEQ = #{seq}
+		UPDATE bon_board 
+		SET TITLE = #{title}, CONTENT = #{content}
+		where SEQ = #{seq}
 
 	</update>
 
@@ -34,6 +41,24 @@
 		DELETE FROM bon_board WHERE SEQ = #{seq}
 	</delete>
 
+
+ <select id="count" resultType="int">
+        SELECT COUNT(*) FROM bon_board
+    </select>
+
+
+	<select id="all"  parameterType="bonboardpageDTO">
+		select * from (
+		select ROW_NUMBER() over(order by seq desc) as bbs_no,
+		b.*
+		from bon_board b) bbs2
+		where bbs2.bbs_no between ${start} and ${end}
+
+		<!-- mysql 5.5 select @row_number:=@row_number+1 as bbs_no, b.* from (select 
+			@row_number:=0) as r, bbs b order by id desc limit 10 offset ${start} -->
+	</select>
+	
+	
 	
 
 </mapper>

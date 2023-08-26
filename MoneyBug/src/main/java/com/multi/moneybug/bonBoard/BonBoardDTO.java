@@ -19,17 +19,6 @@ public class BonBoardDTO {
 	private Date createAt;
 	private Date voteEndAt;
 	
-	private ArrayList<BonFileDTO> fileList;
-	
-
-	public ArrayList getFileList() {
-		return fileList;
-	}
-	
-	public void setFileList(ArrayList fileList) {
-		this.fileList=fileList;
-	}
-	
 	public int getRowNo() {
 		return rowNo;
 	}

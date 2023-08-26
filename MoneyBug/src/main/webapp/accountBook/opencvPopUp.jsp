@@ -1,9 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<script></script>
-
-<%@ include file="/resources/layout/header.jsp"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>돈벌레 친구들</title>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet">
 
 <style>
 
@@ -63,6 +71,8 @@
 }
   
 </style>
+</head>
+<body>
 <div id="section" >
 
 <form id="ocr_form" enctype="multipart/form-data">
@@ -98,7 +108,7 @@
   
 
 </div>
-<%@ include file="/resources/layout/footer.jsp"%>
+
 
 
 <script> //파일 업로드가 없을 때  자동,수동 버튼을 누를 수 없음. 파일업로드 되었을 때 이미지 파일인 경우에만 자동, 수동 버튼을 누를 수 있음.
@@ -134,4 +144,5 @@ function checkFileSelection() {
 3. processButton 수동 버튼
  -->
 <script src="/moneybug/resources/js/account/opencvPopUp.js"></script>
-
+</body>
+</html>
