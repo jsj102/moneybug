@@ -5,7 +5,7 @@
 <%@ include file="../../../resources/layout/header.jsp"%>
 <%@ include file="../../../resources/layout/TagBoardNav.jsp"%>
 <div class="container">
-	<h3>커뮤니티</h3>
+
 
 
 	[${tagBoardDTO.boardType}] ${tagBoardDTO.title}
@@ -14,11 +14,11 @@
 		value="${tagBoardDTO.createAt}" />${tagBoardDTO.writerId}
 	<hr color="lavender">
 
-	<br> ${tagBoardDTO.content} <br>
+	${tagBoardDTO.content} <br> <br>
 	<c:if test="${tagBoardDTO.image ne null}">
 		<img src="../resources/upload/${tagBoardDTO.image}" width="300">
 	</c:if>
-	<br>
+	<br> <br> <br>
 	<c:choose>
 		<c:when test="${sessionScope.userNickname eq tagBoardDTO.writerId }">
 			<a
@@ -88,6 +88,8 @@
 						<form name="form" class="re-tagreply-form"
 							selected_id="${tagReplyDTO.seq}">
 							<textarea id="reinsertcontent${tagReplyDTO.seq}"></textarea>
+							<input type="hidden" id="originWriter${tagReplyDTO.seq}"
+								value="${tagReplyDTO.writerId}" />
 							<button type="submit" style="background: grey; color: white;">등록</button>
 						</form>
 						<br>
@@ -99,7 +101,9 @@
 							<c:if
 								test="${reply.replyLevel eq 1 and reply.groupSeq eq tagReplyDTO.groupSeq}">
 								<div class="tagreply indented-reply" style="margin-left: 20px;">
-									<br> ${reply.writerId} <br> ${reply.content} <br>
+									<br> ${reply.writerId} <br> <b><c:if
+											test="${not empty reply.originWriter}">@${reply.originWriter}</c:if></b>
+									${reply.content} <br>
 									<p style="font-size: 12px;">
 										<fmt:formatDate value="${reply.createAt}"
 											pattern="yyyy-MM-dd HH:mm" />
@@ -133,8 +137,11 @@
 									<form name="form" class="re-tagreply-form"
 										selected_id="${reply.seq}">
 										<textarea id="reinsertcontent${reply.seq}"></textarea>
+										<input type="hidden" id="originWriter${reply.seq}"
+											value="${reply.writerId}" />
 										<button type="submit" style="background: grey; color: white;">등록</button>
 									</form>
+
 									<br>
 
 								</div>
@@ -158,40 +165,38 @@
 
 	</div>
 	<hr color="pink">
-	
+
 	<div class="plmi">
-	<table class="table table-sm mx-auto">
-		<thead>
-			<tr>
-				<th>순서</th>
-				<th>제목</th>
-				<th>작성자</th>
-				<th>조회수</th>
-				<th>작성일</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${plmilist}" var="tagBoardDTO">
+		<table class="table table-sm mx-auto">
+			<thead>
 				<tr>
-					<td>
-					<c:if test="${tagBoardDTO.seq > param.seq}">
-					다음 글 
-					</c:if>
-					<c:if test="${tagBoardDTO.seq < param.seq}">
-					이전 글 
-					</c:if>
-					</td>
-					<td>[${tagBoardDTO.boardType}] <a href="TagBoard_one?seq=${tagBoardDTO.seq}">${tagBoardDTO.title}</a></td>
-					<td>${tagBoardDTO.writerId}</td>
-					<td>${tagBoardDTO.views}</td>
-					<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
-							value="${tagBoardDTO.createAt}" /></td>
+					<th>순서</th>
+					<th>제목</th>
+					<th>작성자</th>
+					<th>조회수</th>
+					<th>작성일</th>
 				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
-	
-	
+			</thead>
+			<tbody>
+				<c:forEach items="${plmilist}" var="tagBoardDTO">
+					<tr>
+						<td><c:if test="${tagBoardDTO.seq > param.seq}">
+					다음 글 
+					</c:if> <c:if test="${tagBoardDTO.seq < param.seq}">
+					이전 글 
+					</c:if></td>
+						<td>[${tagBoardDTO.boardType}] <a
+							href="TagBoard_one?seq=${tagBoardDTO.seq}">${tagBoardDTO.title}</a></td>
+						<td>${tagBoardDTO.writerId}</td>
+						<td>${tagBoardDTO.views}</td>
+						<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
+								value="${tagBoardDTO.createAt}" /></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+
+
 	</div>
 	<hr color="pink">
 	<br> <a href="TagBoard_list?Page=1">글 전체 목록</a> <br>
@@ -225,6 +230,9 @@ $(document).ready(function() {
 
 
 			$('#tagboarddelete').click(function() {
+				var confirmDelete = window.confirm("게시글을 삭제하시겠습니까?");
+			    
+			    if (confirmDelete) {
 				$.ajax({
 					url : "TagBoard_delete",
 					data : {
@@ -238,9 +246,19 @@ $(document).ready(function() {
 						alert("실패!");
 					} //error
 				})
+			    }
 			}) //tagboarddelete - 게시글 지우기 
 
 			$('#tagreplyinsert').click(function() {
+				
+				var replyContent = $('#replycontent').val();
+
+			    // 댓글 내용이 null 또는 빈 문자열인 경우 입력을 막음
+			    if (!replyContent) {
+			        alert("댓글 내용을 입력해주세요.");
+			        return false; // 댓글 내용이 없으므로 함수 종료
+			    }
+			    
 				 $.ajax({
 			            url: "../checkLogin",
 			            method: "GET",
@@ -254,12 +272,11 @@ $(document).ready(function() {
 					url : "../tagReply/TagReply_insert",
 					data : {
 						boardSeq : '${param.seq}',
-						content : $('#replycontent').val(),
-						 writerId: '${sessionScope.userNickname}'
+						content : replyContent,
+						writerId: '${sessionScope.userNickname}'
 
 					},
 					success : function() {
-						alert("댓글을 등록했습니다.")
 						location.reload();
 					},
 					error : function() {
@@ -291,18 +308,26 @@ $(document).ready(function() {
 
 			$('.re-tagreply-form').on("submit", function() {
 				var seq_value = $(this).attr("selected_id");
+				var reInsertContent = $('#reinsertcontent' + seq_value).val();
+				var originWriter = $('#originWriter' + seq_value).val();
+
+			    // 댓글 내용이 null 또는 빈 문자열인 경우 입력을 막음
+			    if (!reInsertContent) {
+			        alert("댓글 내용을 입력해주세요.");
+			        return false;
+			    }
 
 				$.ajax({
 					url : "../tagReply/TagReply_reinsert",
 					data : {
 						boardSeq : '${param.seq}',
 						originSeq : seq_value,
-						content : $('#reinsertcontent' + seq_value).val(),
-						 writerId: '${sessionScope.userNickname}'
+						content : reInsertContent,
+						writerId: '${sessionScope.userNickname}',
+						originWriter : originWriter
 
 					},
 					success : function() {
-						alert("댓글을 등록했습니다.")
 						location.reload();
 					}, //success
 					error : function() {
@@ -329,11 +354,17 @@ $(document).ready(function() {
 
 			$('.tagreply-update-form').on("submit", function() {
 				var seq_value = $(this).attr("selected_id");
+				var UpdateContent = $('#updatecontent' + seq_value).val()
+				
+				 if (!UpdateContent) {
+				        alert("댓글 내용을 입력해주세요.");
+				        return false; // 댓글 내용이 없으므로 함수 종료
+				    }
 				$.ajax({
 					url : "../tagReply/TagReply_update",
 					data : {
 						seq : seq_value,
-						content : $('#updatecontent' + seq_value).val()
+						content : UpdateContent
 
 					},
 					success : function() {
@@ -349,23 +380,28 @@ $(document).ready(function() {
 			})
 
 			$('.tagreplydelete').click(function() {
-
-				var seq_value = $(this).attr("selected_id");
-
-				$.ajax({
-					url : "../tagReply/TagReply_delete",
-					data : {
-						seq : seq_value
-					},
-					success : function() {
-						alert("댓글이 삭제 되었습니다!");
-						location.reload();
-					},
-					error : function() {
-						alert("실패!");
-					} //error
-				})
-			})//tagreplydelete - 댓글 삭제 
+    var seq_value = $(this).attr("selected_id");
+    
+    // 사용자에게 삭제 여부를 확인하는 프롬프트 표시
+    var confirmDelete = window.confirm("댓글을 삭제하시겠습니까?");
+    
+    if (confirmDelete) {
+        $.ajax({
+            url: "../tagReply/TagReply_delete",
+            data: {
+                seq: seq_value
+            },
+            success: function() {
+                alert("댓글이 삭제 되었습니다!");
+                location.reload();
+            },
+            error: function() {
+                alert("실패!");
+            } //error
+        });
+    }
+});
+//tagreplydelete - 댓글 삭제 
 			
 			
 		});//$
