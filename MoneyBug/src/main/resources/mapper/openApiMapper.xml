@@ -21,4 +21,8 @@
 	<delete id="delete" parameterType="Date">
 		delete from open_api where EXPIRE_DATE = #{expireDate}
 	</delete>
+	
+	<delete id="deleteId" parameterType="int">
+		delete from open_api where ACCOUNT_BOOK_ID= #{accountBookId}
+	</delete>
 </mapper>
