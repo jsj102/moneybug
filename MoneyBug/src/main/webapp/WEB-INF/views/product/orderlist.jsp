@@ -2,8 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ include file="../../../resources/layout/header.jsp" %>	
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -11,7 +12,7 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-	rel="stylesheet">
+	rel="stylesheet"> -->
 <style>
 body {
 	background: #F9F5E7;
@@ -77,7 +78,6 @@ body {
 </script>
 </head>
 <body>
-<%@ include file="../../../resources/layout/header.jsp" %>	
 
 	<div class="order-container">
 		<div class="user-container d-flex flex-column align-items-center">
@@ -162,7 +162,7 @@ body {
 				</div>
 
 				<div class="mb-3">
-					<button class="btn btn btn-custom" id="postSearch"
+					<button class="btn btn-secondary" id="postSearch"
 						onclick="execDaumPostcode()">우편번호 찾기</button>
 					<input type="text" class="form-control" id="zip-code"
 						placeholder="우편번호">
@@ -184,9 +184,7 @@ body {
 		<hr>
 	</div>
 
-	<!-- Bootstrap JavaScript -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <%@ include file="../../../resources/layout/footer.jsp" %>
-</body>
-</html>
+<!-- </body>
+</html> -->

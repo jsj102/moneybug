@@ -44,6 +44,9 @@
 			alias="bonreplyDTO"></typeAlias>
 		<typeAlias type="com.multi.moneybug.bonBoard.BonVoteDTO"
 			alias="bonvoteDTO"></typeAlias>
+		<typeAlias
+			type="com.multi.moneybug.bonBoard.BonBoardPageDTO"
+			alias="bonboardpageDTO"></typeAlias>
 
 		<!--맴버 mybatis -->
 		<typeAlias type="com.multi.moneybug.member.MemberDTO"
@@ -72,8 +75,9 @@
 		<mapper resource="mapper/accountbudgetMapper.xml" />
 		<mapper resource="mapper/accountgptMapper.xml" />
 
-		<mapper resource="mapper/tagboardMapper.xml" />
-		<mapper resource="mapper/tagreplyMapper.xml" />
+		<mapper resource="mapper/bonvoteMapper.xml" />
+		<mapper resource="mapper/bonboardMapper.xml" />
+		<mapper resource="mapper/bonreplyMapper.xml" />
 
 		<mapper resource="mapper/bonboardMapper.xml" />
 

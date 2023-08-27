@@ -30,7 +30,6 @@
             background-color: #61c8ff;
             color: white;
         }
-
         .vote-button[data-vote="0"] {
             background-color: #ff4589;
             color: white;

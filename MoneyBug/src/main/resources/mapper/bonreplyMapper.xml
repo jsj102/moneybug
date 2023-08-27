@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bonreply">
+
+	<insert id="insert" parameterType="bonreplyDTO">  <!-- 살말 댓글 작성 -->
+		
+		insert into bon_reply
+		(board_seq, writer_id, content, create_at)
+		values (#{boardSeq}, #{writerId}, #{content}, now())
+	</insert>
+
+
+	<select id="list" resultType="bonreplyDTO" parameterType="int" >   <!-- 살말 댓글리스트 -->
+		select * from bon_reply
+		where BOARD_SEQ = #{boardSeq}
+		order by CREATE_AT
+		ASC    <!-- 오래된 댓글이 맨 위로 오게 정렬함 -->
+	</select>
+
+	<update id="update" parameterType="bonreplyDTO">     <!-- 살말 댓글수정 -->
+		update bon_reply
+		set CONTENT = #{content}
+		where SEQ = #{seq}
+	</update>
+
+
+	<delete id="delete">   <!-- 살말 댓글 삭제 -->
+		delete from bon_reply
+		where SEQ = #{seq}
+
+	</delete>
+	
+	
+	<select id="count" resultType="int" parameterType="int">
+    SELECT COUNT(*) FROM comments
+    WHERE board_seq = #{board_seq}
+</select>
+</mapper>
