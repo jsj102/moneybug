@@ -7,17 +7,17 @@
 
 <
 <style>
-.expenses-table {
+#expenses-table {
 	background-color: rgba(255, 255, 255, 0.472);
 	width: 400px;
 }
 
-.addline {
+#addline {
 	background-color: rgba(255, 255, 255, 0.472);
 	width: 350px;
 }
 
-.moneyinput {
+#moneyinput {
 	width: 250px;
 }
 </style>
