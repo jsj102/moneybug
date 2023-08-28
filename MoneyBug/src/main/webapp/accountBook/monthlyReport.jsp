@@ -5,6 +5,49 @@
 <%@ include file="../resources/layout/header.jsp"%>
 <%@ include file="../resources/layout/accountNav.jsp"%>
 
+<style>
+.MonthlyDiv{display: flex; width:1100px; height:655px; background-color: #F7FFE5;  text-align: center; border: 1px solid #E1ECC8;}
+.MonthlyDiv2{display: flex; width:1100px; height:340px; background-color: #F7FFE5;  text-align: center; border: 1px solid #E1ECC8;}
+.MonthlyDiv3{display: flex; width:1100px; height:340px; background-color: #F7FFE5;  text-align: left; border: 1px solid #993300; position: relative; 	color: purple;
+	font-weight: bold; padding: 5px;  }
+.RecentTable {
+    width: 500px;
+    height: 340px;
+    background-color: rgba(255, 255, 255, 0.472);
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.RecentTable th,
+.RecentTable td {
+	color: purple;
+	font-weight: bold;
+    border: 1px solid #F7FFE5;
+    padding: 8px; /* 셀 내용과 테두리 사이의 간격 */
+}
+
+.RecentTable th {
+	font-weight: bold;
+    background-color: rgba(200, 200, 200, 0.472); /* 테이블 헤더 배경색 */
+}
+.MonthlyTable{width:500px; height:655px; background-color: rgba(255, 255, 255, 0.472);  text-align: center; border: 1px solid #993300;}
+.MonthlyTable th,
+.MonthlyTable td {
+	color: purple;
+	font-weight: bold;
+    border: 1px solid #993300;
+    padding: 8px; /* 셀 내용과 테두리 사이의 간격 */
+}
+
+.MonthlyTable th {
+	font-weight: bold;
+    background-color: rgba(200, 200, 200, 0.472); /* 테이블 헤더 배경색 */
+
+}
+
+</style>
+
+
 <div align="center" id="section">
 	<!-- 날짜로 월간 넘어가게 설정가능해야함 -->
 	<!--  ajax로 div에 gpt에서 받아온 결과 넣어줘야함. -->
