@@ -1,28 +1,62 @@
 package com.multi.moneybug.openApi;
 
 import java.sql.Date;
-import java.time.Instant;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+
+import javax.annotation.PostConstruct;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
+import com.multi.moneybug.accountBook.AccountBudgetDAO;
 import com.multi.moneybug.accountBook.AccountBudgetDTO;
+import com.multi.moneybug.accountBook.AccountDetailDAO;
 import com.multi.moneybug.accountBook.AccountDetailDTO;
+import com.multi.moneybug.accountBook.AccountExpensesDAO;
 import com.multi.moneybug.accountBook.AccountExpensesDTO;
+
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Refill;
+import lombok.extern.slf4j.Slf4j;
 
 //최근 데이터부터 반환
 @Service
+@Slf4j
 public class OpenApiService {
+	// JSON만들기
+	Gson gson = new Gson();
+	// 선언부
+	private final OpenApiDAO openApiDAO;
+	private final AccountDetailDAO accountDetailDAO;
+	private final AccountBudgetDAO accountBudgetDAO;
+	private final AccountExpensesDAO accountExpensesDAO;
 
 	@Autowired
-	OpenApiDAO openApiDAO;
+	public OpenApiService(OpenApiDAO openApiDAO, AccountDetailDAO accountDetailDAO, AccountBudgetDAO accountBudgetDAO,
+			AccountExpensesDAO accountExpensesDAO) {
+		this.openApiDAO = openApiDAO;
+		this.accountBudgetDAO = accountBudgetDAO;
+		this.accountDetailDAO = accountDetailDAO;
+		this.accountExpensesDAO = accountExpensesDAO;
+	}
+
+	public boolean ischeckTokenAvailability(Bucket bucket) {
+		if (bucket.tryConsume(1)) {
+			System.out.println("사용가능한 토큰 수" + bucket.getAvailableTokens());
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public JSONObject detailJsonParsing(int accountBookId, int searchMonth, int searchYear) {
 		List<AccountDetailDTO> detail = openApiDAO.readListDetail(accountBookId);
@@ -78,7 +112,7 @@ public class OpenApiService {
 	public JSONObject expensesJsonParsing(int accountBookId) {
 		List<AccountExpensesDTO> expenses = openApiDAO.readListExpenses(accountBookId);
 		JSONObject outerjson = new JSONObject();
-		if (expenses.isEmpty()) {
+		if (!expenses.isEmpty()) {
 			for (int i = 0; i < expenses.size(); i++) {
 				AccountExpensesDTO data = expenses.get(i);
 				JSONObject detailjson = new JSONObject();
@@ -94,6 +128,71 @@ public class OpenApiService {
 		return outerjson;
 	}
 
+	public void detailJsonPaser(String detailData, int accountBookId) {
+		// 데이터 파싱
+		JSONObject data = new JSONObject(detailData);
+		String category = data.getString("카테고리");
+		String accountType = data.getString("지출/수입");
+		String discription = data.getString("설명");
+		int price = data.getInt("가격");
+
+		String dateString = data.getString("사용날짜");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		java.util.Date utilDate = null;
+		try {
+			utilDate = dateFormat.parse(dateString);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Date usedAt = new Date(utilDate.getTime());
+		// 객체에 데이터 넣기
+		AccountDetailDTO accountDetailDTO = new AccountDetailDTO();
+		accountDetailDTO.setAccountBookId(accountBookId);
+		accountDetailDTO.setAccountCategory(category);
+		accountDetailDTO.setAccountType(accountType);
+		accountDetailDTO.setDescription(discription);
+		accountDetailDTO.setUsedAt(usedAt);
+		accountDetailDTO.setPrice(price);
+		// 삽입
+		accountDetailDAO.insert(accountDetailDTO);
+	}
+
+	public void budgetJsonPaser(String budgetData, int accountBookId) {
+		JSONObject data = new JSONObject(budgetData);
+		String category = data.getString("카테고리");
+		int price = data.getInt("가격");
+		String dateString = data.getString("사용날짜");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		java.util.Date utilDate = null;
+		try {
+			utilDate = dateFormat.parse(dateString);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Date usedAt = new Date(utilDate.getTime());
+		AccountBudgetDTO accountBudgetDTO = new AccountBudgetDTO();
+		accountBudgetDTO.setAccountBookId(accountBookId);
+		accountBudgetDTO.setFixedCategory(category);
+		accountBudgetDTO.setPrice(price);
+		accountBudgetDTO.setUsedAt(usedAt);
+		//
+		accountBudgetDAO.insertDate(accountBudgetDTO);
+		System.out.println("데이터 삽입");
+	}
+
+	public void expensesJsonPaser(String expensesData, int accountBookId) {
+		JSONObject data = new JSONObject(expensesData);
+		String category = data.getString("카테고리");
+		int price = data.getInt("가격");
+		AccountExpensesDTO accountExpensesDTO = new AccountExpensesDTO();
+		accountExpensesDTO.setAccountBookId(accountBookId);
+		accountExpensesDTO.setFixedCategory(category);
+		accountExpensesDTO.setPrice(price);
+
+		accountExpensesDAO.insert(accountExpensesDTO);
+		System.out.println("데이터 삽입");
+	}
+
 	public HashMap<String, String> userApiGenerator() {
 		String apiKey = UUID.randomUUID().toString();
 		String secretKey = UUID.randomUUID().toString();
@@ -102,12 +201,8 @@ public class OpenApiService {
 		key.put("secretKey", secretKey);
 		return key;
 	}
-	
-	public void userApiInsert() {
-		
-	}
-	
-	public void insert(String apiKey,String secretKey,int accountBookId) {
+
+	public void insert(String apiKey, String secretKey, int accountBookId) {
 		// 발급날짜 -> 일주일 후 API키 폐기
 		LocalDate expireDate = LocalDate.now();
 		expireDate = expireDate.plusDays(7);
@@ -117,6 +212,7 @@ public class OpenApiService {
 		openApiDTO.setSecretKey(secretKey);
 		openApiDTO.setExpireDate(date);
 		openApiDTO.setAccountBookId(accountBookId);
+		System.out.println("데이터 삽입");
 		openApiDAO.insert(openApiDTO);
 	}
 
@@ -138,5 +234,22 @@ public class OpenApiService {
 
 	public void deleteId(int accountBookId) {
 		openApiDAO.deleteId(accountBookId);
+	}
+
+	public void insertToken(OpenApiTokenDTO openApiTokenDTO) {
+		openApiDAO.insertToken(openApiTokenDTO);
+	}
+	
+	public void updateToken(OpenApiTokenDTO apiTokenDTO) {
+		openApiDAO.updateToken(apiTokenDTO);
+		System.out.println(apiTokenDTO.toString());
+		System.out.println("업데이트 성공"); 
+	}
+	public Bucket readToken(String secretKey) {
+		OpenApiTokenDTO token = openApiDAO.readToken(secretKey);
+		Refill refill = Refill.intervally(token.getRefillCount(), Duration.ofSeconds(token.getRefillTime()));
+		Bandwidth limit = Bandwidth.classic(token.getGivenToken(), refill);
+		Bucket bucket = Bucket.builder().addLimit(limit).build();
+		return bucket;
 	}
 }

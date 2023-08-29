@@ -10,6 +10,10 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,35 +27,53 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.multi.moneybug.accountBook.AccountBookService;
 
+import io.github.bucket4j.Bucket;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.java.Log;
 
 @Controller
 @RequestMapping("/api")
 @Log
+@EnableScheduling
+@Api(tags = { "OpenAPI" })
 public class OpenApiController {
 
 	Gson gson = new Gson();
 
+	private final OpenApiService openApiService;
+	private final AccountBookService accountBookService;
+	private Map<String, Bucket> bucketMap = new HashMap<>();
+
 	@Autowired
-	OpenApiService openApiService;
-	@Autowired
-	private AccountBookService accountBookService;
+	public OpenApiController(OpenApiService openApiService, AccountBookService accountBookService) {
+		this.accountBookService = accountBookService;
+		this.openApiService = openApiService;
+	}
 
 	@RequestMapping("/key")
 	@ResponseBody
 	public String keyGenerator(HttpSession session, @RequestParam String type, Model model) {
 		OpenApiDTO openApiDTO = new OpenApiDTO();
+		OpenApiTokenDTO apiTokenDTO = new OpenApiTokenDTO();
+		apiTokenDTO.setRefillCount(1);
+		apiTokenDTO.setRefillTime(1);
+		apiTokenDTO.setGivenToken(20);
 		String convert = (String) session.getAttribute("socialId");
 		String accountBookId = accountBookService.insertAccountDetailFindSeq(convert);
 		int id = Integer.parseInt(accountBookId);
 		openApiDTO = openApiService.readOne(id);
-
+		System.out.println("아이디값" + id);
 		// 값이 들어있으면 발급 X
 		if (openApiDTO == null && type.equals("발급")) {
 			HashMap<String, String> key = openApiService.userApiGenerator();
 			String apiKey = key.get("apiKey");
 			String sercetKey = key.get("secretKey");
+			apiTokenDTO.setSecretKey(sercetKey);
 			openApiService.insert(apiKey, sercetKey, id);
+			System.out.println(apiTokenDTO.toString());
+			openApiService.insertToken(apiTokenDTO);
+
 			String result = "APIKEY : " + apiKey + "<br>SERCETKEY : " + sercetKey;
 			return result;
 
@@ -59,10 +81,16 @@ public class OpenApiController {
 			String result = "Exist Key";
 			return result;
 		} else if (openApiDTO != null && type.equals("재발급")) {
-			openApiService.deleteId(id);
+			OpenApiTokenDTO newApiTokenDTO = new OpenApiTokenDTO();
 			HashMap<String, String> key = openApiService.userApiGenerator();
 			String apiKey = key.get("apiKey");
 			String sercetKey = key.get("secretKey");
+			OpenApiDTO open = openApiService.readOne(id);
+			System.out.println(open.toString());
+			newApiTokenDTO.setOldSecretKey(open.getSecretKey());
+			newApiTokenDTO.setNewSecretKey(sercetKey);
+			openApiService.updateToken(newApiTokenDTO);
+			openApiService.deleteId(id);
 			openApiService.insert(apiKey, sercetKey, id);
 			String result = "APIKEY : " + apiKey + "<br>SERCETKEY : " + sercetKey;
 			return result;
@@ -72,95 +100,220 @@ public class OpenApiController {
 		}
 	}
 
-	@PostMapping(value = "/v1/budget", produces = "application/json;charset=utf-8")
+	// GET
+	@GetMapping(value = "/v1/budget", produces = "application/json;charset=utf-8")
 	@ResponseBody
-	public String budget(HttpServletRequest request, @RequestBody Map<String, String> requestBody) {
-		String apikey = request.getHeader("apiKey");
+	@ApiOperation(value = "예산 조회", notes = "조회할 연월을 입력하면 조회가 가능합니다.")
+	public ResponseEntity<String> budget(HttpServletRequest request) {
+		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
-		int searchMonth = Integer.parseInt(requestBody.get("searchMonth"));
-		int searchYear = Integer.parseInt(requestBody.get("searchYear"));
-
+		int searchMonth = Integer.parseInt(request.getHeader("searchMonth"));
+		int searchYear = Integer.parseInt(request.getHeader("searchYear"));
 		OpenApiDTO openApiDTO = new OpenApiDTO();
-		openApiDTO.setApiKey(apikey);
+		openApiDTO.setApiKey(apiKey);
 		openApiDTO.setSecretKey(secretKey);
-
+		// 버킷이 없으면 생성합니다.
+		try {
+			if (!bucketMap.containsKey(secretKey)) {
+				bucketMap.put(secretKey, openApiService.readToken(secretKey));
+			}
+		} catch (NullPointerException e) {
+			return ResponseEntity.badRequest().body("잘못된 키값");
+		}
 		// 값을 재할당
 		openApiDTO = openApiService.readOneKey(openApiDTO);
-		if (openApiDTO != null) {
-			JSONObject result = openApiService.budgetJsonParsing(openApiDTO.getAccountBookId(), searchMonth,
-					searchYear);
-			String data = result.toString();
-			return data;
+		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
+			if (openApiDTO != null) {
+				JSONObject result = openApiService.budgetJsonParsing(openApiDTO.getAccountBookId(), searchMonth,
+						searchYear);
+				String data = result.toString();
+				return ResponseEntity.ok(data);
+			} else {
+				JSONObject errorObject = new JSONObject();
+				errorObject.put("error", "키값이 잘못되었습니다.");
+				String jsonStr = gson.toJson(errorObject);
+				return ResponseEntity.badRequest().body(jsonStr); // JSON 형식의 에러 메시지 반환
+			}
 		} else {
-			JSONObject errorObject = new JSONObject();
-			errorObject.put("error", "키값이 잘못되었습니다.");
-			String jsonStr = gson.toJson(errorObject);
-			return jsonStr; // JSON 형식의 에러 메시지 반환
+			log.info("토큰 수 한도 초과");
+			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
 		}
 	}
 
 	// GET
 	@GetMapping(value = "/v1/expenses", produces = "application/json;charset=utf-8")
 	@ResponseBody
-	public String expenses(HttpServletRequest request) {
-		String apikey = request.getHeader("apiKey");
+	@ApiOperation(value = "고정 지출 조회", notes = "고정 지출은 모든 데이터를 가져옵니다.")
+	public ResponseEntity<String> expenses(HttpServletRequest request) {
+		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
 
 		OpenApiDTO openApiDTO = new OpenApiDTO();
-		openApiDTO.setApiKey(apikey);
+		openApiDTO.setApiKey(apiKey);
 		openApiDTO.setSecretKey(secretKey);
-
 		openApiDTO = openApiService.readOneKey(openApiDTO);
-		if (openApiDTO != null) {
-			JSONObject result = openApiService.expensesJsonParsing(openApiDTO.getAccountBookId());
-			String data = result.toString();
-			return data;
+		// 버킷이 없으면 생성합니다.
+		System.out.println(secretKey);
+		try {
+			if (!bucketMap.containsKey(secretKey)) {
+				bucketMap.put(secretKey, openApiService.readToken(secretKey));
+			}
+		} catch (NullPointerException e) {
+			return ResponseEntity.badRequest().body("잘못된 키값");
+		}
+		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
+			if (openApiDTO != null) {
+				JSONObject result = openApiService.expensesJsonParsing(openApiDTO.getAccountBookId());
+				String data = result.toString();
+				return ResponseEntity.ok(data);
+			} else {
+				JSONObject errorObject = new JSONObject();
+				errorObject.put("error", "키값이 잘못되었습니다.");
+				String jsonStr = gson.toJson(errorObject);
+				return ResponseEntity.badRequest().body(jsonStr); // JSON 형식의 에러 메시지 반환
+			}
 		} else {
-			JSONObject errorObject = new JSONObject();
-			errorObject.put("error", "키값이 잘못되었습니다.");
-			String jsonStr = gson.toJson(errorObject);
-			return jsonStr; // JSON 형식의 에러 메시지 반환
+			log.info("토큰 수 한도 초과");
+			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
 		}
 	}
 
-	// POST
-	@PostMapping(value = "/v1/detail", produces = "application/json;charset=utf-8")
+	// GET
+	@GetMapping(value = "/v1/detail", produces = "application/json;charset=utf-8")
 	@ResponseBody
-	public String detail(HttpServletRequest request, @RequestBody Map<String, String> requestBody) {
-		String apikey = request.getHeader("apiKey");
+	@ApiOperation(value = "지출/수입 내역 조회", notes = "조회할 연월을 입력하면 조회가 가능합니다.")
+	public ResponseEntity<String> detail(HttpServletRequest request) {
+		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
-		int searchMonth = Integer.parseInt(requestBody.get("searchMonth"));
-		int searchYear = Integer.parseInt(requestBody.get("searchYear"));
+		int searchMonth = Integer.parseInt(request.getHeader("searchMonth"));
+		int searchYear = Integer.parseInt(request.getHeader("searchYear"));
 
 		OpenApiDTO openApiDTO = new OpenApiDTO();
-		openApiDTO.setApiKey(apikey);
+		openApiDTO.setApiKey(apiKey);
 		openApiDTO.setSecretKey(secretKey);
-
 		openApiDTO = openApiService.readOneKey(openApiDTO);
-		if (openApiDTO != null) {
-			JSONObject result = openApiService.detailJsonParsing(openApiDTO.getAccountBookId(), searchMonth,
-					searchYear);
-			String data = result.toString();
-			return data;
+		try {
+			if (!bucketMap.containsKey(secretKey)) {
+				bucketMap.put(secretKey, openApiService.readToken(secretKey));
+			}
+		} catch (NullPointerException e) {
+			return ResponseEntity.badRequest().body("잘못된 키값");
+		}
+		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
+			if (openApiDTO != null) {
+				JSONObject result = openApiService.detailJsonParsing(openApiDTO.getAccountBookId(), searchMonth,
+						searchYear);
+				String data = result.toString();
+				return ResponseEntity.ok(data);
+			} else {
+				JSONObject errorObject = new JSONObject();
+				errorObject.put("error", "키값이 잘못되었습니다.");
+				String jsonStr = gson.toJson(errorObject);
+				return ResponseEntity.badRequest().body(jsonStr); // JSON 형식의 에러 메시지 반환
+			}
 		} else {
-			JSONObject errorObject = new JSONObject();
-			errorObject.put("error", "키값이 잘못되었습니다.");
-			String jsonStr = gson.toJson(errorObject);
-			return jsonStr; // JSON 형식의 에러 메시지 반환
+			log.info("토큰 수 한도 초과");
+			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
 		}
 	}
 
-	@DeleteMapping("/v1/delete")
+	@PostMapping(value = "/v1/detail", produces = "application/json;charset=utf-8")
+	@ApiOperation(value = "지출/수입에 대해서 입력이 가능합니다.", notes = "입력할 연월을 입력하고 데이터를 넣으면 입력됩니다.")
+	public ResponseEntity<String> detailInsert(HttpServletRequest request, @RequestBody String requestBody) {
+		// 인증
+		String apiKey = request.getHeader("apiKey");
+		String secretKey = request.getHeader("secretKey");
+		OpenApiDTO openApiDTO = new OpenApiDTO();
+		openApiDTO.setApiKey(apiKey);
+		openApiDTO.setSecretKey(secretKey);
+		openApiDTO = openApiService.readOneKey(openApiDTO);
+		// 버킷이 없으면 생성합니다.
+		try {
+			if (!bucketMap.containsKey(secretKey)) {
+				bucketMap.put(secretKey, openApiService.readToken(secretKey));
+			}
+		} catch (NullPointerException e) {
+			return ResponseEntity.badRequest().body("잘못된 키값");
+		}
+		// 데이터 삽입
+		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
+			log.info("detail accountBookId : {}" + openApiDTO.getAccountBookId());
+			openApiService.detailJsonPaser(requestBody, openApiDTO.getAccountBookId());
+			return ResponseEntity.ok(requestBody);
+		} else {
+			log.info("토큰 수 한도 초과");
+			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
+		}
+	}
+
+	@PostMapping(value = "/v1/budget", produces = "application/json;charset=utf-8")
+	@ApiOperation(value = "예산 입력", notes = "입력할 연월을 입력하고 데이터를 넣으면 입력됩니다. 대신 카테고리가 반복되지않게 주의해주십시오.")
+	public ResponseEntity<String> budgetInsert(HttpServletRequest request, @RequestBody String requestBody) {
+		// 인증
+		String apiKey = request.getHeader("apiKey");
+		String secretKey = request.getHeader("secretKey");
+
+		OpenApiDTO openApiDTO = new OpenApiDTO();
+		openApiDTO.setApiKey(apiKey);
+		openApiDTO.setSecretKey(secretKey);
+		openApiDTO = openApiService.readOneKey(openApiDTO);
+		// 버킷이 없으면 생성합니다.
+		try {
+			if (!bucketMap.containsKey(secretKey)) {
+				bucketMap.put(secretKey, openApiService.readToken(secretKey));
+			}
+		} catch (NullPointerException e) {
+			return ResponseEntity.badRequest().body("잘못된 키값");
+		}
+		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
+			log.info("detail accountBookId : {}" + openApiDTO.getAccountBookId());
+			openApiService.budgetJsonPaser(requestBody, openApiDTO.getAccountBookId());
+			return ResponseEntity.ok(requestBody);
+		} else {
+			log.info("토큰 수 한도 초과");
+			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
+		}
+	}
+
+	@PostMapping(value = "/v1/expenses", produces = "application/json;charset=utf-8")
+	@ApiOperation(value = "고정 지출 입력", notes = "데이터를 넣으면 입력됩니다. 대신 카테고리가 반복되지않게 주의해주십시오.")
+	public ResponseEntity<String> expensesInsert(HttpServletRequest request, @RequestBody String requestBody) {
+		String apiKey = request.getHeader("apiKey");
+		String secretKey = request.getHeader("secretKey");
+
+		OpenApiDTO openApiDTO = new OpenApiDTO();
+		openApiDTO.setApiKey(apiKey);
+		openApiDTO.setSecretKey(secretKey);
+		openApiDTO = openApiService.readOneKey(openApiDTO);
+		// 버킷이 없으면 생성합니다.
+		try {
+			if (!bucketMap.containsKey(secretKey)) {
+				bucketMap.put(secretKey, openApiService.readToken(secretKey));
+			}
+		} catch (NullPointerException e) {
+			return ResponseEntity.badRequest().body("잘못된 키값");
+		}
+		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
+			log.info("detail accountBookId : {}" + openApiDTO.getAccountBookId());
+			openApiService.expensesJsonPaser(requestBody, openApiDTO.getAccountBookId());
+			return ResponseEntity.ok(requestBody);
+		} else {
+			log.info("토큰 수 한도 초과");
+			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
+		}
+	}
+
+	@Scheduled(cron = "0 0 0 * * *")
 	public void expiredKey() {
 		LocalDate today = LocalDate.now();
 		Date date = java.sql.Date.valueOf(today);
 		if (openApiService.delete(date) == 1) {
-			System.out.println("삭제완료");
+			log.info("만료키 삭제");
 		} else {
-			System.out.println("만료일 apiKey없음");
+			log.info("삭제될 만료키 없음");
 		}
 	}
-	
+
 	@GetMapping("/showButton")
 	public String show() {
 		return "open";

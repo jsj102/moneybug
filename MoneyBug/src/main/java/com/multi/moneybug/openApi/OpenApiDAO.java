@@ -45,28 +45,41 @@ public class OpenApiDAO {
 		System.out.println(accountBudgetDTO.toString());
 		return accountBudgetDAO.readList(accountBudgetDTO);
 	}
-	
+
 	public void insert(OpenApiDTO openApiDTO) {
 		my.insert("openApi.insert", openApiDTO);
 	}
-	
+
 	public OpenApiDTO readOne(int accountBookId) {
 		return my.selectOne("openApi.readOne", accountBookId);
 	}
-	
+
 	public int delete(Date expireDate) {
 		return my.delete("openApi.delete", expireDate);
 	}
-	
+
 	public OpenApiDTO readOneKey(OpenApiDTO openApiDTO) {
 		return my.selectOne("openApi.readOneKey", openApiDTO);
 	}
-	
-	public List<OpenApiDTO> readList(OpenApiDTO openApiDTO){
+
+	public List<OpenApiDTO> readList(OpenApiDTO openApiDTO) {
 		return my.selectList("openApi.list", openApiDTO);
 	}
-	
+
 	public void deleteId(int accountBookId) {
 		my.delete("openApi.deleteId", accountBookId);
 	}
+
+	public void insertToken(OpenApiTokenDTO apiTokenDTO) {
+		my.insert("openApi.insertToken", apiTokenDTO);
+	}
+
+	public OpenApiTokenDTO readToken(String secretKey) {
+		return my.selectOne("openApi.readToken", secretKey);
+	}
+	
+	public void updateToken(OpenApiTokenDTO apiTokenDTO) {
+		my.update("openApi.updateToken",apiTokenDTO);
+	}
+
 }

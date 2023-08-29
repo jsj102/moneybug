@@ -63,7 +63,8 @@
 		<!--openApi mybatis -->
 		<typeAlias type="com.multi.moneybug.openApi.OpenApiDTO"
 			alias="openApiDTO"></typeAlias>
-
+		<typeAlias type="com.multi.moneybug.openApi.OpenApiTokenDTO"
+			alias="openApiTokenDTO"></typeAlias>
 		<!--log mybatis -->
 		<typeAlias type="com.multi.moneybug.log.LogDTO"
 			alias="LogDTO"></typeAlias>
