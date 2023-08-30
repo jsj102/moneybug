@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="log">
+	<insert id="insert" parameterType="LogDTO" useGeneratedKeys="true">
+		insert into logs (`SEQ`,`LOG_TYPE`,`LOG_LEVEL`,`LOG_MESSAGE`,`LOG_TIME`)
+		values (#{seq},#{type},#{level},#{content},now())
+	</insert>
+	<select id="readOneLevel" parameterType="String" resultType="LogDTO">
+		select * from logs where LOG_LEVEL = #{level}
+	</select>
+	<select id="readOneType" parameterType="String" resultType="LogDTO">
+		select * from logs where LOG_TYPE = #{type}
+	</select>
+	<select id="readList" resultType="LogDTO">
+		select * from logs
+	</select>
+	<delete id="delete">
+		delete from logs
+	</delete>
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+
+	<util:properties id="key"
+		location="classpath:key.properties" />
+
+	<context:property-placeholder
+		location="classpath:db.properties" />
+	<bean id="my" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="config"></constructor-arg>
+	</bean>
+
+	<bean id="config" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dbcp"></property>
+		<property name="configLocation"
+			value="classpath:mybatis-config.xml"></property>
+	</bean>
+	<bean id="dbcp" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driver}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+<!-- 
+	<beans profile="profile1">
+		<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+			<property name="maxUploadSize" value="10485760"/>
+			
+			<property name="defaultEncoding" value="utf-8"/>
+		</bean>
+	</beans>
+	<beans profile="multiPartBuilder">
+		<bean id="multipartEntityBuilder" class="org.apache.http.entity.mime.MultipartEntityBuilder">
+
+		</bean>
+	</beans>
+ -->
+</beans>

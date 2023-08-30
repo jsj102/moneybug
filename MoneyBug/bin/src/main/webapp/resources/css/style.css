@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+/* .account_nav {
+    width: 15%;
+    height: 90%;
+    float: left;
+    background-color: #C4D7B2;
+}
+
+.account_section {
+    width: 65%;
+    height: 90%;
+    float: left;
+    background: #A0C49D;
+    overflow-y: auto;
+}
+
+.account_aside {
+    width: 20%; 
+    height: 90%; 
+    float: left;
+    background: transparent; 배경색을 투명하게 설정
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+   
+} */
+/* ㄴ> html 구조  */
+
+
+
+
+.popup-content {
+    background: linear-gradient(to bottom, #CA61FF, hsl(265, 100%, 72%), #945FFF);
+    min-height: 100vh;
+    background-color: rgba(255, 255, 255, 0.472);
+}
+
+/* ㄴ> 팝업창 색상 */
+
+
+

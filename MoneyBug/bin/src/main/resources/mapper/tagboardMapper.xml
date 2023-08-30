@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tagboard">
+
+	<insert id="insert" parameterType="tagboardDTO"
+		useGeneratedKeys="true" keyProperty="SEQ">
+		insert into tag_board
+		values (null,
+		#{writerId}, #{title}, #{content}, #{views}, #{image}, now(),
+		#{boardType})
+	</insert>
+
+	<select id="one" resultType="tagboardDTO">
+		select * from tag_board where SEQ =
+		#{seq}
+
+	</select>
+	<select id="list" resultType="tagboardDTO"
+		parameterType="tagboardpageDTO">
+		select * from
+		(select ROW_NUMBER() over(order by SEQ asc)
+		as rowNo, SEQ, TITLE, WRITER_ID,
+		VIEWS, CREATE_AT, BOARD_TYPE from
+		tag_board) tb
+		where tb.rowNo BETWEEN
+		#{start} and #{end}
+		order by
+		tb.rowNo desc
+	</select>
+
+	<select id="plmilist" resultType="tagboardDTO">
+		SELECT *
+		FROM tag_board
+		WHERE SEQ = (
+		SELECT MIN(SEQ)
+		FROM tag_board
+		WHERE SEQ &gt; #{seq})
+		OR SEQ = (
+		SELECT MAX(SEQ)
+		FROM tag_board
+		WHERE SEQ &lt; #{seq}
+		)
+		order by SEQ desc
+	</select>
+
+	<select id="todaylist" resultType="tagboardDTO">
+		SELECT * FROM (
+		SELECT
+		ROW_NUMBER() OVER (ORDER BY VIEWS DESC) AS rowNo, SEQ, TITLE,
+		WRITER_ID,
+		VIEWS, CREATE_AT, BOARD_TYPE
+		FROM tag_board
+		WHERE
+		DATE(CREATE_AT) = CURDATE()
+		) tb
+		WHERE tb.rowNo BETWEEN 1 AND 3
+
+
+	</select>
+
+	<select id="weeklylist" resultType="tagboardDTO">
+		SELECT *
+		FROM (
+		SELECT
+		ROW_NUMBER() OVER (ORDER BY VIEWS DESC) AS rowNo, SEQ, TITLE,
+		WRITER_ID, VIEWS, CREATE_AT, BOARD_TYPE
+		FROM tag_board
+		WHERE CREATE_AT
+		&gt;= DATE_SUB(CURDATE(), INTERVAL 6 DAY) AND CREATE_AT &lt;=
+		DATE_ADD(CURDATE(), INTERVAL 1 DAY)
+		) tb
+		WHERE tb.rowNo BETWEEN 1 AND 3;
+
+
+	</select>
+
+
+
+
+
+
+	<select id="taglist" resultType="tagboardDTO"
+		parameterType="tagboardpageDTO">
+		select * from
+		(select ROW_NUMBER() over(order by SEQ asc)
+		as rowNo, SEQ, TITLE, WRITER_ID,
+		VIEWS, CREATE_AT, BOARD_TYPE from
+		tag_board where BOARD_TYPE = #{boardType}) tb
+		where tb.rowNo BETWEEN
+		#{start} and #{end}
+		order by
+		tb.rowNo desc
+
+	</select>
+
+	<select id="searchlist" resultType="tagboardDTO"
+		parameterType="tagboardpageDTO">
+		SELECT *
+		FROM (
+		SELECT ROW_NUMBER() OVER (ORDER BY SEQ ASC) AS rowNo,
+		SEQ, TITLE, WRITER_ID,
+		VIEWS, CREATE_AT, BOARD_TYPE
+		FROM tag_board
+		WHERE
+		TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+		<choose>
+			<when test="boardType != null and boardType != ''">
+				AND BOARD_TYPE = #{boardType}
+			</when>
+			<otherwise>
+				<!-- boardType이 없을 경우 모든 게시물을 가져옴 -->
+			</otherwise>
+		</choose>
+		) tb
+		WHERE tb.rowNo BETWEEN #{start} AND #{end}
+		ORDER BY tb.rowNo DESC
+	</select>
+
+
+
+	<update id="update" parameterType="tagboardDTO">
+		update tag_board set TITLE =
+		#{title}, CONTENT = #{content}, BOARD_TYPE = #{boardType} WHERE SEQ =
+		#{seq}
+	</update>
+
+	<!-- 조회수 증가를 위한 select 쿼리 -->
+	<update id="updateViews" parameterType="java.lang.Long">
+		UPDATE tag_board
+		SET VIEWS
+		= VIEWS + 1
+		WHERE SEQ = #{boardId}
+	</update>
+
+	<select id="getBoardById" parameterType="java.lang.Long"
+		resultType="tagboardDTO">
+		SELECT *
+		FROM tag_board
+		WHERE SEQ = #{seq}
+	</select>
+
+	<delete id="delete">
+		delete from tag_board WHERE SEQ = #{seq}
+	</delete>
+
+	<select id="count" resultType="Integer">
+		select count(*) from tag_board
+	</select>
+
+	<select id="tagcount" resultType="Integer"
+		parameterType="tagboardpageDTO">
+		select count(*) from tag_board where BOARD_TYPE =
+		#{boardType}
+	</select>
+
+	<select id="searchcount" resultType="Integer"
+		parameterType="tagboardpageDTO">
+		select count(*) from tag_board WHERE TITLE LIKE CONCAT('%',
+		#{searchKeyword}, '%')
+		<choose>
+			<when test="boardType != null and boardType != ''">
+				AND BOARD_TYPE = #{boardType}
+			</when>
+			<otherwise>
+				<!-- boardType이 없을 경우 모든 게시물을 가져옴 -->
+			</otherwise>
+		</choose>
+
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
