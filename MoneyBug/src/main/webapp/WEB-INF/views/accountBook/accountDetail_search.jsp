@@ -68,7 +68,7 @@
 <body>
 	<div class="section" id="accountDetail">
 		<h1>Account Details</h1>
-		<table class="table table-bordered">
+		<table>
 			<tr>
 				<th>순서</th>
 				<th>계정</th>
