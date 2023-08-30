@@ -33,7 +33,9 @@ public class AccountBudgetDAO {
 		return my.delete("accountBudget.delete", accountBookId);
 	}
 	
-	
+	public int insertDate(AccountBudgetDTO accountBudgetDTO) {
+		return my.insert("accountBudget.insertDate",accountBudgetDTO);
+	}
 	
 	
 	

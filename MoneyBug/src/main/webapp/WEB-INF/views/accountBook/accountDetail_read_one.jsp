@@ -70,7 +70,7 @@
                 },
                 success : function(res) {
                     alert("삭제 성공")
-                    location.href = "readSeq.accountDetail?seq=" + res.seq;
+                    location.href = "/moneybug/accountBook/accountDetail_List.jsp";
                 },
                 error : function(xhr, status, error) {
                     console.error("AJAX 요청 실패:", status, error);

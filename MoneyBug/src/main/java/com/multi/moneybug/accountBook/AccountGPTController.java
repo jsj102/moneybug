@@ -44,7 +44,6 @@ public class AccountGPTController {
 		List<Integer> idList = accountBookService.readList();
 		AccountDetailDTO account = new AccountDetailDTO();
 		AccountGPTDTO accountGPTDTO = new AccountGPTDTO();
-		LocalDate today = LocalDate.now();
 		// 데이터 삽입
 		for (Integer accountBookId : idList) {
 			account.setAccountBookId(accountBookId);
