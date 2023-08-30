@@ -83,8 +83,7 @@
 </div>
 <br>
 
-<form action="TagBoard_insert" id="form" method="post"
-	enctype="multipart/form-data" onsubmit="return validateForm();">
+<form action="TagBoard_insert" id="form"  onsubmit="return validateForm();">
 	<input type="hidden" name="writerId" value="${userNickname }">
 
 
@@ -112,18 +111,7 @@
 			placeholder="내용을 입력하세요. . ." style="font-size: 23px;"></textarea>
 	</div>
 	<br>
-	<div>
-
-		<!-- 파일 입력 요소 숨기기 -->
-		<input type="file" name="file" id="fileInput" style="display: none;">
-
-		<!-- 대체 버튼 디자인 -->
-		<label for="fileInput" class="custom-file-upload btn btn-outline-dark">
-			이미지 첨부 </label>
-		<!-- 파일 이름을 표시할 영역 -->
-		<div id="fileNameArea"></div>
-
-	</div>
+	
 	<br>
 	<div>
 
@@ -165,12 +153,9 @@
 		return false;
 	});
 
-	// 파일 입력 요소에 변화가 있을 때 파일 이름 표시
-	$("#fileInput").change(function() {
-		var fileName = $(this).val().split("\\").pop(); // 파일 이름 추출
-		$("#fileNameArea").text("이미지 파일 : " + fileName); // 파일 이름 표시
-	});
+	
 	
 	
 </script>
+
 

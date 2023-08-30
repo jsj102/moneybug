@@ -1,13 +1,8 @@
 package com.multi.moneybug.tagBoard;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.multi.moneybug.tagReply.TagReplyDTO;
 import com.multi.moneybug.tagReply.TagReplyService;
@@ -31,21 +25,8 @@ public class TagBoardController {
 	TagReplyService tagReplyService;
 
 	@RequestMapping("tagBoard/TagBoard_insert")
-	public String insert(TagBoardDTO tagBoardDTO, HttpServletRequest request, MultipartFile file, Model model)
-	        throws Exception {
-	    String savedName = null; // 초기화
-
-	    if (file != null && !file.isEmpty()) {
-	        savedName = file.getOriginalFilename();
-	        String uploadPath = request.getSession().getServletContext().getRealPath("resources/upload");
-	        File target = new File(uploadPath + "/" + savedName);
-	        file.transferTo(target);
-
-	        model.addAttribute("savedName", savedName);
-	        tagBoardDTO.setImage(savedName);
-	    }
-
-	    tagBoardService.insert(tagBoardDTO); // 파일이 null이든 아니든 데이터 삽입 시도
+	public String insert(TagBoardDTO tagBoardDTO, Model model){
+	    tagBoardService.insert(tagBoardDTO); 
 
 	    return "redirect:/tagBoard/TagBoard_list?page=1";
 	}
