@@ -2,8 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ include file="../../../resources/layout/header.jsp" %>	
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -11,14 +12,14 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-	rel="stylesheet">
+	rel="stylesheet"> -->
 <style>
 body {
 	background: #F9F5E7;
 }
 
 .order-container {
-	margin: 200px;
+	margin: 100px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -74,10 +75,37 @@ body {
 			}
 		}).open();
 	}
+
+	$(document).ready(function() {
+	    $("#applyPoint").click(function() {
+	        var usingPoint = parseInt($("#usingPoint").val()) || 0;
+	        var totalAmount = <%= request.getAttribute("totalAmount") %>;
+	        var calculatedAmount = totalAmount - usingPoint;
+
+	        if (calculatedAmount < 0) {
+	            calculatedAmount = 0;
+	        }
+
+	        $("#calculatedAmount").text(calculatedAmount);
+
+	    });
+	});
+
+	$(document).ready(function() {
+	    $("#submitForm").click(function() {
+	        var address1 = $("#address-1").val();
+	        var address2 = $("#address-2").val();
+	        var fullAddress = address1 + " " + address2;
+	        $("#address").val(fullAddress);
+	        $("#payOrder").submit();
+	    });
+	});
+
+    
 </script>
+
 </head>
 <body>
-<%@ include file="../../../resources/layout/header.jsp" %>	
 
 	<div class="order-container">
 		<div class="user-container d-flex flex-column align-items-center">
@@ -86,15 +114,9 @@ body {
 
 				if (userNickname != null && !userNickname.isEmpty()) {
 			%>
-			<h2><%=userNickname%>님의 결제주문서
+			<h2><%=userNickname%>님의 주문서
 			</h2>
-			<div class="d-flex justify-content-center mt-2">
-				<button class="btn btn-outline-dark" id="idconfirm"
-					onclick="location.href='/moneybug/member/myPage.do'">사용자
-					정보 확인</button>
-				<button class="btn btn-outline-dark" id="logout"
-					onclick="location.href='/moneybug/logout.do'">로그아웃</button>
-			</div>
+
 			<%
 				} else {
 			%>
@@ -106,7 +128,7 @@ body {
 			%>
 		</div>
 		<div class="pay-container">
-			<form action="payOrder" method="post">
+			<form action="payOrder.do" method="post">
 				<table
 					class="table table-light table-hover table-striped text-center">
 					<thead>
@@ -139,31 +161,61 @@ body {
 					</tbody>
 				</table>
 
-
 				<blockquote class="blockquote">
 					<p id="paySum">
-						<strong>결제하실 금액은 <%=request.getAttribute("totalAmount")%>
-							원입니다.
+						<strong>선택 금액: <%=request.getAttribute("totalAmount")%>원 </strong>
+					</p>
+				</blockquote>
+				
+				<c:choose>
+					<c:when test="${member.point >= 0}">
+						<blockquote class="blockquote">
+							<p id="myPoint">
+								<strong>현재 나의 포인트: ${member.point } p </strong>
+							</p>
+						</blockquote>
+
+						<div class="mb-3">
+							<label for="usingPoint">사용하고 싶은 포인트:</label><br> <input
+								type="number" class="form-control" id="usingPoint"
+								name="usingPoint" max="${member.point}">
+							<button class="btn btn-secondary mt-2" id="applyPoint">적용하기</button>
+						</div>
+
+					</c:when>
+					<c:otherwise>
+						<p>Invalid point value</p>
+					</c:otherwise>
+				</c:choose>
+
+				<blockquote class="blockquote">
+					<p id="finalPay">
+						<strong>최종 고객님께서 결제하실 금액은 <span id="calculatedAmount"></span>원입니다.
 						</strong>
 					</p>
-
-
-
 				</blockquote>
+
+
+
+				<div class="mb-3">
+					<label for="userNickname">주문자 닉네임:</label><br> <input type="text"
+						class="form-control" id="userNickname" name="userNickname" value="${member.userNickname}" readonly>
+				</div>
+				
 				<div class="mb-3">
 					<label for="userName">주문자 성함:</label><br> <input type="text"
-						class="form-control" id="userName" name="userName" readonly>
+						class="form-control" id="userName" value="${member.userName}" name="userName" readonly>
 				</div>
 
 				<div class="mb-3">
-					<label for="userAddress">배송지 전화번호:</label><br> <input
-						type="text" class="form-control" id="userAddress"
-						name="userAddress" required>
+					<label for="tel">배송지 전화번호:</label><br> <input
+						type="text" class="form-control" id="tel"
+						name="tel" required>
 				</div>
 
 				<div class="mb-3">
-					<button class="btn btn btn-custom" id="postSearch"
-						onclick="execDaumPostcode()">우편번호 찾기</button>
+					<button class="btn btn-secondary" id="postSearch"
+						onclick="execDaumPostcode(); return false;">우편번호 찾기</button>
 					<input type="text" class="form-control" id="zip-code"
 						placeholder="우편번호">
 				</div>
@@ -184,9 +236,7 @@ body {
 		<hr>
 	</div>
 
-	<!-- Bootstrap JavaScript -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <%@ include file="../../../resources/layout/footer.jsp" %>
-</body>
-</html>
+<!-- </body>
+</html> -->

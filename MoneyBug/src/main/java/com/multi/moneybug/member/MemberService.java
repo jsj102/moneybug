@@ -39,5 +39,15 @@ public class MemberService {
 		String findId = memberDAO.getUserIdByUserNickname(userNickname);
 		return findId;
 	}
+	
+	public MemberDTO selectByNickname(String userNickname) {
+	    return memberDAO.selectByNickname(userNickname);
+	}
+
+	public String getEmailByUserNickname(String userNickname) {
+		String email = memberDAO.getEmailByUserNickname(userNickname);
+		return email;
+	}
+	
 
 }

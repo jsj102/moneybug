@@ -5,13 +5,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<link rel="stylesheet" type="text/css" media="all"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
 <style>
 body {
 	background: #F9F5E7;
@@ -37,6 +34,7 @@ body {
 }
 
 .card-body {
+
 	padding-left: 50px;
 	padding-right: 50px;
 }
@@ -45,6 +43,7 @@ form {
 	display: flex;
 	flex-direction: column;
 }
+
 
 .nick-container {
 	padding: 50px;
@@ -86,8 +85,9 @@ form {
 							value="${userLevel}" />
 					</div>
 					<div class="form-group">
-						<label for="point">나의 포인트:</label> <input type="text" id="point"
-							name="point" readonly class="form-control" value="${point}" />
+						<label for="point">나의 포인트:</label> <input type="text"
+							id="point" name="point" readonly class="form-control"
+							value="${point}" />
 					</div>
 
 					<form action="myInfoUpdate.do" method="post">
@@ -102,37 +102,7 @@ form {
 						<button type="submit" id="updateButton"
 							class="btn btn-custom btn-outline-secondary btn-lg">등록하기</button>
 					</form>
-					<hr>
-					<div class="form-group">
-						<label for="orderlist">나의 주문이력</label>
-						<table class="table">
-							<thead>
-								<tr>
-									<th>주문번호</th>
-									<th>주문일자</th>
-									<th>주문자 이름</th>
-									<th>주소</th>
-									<th>주문금액</th>
-									<th>결제방법</th>
-									<th>주문상태</th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach items="${orderlist}" var="order">
-									<tr>
-										<td>${order.orderNumber}</td>
-										<td>${order.orderAt}</td>
-										<td>${order.userName}</td>
-										<td>${order.address}</td>
-										<td>${order.totalPrice}</td>
-										<td>${order.payTool}</td>
-										<td>${order.orderStatus}</td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-					</div>
-
+	
 				</div>
 			</div>
 		</div>
