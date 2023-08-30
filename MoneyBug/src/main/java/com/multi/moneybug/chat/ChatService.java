@@ -18,9 +18,9 @@ public class ChatService {
     @Autowired
     private FirebaseApp firebaseApp;
 
-    public void sendMessage(String name, String text) {
+    public void sendMessage(String name, String text, String channel) {
         FirebaseDatabase database = FirebaseDatabase.getInstance(firebaseApp);
-        DatabaseReference chatRef = database.getReference("Voicechat/chat2");
+        DatabaseReference chatRef = database.getReference("Voicechat/" + channel);
         String timestamp = getCurrentTimestamp();
 
         ChatMessage newMessage = new ChatMessage(name, text, timestamp);
@@ -28,9 +28,9 @@ public class ChatService {
         chatRef.push().setValueAsync(newMessage);
     }
 
-    public List<ChatMessage> getAllMessages() {
+    public List<ChatMessage> getAllMessages(String channel) {
         FirebaseDatabase database = FirebaseDatabase.getInstance(firebaseApp);
-        DatabaseReference chatRef = database.getReference("Voicechat/chat2");
+        DatabaseReference chatRef = database.getReference("Voicechat/" + channel);
 
         CompletableFuture<List<ChatMessage>> completableFuture = new CompletableFuture<>();
         List<ChatMessage> messages = new ArrayList<>();
