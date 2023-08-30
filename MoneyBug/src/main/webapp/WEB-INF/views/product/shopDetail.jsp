@@ -2,27 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<<<<<<< HEAD
 <jsp:include page="/layout/header.jsp"/>
 
-=======
-<%@ include file="../../../resources/layout/header.jsp"%>
-
-<%--<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<title>돈벌레 상세페이지</title>
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<link rel="stylesheet" type="text/css" media="all"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
-<link href="${pageContext.request.contextPath}/resources/css/main.css"
-	rel="stylesheet"> --%>
->>>>>>> 41230e5978ad9b92e14247dec223953576232777
 <style>
 body {
 	background: #F9F5E7;
@@ -191,11 +172,7 @@ function addToCart(productId, userNickname, count) {
 				<div class="input-group-prepend">
 					<button class="btn btn-outline-secondary" id="decrease">-</button>
 				</div>
-<<<<<<< HEAD
 				<input type="text" class="form-control text-center quantity"
-=======
-				<input type="text" class="form-control text-center quantity"	
->>>>>>> 41230e5978ad9b92e14247dec223953576232777
 					value="1" readonly>
 				<div class="input-group-append">
 					<button class="btn btn-outline-secondary" id="increase">+</button>
@@ -211,10 +188,6 @@ function addToCart(productId, userNickname, count) {
 		</div>
 	</div>
 
-<<<<<<< HEAD
 <jsp:include page="/layout/footer.jsp"/>
-=======
-	<%@ include file="../../../resources/layout/footer.jsp"%>
->>>>>>> 41230e5978ad9b92e14247dec223953576232777
 </body>
 </html>
