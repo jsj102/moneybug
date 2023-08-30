@@ -2,8 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <script></script>
-<%@ include file="../resources/layout/header.jsp"%>
-<%@ include file="../resources/layout/accountNav.jsp"%>
+<jsp:include page="/layout/header.jsp"/>
+<jsp:include page="/layout/accountNav.jsp"/>
 
 <style>
 .addline {
@@ -155,4 +155,4 @@
 		<div id="resultbudget">총 예산 : ₩0원</div>
 	</div>
 </div>
-<%@ include file="../resources/layout/footer.jsp"%>
+<jsp:include page="/layout/footer.jsp"/>
