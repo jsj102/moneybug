@@ -266,9 +266,9 @@
 		</dependency>
 		<!-- OpenAPI트래픽 제한 -->
 		<dependency>
-			<groupId>com.bucket4j</groupId>
+			<groupId>com.github.vladimir-bukhtoyarov</groupId>
 			<artifactId>bucket4j-core</artifactId>
-			<version>8.3.0</version>
+			<version>7.6.0</version>
 		</dependency>
 		<!-- swagger -->
 		<dependency>
