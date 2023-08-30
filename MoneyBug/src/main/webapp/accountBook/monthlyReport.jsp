@@ -2,8 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <script></script>
-<jsp:include page="/layout/header.jsp"/>
-<jsp:include page="/layout/accountNav.jsp"/>
+<%@ include file="/layout/header.jsp"%>
+<%@ include file="/layout/accountNav.jsp"%>
 
 <style>
 .MonthlyDiv{display: flex; width:1100px; height:655px; background-color: #F7FFE5;  text-align: center; border: 1px solid #E1ECC8;}
@@ -647,4 +647,4 @@
     </script>
 
 </div>
-<jsp:include page="/layout/footer.jsp"/>
+<%@ include file="/layout/footer.jsp"%>

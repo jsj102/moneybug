@@ -2,10 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <script></script>
-<jsp:include page="/layout/header.jsp"/>
-<jsp:include page="/layout/accountNav.jsp"/>
+<%@ include file="/layout/header.jsp"%>
+<%@ include file="/layout/accountNav.jsp"%>
 
-<
+
 <style>
 #addline {
 	background-color: rgba(255, 255, 255, 0.472);
@@ -153,4 +153,4 @@
 		<div id="resultexpenses">총 고정지출 : 0원</div>
 	</div>
 </div>
-<jsp:include page="/layout/footer.jsp"/>
+<%@ include file="/layout/footer.jsp"%>
