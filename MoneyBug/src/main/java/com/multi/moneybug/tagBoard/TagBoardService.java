@@ -52,11 +52,11 @@ public class TagBoardService {
 	public int count() {
 		return tagBoardDAO.count();
 	}
-	public int tagcount() {
-		return tagBoardDAO.tagcount();
+	public int tagcount(String boardType) {
+		return tagBoardDAO.tagcount(boardType);
 	}
-	public int searchcount() {
-		return tagBoardDAO.searchcount();
+	public int searchcount(TagBoardPageDTO tagBoardPageDTO) {
+		return tagBoardDAO.searchcount(tagBoardPageDTO);
 	}
 
 	public int updateViews(Long seq) {

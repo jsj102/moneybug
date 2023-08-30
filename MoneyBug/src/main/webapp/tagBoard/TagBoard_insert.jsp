@@ -2,99 +2,176 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix='form' uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ include file="../../resources/layout/header.jsp"%>
+<%@ include file="/layout/header.jsp" %>
+<style>
+
+/* 글 쓰기 페이지 스타일 추가 */
+#form {
+	height: 100%;
+	border: 2px solid #56CC9D; /* 테두리 색상과 두께 설정 */
+	border-radius: 20px; /* 모서리 둥글게 만듦 */
+	margin: 10px 70px 55px 70px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+#boardType {
+	width: 150px;
+	height: 30px;
+	margin-top: 40px;
+	margin-left: 18px;
+	font-size: 17px;
+	border: none; /* 기본 테두리 제거 */
+	text-align: center; /* 가운데 정렬을 위한 속성 */
+}
+
+#title {
+	border: none; /* 기본 테두리 제거 */
+	border-bottom: 2px solid #F3969A; /* 밑줄 스타일 적용 */
+	outline: none; /* 포커스시 테두리 제거 */
+	padding: 15px; /* 내부 여백 추가 */
+	width: 900px;
+	text-align: center; /* 가운데 정렬을 위한 속성 */
+	margin-bottom: 70px;
+}
+
+#content {
+	height: 500px;
+	background-color: #fffdf5;
+	border: none; /* 테두리 없애기 */
+	border-radius: 20px;
+	outline: none;
+	width: 1100px;
+	display: flex; /* 텍스트를 수직 및 수평으로 가운데 정렬하기 위해 flexbox 사용 */
+	flex-direction: column;
+	align-items: center; /* 수평 가운데 정렬 */
+	text-align: center;
+	font-size: 23px;
+	padding-top: 40px; 
+}
+
+.uploadfileform {
+	margin-top: 10px;
+}
+
+#insert, #cancel {
+	margin-top: 10px;
+	padding: 5px 15px;
+	cursor: pointer;
+}
+
+#cancel {
+	margin-left: 10px;
+}
+
+.banner-text {
+	margin-top: 35px;
+	margin-bottom: 40px;
+}
+</style>
+
+<div class="banner-container" align="center">
+	<div class="banner-text">
+		<br> <a class="nav-link"
+			href="/moneybug/tagBoard/TagBoard_list?page=1"><h1>MoneyBug
+				Community</h1></a>
+		<p>나만의 이야기를 작성하고 있어요!</p>
+	</div>
+</div>
+<br>
+
+<form action="TagBoard_insert" id="form" method="post"
+	enctype="multipart/form-data" onsubmit="return validateForm();">
+	<input type="hidden" name="writerId" value="${userNickname }">
 
 
-	<h3>커뮤니티 글쓰기</h3>
+	<div>
+
+		<select id="boardType" name="boardType">
+			<option value="">말머리</option>
+			<option value="공과금">공과금</option>
+			<option value="교통">교통</option>
+			<option value="데이트">데이트</option>
+			<option value="생활꿀팁">생활꿀팁</option>
+			<option value="식비">식비</option>
+			<option value="일상">일상</option>
+			<option value="플렉스">플렉스</option>
+		</select>
+	</div>
 	<br>
+	<div>
+		<input id="title" name="title" type="text" placeholder=" 제목"
+			style="font-size: 25px;">
+	</div>
 
-	<form action="TagBoard_insert" id="form" method="post"
-		enctype="multipart/form-data" onsubmit="return validateForm();">
-		<input type="hidden" name="writerId" value="${userNickname }">
-		<table>
+	<div>
+		<textarea id="content" name="content" rows="6"
+			placeholder="내용을 입력하세요. . ." style="font-size: 23px;"></textarea>
+	</div>
+	<br>
+	<div>
 
-			<tr>
-				<td>제목</td>
-				<td><select id="boardType" name="boardType">
-						<option value="">말머리</option>
-						<option value="공과금">공과금</option>
-						<option value="교통">교통</option>
-						<option value="데이트">데이트</option>
-						<option value="생활꿀팁">생활꿀팁</option>
-						<option value="식비">식비</option>
-						<option value="일상">일상</option>
-						<option value="플렉스">플렉스</option>
-				</select> <input id="title" name="title" type="text" placeholder=" 제목을 입력하세요.."
-					style="width: 507px; height: 25px; font-size: 15px;"></td>
-			</tr>
-			<tr>
-				<td>내용</td>
-				<td><input id="content" name="content" type="text"
-					placeholder=" 내용을 입력하세요.."
-					style="width: 620px; height: 200px; font-size: 15px;"></td>
-			</tr>
-			<tr>
-				<td>첨부파일
-					<button type="button" id="add_file">추가</button>
-				</td>
-				<td class="file_area">
-					<div class="uploadfileform">
-						<input type="file" name="file">
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<button id="insert">글 쓰기</button>
-					<button id="cancel">취소</button>
-				</td>
-			</tr>
-		</table>
-		<!-- 입력한 값들이 서버(톰킷)으로 전달될때는 form태그 안에 있어야 함. -->
-		<!-- 보충내용: <input name="data"> -->
-	</form>
+		<!-- 파일 입력 요소 숨기기 -->
+		<input type="file" name="file" id="fileInput" style="display: none;">
 
-<%@ include file="../../resources/layout/footer.jsp"%>
+		<!-- 대체 버튼 디자인 -->
+		<label for="fileInput" class="custom-file-upload btn btn-outline-dark">
+			이미지 첨부 </label>
+		<!-- 파일 이름을 표시할 영역 -->
+		<div id="fileNameArea"></div>
+
+	</div>
+	<br>
+	<div>
+
+		<button id="insert" class="btn btn-info">글 쓰기</button>
+		<button id="cancel" class="btn btn-danger">취소</button>
+
+	</div>
+
+	<br>
+	<br>
+	<br>
+</form>
+
+<%@ include file="/layout/footer.jsp"%>
 
 
 <script type="text/javascript">
-	$('#add_file')
-			.click(
-					function() {
-						$('.file_area')
-								.append(
-										'<div class="uploadfileform">'
-												+ '<input type="file" name="file">'
-												+ ' <button type="button" class="delete_file">삭제</button>'
-												+ '</div>');
-					});
-	
-	$('.file_area').on('click', '.delete_file', function() {
-		$(this).closest('div').remove();
-	});
-	
 	$('#insert').click(function() {
-	    var selectedValue1 = document.getElementById("boardType").value;
-	    var selectedValue2 = document.getElementById("title").value;
-	    var selectedValue3 = document.getElementById("content").value;
-	    if (selectedValue1 === "") {
-	        alert("말머리를 선택하세요.");
-	        return false; // 폼 제출 막기
-	    }
-	    if (selectedValue2 === "") {
-	        alert("제목을 입력하세요.");
-	        return false; // 폼 제출 막기
-	    }
-	    if (selectedValue3 === "") {
-	        alert("내용을 입력하세요.");
-	        return false; // 폼 제출 막기
-	    }
-	    return true; // 폼 제출 허용
+		var selectedValue1 = document.getElementById("boardType").value;
+		var selectedValue2 = document.getElementById("title").value;
+		var selectedValue3 = document.getElementById("content").value;
+		if (selectedValue1 === "") {
+			alert("말머리를 선택하세요.");
+			return false; // 폼 제출 막기
+		}
+		if (selectedValue2 === "") {
+			alert("제목을 입력하세요.");
+			return false; // 폼 제출 막기
+		}
+		if (selectedValue3 === "") {
+			alert("내용을 입력하세요.");
+			return false; // 폼 제출 막기
+		}
+		return true; // 폼 제출 허용
 	});
 
-	
 	$('#cancel').click(function() {
-	    location.href = "TagBoard_list?page=1"; 
-	    return false;
+		location.href = "TagBoard_list?page=1";
+		return false;
 	});
+
+	// 파일 입력 요소에 변화가 있을 때 파일 이름 표시
+	$("#fileInput").change(function() {
+		var fileName = $(this).val().split("\\").pop(); // 파일 이름 추출
+		$("#fileNameArea").text("이미지 파일 : " + fileName); // 파일 이름 표시
+	});
+	
+	
 </script>
+
+

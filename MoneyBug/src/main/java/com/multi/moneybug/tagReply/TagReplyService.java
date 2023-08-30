@@ -28,6 +28,9 @@ public class TagReplyService {
 	public int update(TagReplyDTO tagReplyDTO) {
 		return tagReplyDAO.update(tagReplyDTO);
 	}
+	public int delupdate(TagReplyDTO tagReplyDTO) {
+		return tagReplyDAO.delupdate(tagReplyDTO);
+	}
 	
 	public int delete(int seq) {
 		return tagReplyDAO.delete(seq);
