@@ -54,6 +54,15 @@
 		update tag_reply set CONTENT =
 		#{content} WHERE SEQ = #{seq}
 	</update>
+	
+	<update id="delupdate" parameterType="tagreplyDTO">
+    UPDATE tag_reply
+    SET CONTENT = #{content},
+        WRITER_ID = null,
+        CREATE_AT = null
+    WHERE SEQ = #{seq}
+</update>
+
 
 	<delete id="delete">
 		delete from tag_reply WHERE SEQ = #{seq}

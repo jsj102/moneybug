@@ -61,11 +61,11 @@ public class TagBoardDAO {
 		public int count() {
 			return my.selectOne("tagboard.count");
 		}
-		public int tagcount() {
-			return my.selectOne("tagboard.tagcount");
+		public int tagcount(String boardType) {
+			return my.selectOne("tagboard.tagcount", boardType);
 		}
-		public int searchcount() {
-			return my.selectOne("tagboard.searchcount");
+		public int searchcount(TagBoardPageDTO tagBoardPageDTO) {
+			return my.selectOne("tagboard.searchcount", tagBoardPageDTO);
 		}
 		
 //확인 		
