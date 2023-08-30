@@ -462,7 +462,12 @@
 		    let gptContent = document.getElementById("resultGPT").innerHTML;
 		    let chartImage = ctx.toDataURL('image/png'); 
 		    let graphImage = ctx2.toDataURL('image/png'); 
-		    let email = prompt;
+		    let email;
+		    $.ajax({
+				url : "getEmail",
+				method : "POST",
+				success : function(useremail){
+				    email = useremail;
 					$.ajax({
 					    url : "sendEmailReport",
 					    method : "POST",
@@ -480,7 +485,9 @@
 					    error : function(){
 							alert("실패.")
 					    }
-					}); //ajax
+					}); //ajax sendEmailReport
+				}//ajax get Email success
+		    })//ajax get Email
 		}); //snedToEmailReport
 
 	});//$
