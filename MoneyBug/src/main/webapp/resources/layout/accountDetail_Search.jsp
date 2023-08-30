@@ -36,9 +36,9 @@
 <body>
 	
 	<div class="account_search">
-	<select id="searchYear" name="searchYear">
+	<select id="searchYear" name="searchYear" >
 		<option value="2024">2024년</option>
-		<option value="2023">2023년</option>
+		<option value="2023" selected="selected">2023년</option>
 		<option value="2022">2022년</option>
 		<option value="2021">2021년</option>
 		<option value="2020">2020년</option>

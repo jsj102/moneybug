@@ -42,7 +42,6 @@ public class OpenApiDAO {
 	}
 
 	public List<AccountBudgetDTO> readListBudget(AccountBudgetDTO accountBudgetDTO) {
-		System.out.println(accountBudgetDTO.toString());
 		return accountBudgetDAO.readList(accountBudgetDTO);
 	}
 

@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +49,6 @@ public class OpenApiService {
 
 	public boolean ischeckTokenAvailability(Bucket bucket) {
 		if (bucket.tryConsume(1)) {
-			System.out.println("사용가능한 토큰 수" + bucket.getAvailableTokens());
 			return true;
 		} else {
 			return false;
@@ -128,15 +125,15 @@ public class OpenApiService {
 		return outerjson;
 	}
 
-	public void detailJsonPaser(String detailData, int accountBookId) {
+	public void detailJsonPaser(SwaggerDetailDTO detailData, int accountBookId) {
 		// 데이터 파싱
 		JSONObject data = new JSONObject(detailData);
-		String category = data.getString("카테고리");
-		String accountType = data.getString("지출/수입");
-		String discription = data.getString("설명");
-		int price = data.getInt("가격");
+		String category = data.getString("category");
+		String accountType = data.getString("accountType");
+		String discription = data.getString("description");
+		int price = data.getInt("price");
 
-		String dateString = data.getString("사용날짜");
+		String dateString = data.getString("usedAt");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		java.util.Date utilDate = null;
 		try {
@@ -157,11 +154,11 @@ public class OpenApiService {
 		accountDetailDAO.insert(accountDetailDTO);
 	}
 
-	public void budgetJsonPaser(String budgetData, int accountBookId) {
+	public void budgetJsonPaser(SwaggerBudgetDTO budgetData, int accountBookId) {
 		JSONObject data = new JSONObject(budgetData);
-		String category = data.getString("카테고리");
-		int price = data.getInt("가격");
-		String dateString = data.getString("사용날짜");
+		String category = data.getString("category");
+		int price = data.getInt("price");
+		String dateString = data.getString("usedAt");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		java.util.Date utilDate = null;
 		try {
@@ -177,20 +174,18 @@ public class OpenApiService {
 		accountBudgetDTO.setUsedAt(usedAt);
 		//
 		accountBudgetDAO.insertDate(accountBudgetDTO);
-		System.out.println("데이터 삽입");
 	}
 
-	public void expensesJsonPaser(String expensesData, int accountBookId) {
+	public void expensesJsonPaser(SwaggerExpensesDTO expensesData, int accountBookId) {
 		JSONObject data = new JSONObject(expensesData);
-		String category = data.getString("카테고리");
-		int price = data.getInt("가격");
+		String category = data.getString("category");
+		int price = data.getInt("price");
 		AccountExpensesDTO accountExpensesDTO = new AccountExpensesDTO();
 		accountExpensesDTO.setAccountBookId(accountBookId);
 		accountExpensesDTO.setFixedCategory(category);
 		accountExpensesDTO.setPrice(price);
 
 		accountExpensesDAO.insert(accountExpensesDTO);
-		System.out.println("데이터 삽입");
 	}
 
 	public HashMap<String, String> userApiGenerator() {
@@ -212,7 +207,6 @@ public class OpenApiService {
 		openApiDTO.setSecretKey(secretKey);
 		openApiDTO.setExpireDate(date);
 		openApiDTO.setAccountBookId(accountBookId);
-		System.out.println("데이터 삽입");
 		openApiDAO.insert(openApiDTO);
 	}
 
@@ -242,9 +236,8 @@ public class OpenApiService {
 	
 	public void updateToken(OpenApiTokenDTO apiTokenDTO) {
 		openApiDAO.updateToken(apiTokenDTO);
-		System.out.println(apiTokenDTO.toString());
-		System.out.println("업데이트 성공"); 
 	}
+
 	public Bucket readToken(String secretKey) {
 		OpenApiTokenDTO token = openApiDAO.readToken(secretKey);
 		Refill refill = Refill.intervally(token.getRefillCount(), Duration.ofSeconds(token.getRefillTime()));

@@ -16,7 +16,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +28,11 @@ import com.multi.moneybug.accountBook.AccountBookService;
 
 import io.github.bucket4j.Bucket;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.java.Log;
 
 @Controller
@@ -63,7 +66,6 @@ public class OpenApiController {
 		String accountBookId = accountBookService.insertAccountDetailFindSeq(convert);
 		int id = Integer.parseInt(accountBookId);
 		openApiDTO = openApiService.readOne(id);
-		System.out.println("아이디값" + id);
 		// 값이 들어있으면 발급 X
 		if (openApiDTO == null && type.equals("발급")) {
 			HashMap<String, String> key = openApiService.userApiGenerator();
@@ -71,10 +73,10 @@ public class OpenApiController {
 			String sercetKey = key.get("secretKey");
 			apiTokenDTO.setSecretKey(sercetKey);
 			openApiService.insert(apiKey, sercetKey, id);
-			System.out.println(apiTokenDTO.toString());
 			openApiService.insertToken(apiTokenDTO);
 
 			String result = "APIKEY : " + apiKey + "<br>SERCETKEY : " + sercetKey;
+			log.info("키 발급 완료 / " + session.getAttribute("userNickname"));
 			return result;
 
 		} else if (openApiDTO != null && type.equals("발급")) {
@@ -86,13 +88,13 @@ public class OpenApiController {
 			String apiKey = key.get("apiKey");
 			String sercetKey = key.get("secretKey");
 			OpenApiDTO open = openApiService.readOne(id);
-			System.out.println(open.toString());
 			newApiTokenDTO.setOldSecretKey(open.getSecretKey());
 			newApiTokenDTO.setNewSecretKey(sercetKey);
 			openApiService.updateToken(newApiTokenDTO);
 			openApiService.deleteId(id);
 			openApiService.insert(apiKey, sercetKey, id);
 			String result = "APIKEY : " + apiKey + "<br>SERCETKEY : " + sercetKey;
+			log.info("키 재발급 완료 / " + session.getAttribute("userNickname"));
 			return result;
 		} else {
 			String result = "No Exist Key";
@@ -102,8 +104,11 @@ public class OpenApiController {
 
 	// GET
 	@GetMapping(value = "/v1/budget", produces = "application/json;charset=utf-8")
-	@ResponseBody
 	@ApiOperation(value = "예산 조회", notes = "조회할 연월을 입력하면 조회가 가능합니다.")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "searchMonth", value = "조회할 월", required = true, paramType = "header", dataType = "int"),
+			@ApiImplicitParam(name = "searchYear", value = "조회할 연도", required = true, paramType = "header", dataType = "int") })
+	@ApiResponses({ @ApiResponse(code = 200, message = "성공적인 응답", response = SwaggerBudgetResponse.class) })
 	public ResponseEntity<String> budget(HttpServletRequest request) {
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
@@ -127,6 +132,7 @@ public class OpenApiController {
 				JSONObject result = openApiService.budgetJsonParsing(openApiDTO.getAccountBookId(), searchMonth,
 						searchYear);
 				String data = result.toString();
+				log.info("예산 조회 / " + secretKey);
 				return ResponseEntity.ok(data);
 			} else {
 				JSONObject errorObject = new JSONObject();
@@ -142,8 +148,8 @@ public class OpenApiController {
 
 	// GET
 	@GetMapping(value = "/v1/expenses", produces = "application/json;charset=utf-8")
-	@ResponseBody
 	@ApiOperation(value = "고정 지출 조회", notes = "고정 지출은 모든 데이터를 가져옵니다.")
+	@ApiResponses({ @ApiResponse(code = 200, message = "성공적인 응답", response = SwaggerExpensesResponse.class) })
 	public ResponseEntity<String> expenses(HttpServletRequest request) {
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
@@ -153,7 +159,6 @@ public class OpenApiController {
 		openApiDTO.setSecretKey(secretKey);
 		openApiDTO = openApiService.readOneKey(openApiDTO);
 		// 버킷이 없으면 생성합니다.
-		System.out.println(secretKey);
 		try {
 			if (!bucketMap.containsKey(secretKey)) {
 				bucketMap.put(secretKey, openApiService.readToken(secretKey));
@@ -165,6 +170,7 @@ public class OpenApiController {
 			if (openApiDTO != null) {
 				JSONObject result = openApiService.expensesJsonParsing(openApiDTO.getAccountBookId());
 				String data = result.toString();
+				log.info("고정 조회 / " + secretKey);
 				return ResponseEntity.ok(data);
 			} else {
 				JSONObject errorObject = new JSONObject();
@@ -180,14 +186,16 @@ public class OpenApiController {
 
 	// GET
 	@GetMapping(value = "/v1/detail", produces = "application/json;charset=utf-8")
-	@ResponseBody
-	@ApiOperation(value = "지출/수입 내역 조회", notes = "조회할 연월을 입력하면 조회가 가능합니다.")
+	@ApiOperation(value = "지출 내역 조회", notes = "조회할 연월을 입력하면 조회가 가능합니다.")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "searchMonth", value = "조회할 월", required = true, paramType = "header", dataType = "int"),
+			@ApiImplicitParam(name = "searchYear", value = "조회할 연도", required = true, paramType = "header", dataType = "int") })
+	@ApiResponses({ @ApiResponse(code = 200, message = "성공적인 응답", response = SwaggerDetailResponse.class) })
 	public ResponseEntity<String> detail(HttpServletRequest request) {
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
 		int searchMonth = Integer.parseInt(request.getHeader("searchMonth"));
 		int searchYear = Integer.parseInt(request.getHeader("searchYear"));
-
 		OpenApiDTO openApiDTO = new OpenApiDTO();
 		openApiDTO.setApiKey(apiKey);
 		openApiDTO.setSecretKey(secretKey);
@@ -204,6 +212,7 @@ public class OpenApiController {
 				JSONObject result = openApiService.detailJsonParsing(openApiDTO.getAccountBookId(), searchMonth,
 						searchYear);
 				String data = result.toString();
+				log.info("지출 조회 / " + secretKey);
 				return ResponseEntity.ok(data);
 			} else {
 				JSONObject errorObject = new JSONObject();
@@ -219,7 +228,7 @@ public class OpenApiController {
 
 	@PostMapping(value = "/v1/detail", produces = "application/json;charset=utf-8")
 	@ApiOperation(value = "지출/수입에 대해서 입력이 가능합니다.", notes = "입력할 연월을 입력하고 데이터를 넣으면 입력됩니다.")
-	public ResponseEntity<String> detailInsert(HttpServletRequest request, @RequestBody String requestBody) {
+	public ResponseEntity<String> detailInsert(HttpServletRequest request, @RequestBody SwaggerDetailDTO requestBody) {
 		// 인증
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
@@ -239,7 +248,8 @@ public class OpenApiController {
 		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
 			log.info("detail accountBookId : {}" + openApiDTO.getAccountBookId());
 			openApiService.detailJsonPaser(requestBody, openApiDTO.getAccountBookId());
-			return ResponseEntity.ok(requestBody);
+			log.info("지출/수입 삽입 / " + secretKey);
+			return ResponseEntity.ok(requestBody.toString());
 		} else {
 			log.info("토큰 수 한도 초과");
 			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
@@ -248,7 +258,7 @@ public class OpenApiController {
 
 	@PostMapping(value = "/v1/budget", produces = "application/json;charset=utf-8")
 	@ApiOperation(value = "예산 입력", notes = "입력할 연월을 입력하고 데이터를 넣으면 입력됩니다. 대신 카테고리가 반복되지않게 주의해주십시오.")
-	public ResponseEntity<String> budgetInsert(HttpServletRequest request, @RequestBody String requestBody) {
+	public ResponseEntity<String> budgetInsert(HttpServletRequest request, @RequestBody SwaggerBudgetDTO requestBody) {
 		// 인증
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
@@ -268,7 +278,8 @@ public class OpenApiController {
 		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
 			log.info("detail accountBookId : {}" + openApiDTO.getAccountBookId());
 			openApiService.budgetJsonPaser(requestBody, openApiDTO.getAccountBookId());
-			return ResponseEntity.ok(requestBody);
+			log.info("예산 삽입 / " + secretKey);
+			return ResponseEntity.ok(requestBody.toString());
 		} else {
 			log.info("토큰 수 한도 초과");
 			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
@@ -277,7 +288,8 @@ public class OpenApiController {
 
 	@PostMapping(value = "/v1/expenses", produces = "application/json;charset=utf-8")
 	@ApiOperation(value = "고정 지출 입력", notes = "데이터를 넣으면 입력됩니다. 대신 카테고리가 반복되지않게 주의해주십시오.")
-	public ResponseEntity<String> expensesInsert(HttpServletRequest request, @RequestBody String requestBody) {
+	public ResponseEntity<String> expensesInsert(HttpServletRequest request,
+			@RequestBody SwaggerExpensesDTO requestBody) {
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
 
@@ -296,7 +308,8 @@ public class OpenApiController {
 		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
 			log.info("detail accountBookId : {}" + openApiDTO.getAccountBookId());
 			openApiService.expensesJsonPaser(requestBody, openApiDTO.getAccountBookId());
-			return ResponseEntity.ok(requestBody);
+			log.info("고정 지출 삽입 / " + secretKey);
+			return ResponseEntity.ok(requestBody.toString());
 		} else {
 			log.info("토큰 수 한도 초과");
 			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
