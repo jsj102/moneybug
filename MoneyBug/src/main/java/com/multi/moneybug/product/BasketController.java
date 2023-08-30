@@ -75,6 +75,23 @@ public class BasketController {
 
         return "successfully";
     }
+    
+    @RequestMapping("/updateQuantity")
+    @ResponseBody
+    public String updateQuantity(
+        @RequestParam String userNickname,
+        @RequestParam int productId,
+        @RequestParam int seq,
+        @RequestParam int newCount
+    ) {
+        // userNickname로 userId 조회
+        String userId = memberService.getUserIdByUserNickname(userNickname);
+        
+        // 업데이트 로직 실행
+        basketService.updateProductCount(userId, productId, seq, newCount);
+
+        return "success";
+    }
 
 }
 

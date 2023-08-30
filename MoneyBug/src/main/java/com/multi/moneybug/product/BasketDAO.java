@@ -37,4 +37,8 @@ public class BasketDAO {
 	public List<BasketDTO> getOrderlists(List<Integer> selectedSeqs) {
 		return my.selectList("basket.order_List", selectedSeqs);
 	}
+
+	public void updateProductCount(Map<String, Object> params) {
+        my.update("basket.updateProductCount", params);
+    }
 }

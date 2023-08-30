@@ -55,8 +55,8 @@ body {
 }
 </style>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <script>
 	function execDaumPostcode() {
@@ -68,30 +68,21 @@ body {
 		}).open();
 	}
 
-	$(document).ready(function() {
-	    $("#applyPoint").click(function() {
-	        var usingPoint = parseInt($("#usingPoint").val()) || 0;
-	        var totalAmount = <%= request.getAttribute("totalAmount") %>;
-	        var calculatedAmount = totalAmount - usingPoint;
+	   $(document).ready(function() {
+	        $("#applyPoint").click(function(event) {
+	            event.preventDefault(); 
+	            var discountPrice = parseInt($("#discountPrice").val()) || 0;
+	            var totalAmount = <%= request.getAttribute("totalAmount") %>;
+	            var totalPrice = totalAmount - discountPrice;
 
-	        if (calculatedAmount < 0) {
-	            calculatedAmount = 0;
-	        }
+	            if (totalPrice < 0) {
+	                totalPrice = 0;
+	            }
 
-	        $("#calculatedAmount").text(calculatedAmount);
+	            $("#totalPrice").val(totalPrice); 
+	        });
+	   });
 
-	    });
-	});
-
-	$(document).ready(function() {
-	    $("#submitForm").click(function() {
-	        var address1 = $("#address-1").val();
-	        var address2 = $("#address-2").val();
-	        var fullAddress = address1 + " " + address2;
-	        $("#address").val(fullAddress);
-	        $("#payOrder").submit();
-	    });
-	});
 
 	   $(function() {
            $('#payOrder').click(function() {
@@ -102,7 +93,7 @@ body {
                    pay_method : 'card',
                    merchant_uid : 'merchant_' + new Date().getTime(),
                    name : '주문명:결제테스트',
-                   amount : 14000,
+                   amount : 1000,
                    buyer_email : 'iamport@siot.do',
                    buyer_name : '구매자이름',
                    buyer_tel : '010-1234-5678',
@@ -125,8 +116,19 @@ body {
 
            })
        })
+       
+       document.getElementById("applyPoint").addEventListener("click", function(event) {
+        var discountPriceInput = document.getElementById("discountPrice");
+        var maxPoint = parseInt(discountPriceInput.max);
+        var enteredValue = parseInt(discountPriceInput.value);
+        
+        if (enteredValue > maxPoint) {
+            alert("The entered value exceeds the maximum point value.");
+            event.preventDefault();
+        }
+    });
+       
 
-    
 </script>
 
 </head>
@@ -153,7 +155,6 @@ body {
 			%>
 		</div>
 		<div class="pay-container">
-			<form action="paySuccess.do" method="post">
 				<table
 					class="table table-light table-hover table-striped text-center">
 					<thead>
@@ -186,53 +187,94 @@ body {
 					</tbody>
 				</table>
 
-				<blockquote class="blockquote">
-					<p id="paySum" name="price">
-						<strong>선택 금액: <%=request.getAttribute("totalAmount")%>원 </strong>
-					</p>
-				</blockquote>
-				
-						<blockquote class="blockquote">
-							<p id="myPoint">
-								<strong>현재 나의 포인트: ${member.point } p </strong>
-							</p>
-						</blockquote>
-
-						<div class="mb-3">
-							<label for="usingPoint">사용하고 싶은 포인트:</label><br> <input
-								type="number" class="form-control" id="usingPoint"
-								name="usingPoint" max="${member.point}">
-							<button class="btn btn-secondary mt-2" id="applyPoint">적용하기</button>
+			<!-- <form action="payOrder" method="post"> -->
+		
+				<div class="form-group row">
+					<label for="basketSeq" class="col-sm-8 col-form-label"> 장바구니 번호</label>
+					<div class="col-sm-4">
+						<div class="input-group">
+						<c:forEach items="${orderlist}" var="order">
+							<input type="text" class="form-control" id="basketSeq" name="basketSeq" value="${order.seq}" readonly>
+							</c:forEach>
 						</div>
-
-
-				<blockquote class="blockquote">
-					<p id="finalPay">
-						<strong>최종 고객님께서 결제하실 금액은 <span id="calculatedAmount"  name="discountPrice"></span>원입니다.
-						</strong>
-					</p>
-				</blockquote>
-
-
-
-				<div class="mb-3">
-					<label for="userNickname">주문자 닉네임:</label><br> <input type="text"
-						class="form-control" id="userNickname" name="userNickname" value="${member.userNickname}" readonly>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="userId" class="col-sm-8 col-form-label"> 회원 아이디</label>
+					<div class="col-sm-4">
+						<div class="input-group">
+							<input type="text" class="form-control" id="userId" name="userId" value="<%=request.getAttribute("userId")%>" readonly>
+						</div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="userName" class="col-sm-8 col-form-label"> 회원 이름</label>
+					<div class="col-sm-4">
+						<div class="input-group">
+							<input type="text" class="form-control" id="userName" name="userName" value="<%=request.getAttribute("userName")%>" readonly>
+						</div>
+					</div>
 				</div>
 				
-				<div class="mb-3">
-					<label for="userName">주문자 성함:</label><br> <input type="text"
-						class="form-control" id="userName" value="${member.userName}" name="userName" readonly>
+				<div class="form-group row">
+					<label for="price" class="col-sm-8 col-form-label"> 선택한 상품의 합계</label>
+					<div class="col-sm-4">
+						<div class="input-group">
+							<input type="text" class="form-control" id="price" name="price" value="<%=request.getAttribute("totalAmount")%>" readonly>
+							<div class="input-group-append">
+								<span class="input-group-text">원</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="form-group row">
+					<label for="point" class="col-sm-8 col-form-label"> 현재 나의 포인트</label>
+					<div class="col-sm-4">
+						<div class="input-group">
+							<input type="text" class="form-control" id="point" value="${member.point }" readonly>
+							<div class="input-group-append">
+								<span class="input-group-text">P</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="discountPrice" class="col-sm-8 col-form-label">
+						사용하고 싶은 포인트 입력</label>
+					<div class="col-sm-4">
+						<div class="input-group">
+							<input type="number" class="form-control" id="discountPrice"
+								name="discountPrice" max="${member.point}" min="0" step="5"/>
+							<button class="btn btn-danger" id="applyPoint">적용</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="totalPrice" class="col-sm-8 col-form-label"> 최종 결제금액</label>
+					<div class="col-sm-4">
+						<div class="input-group">
+							<input type="text" class="form-control" id="totalPrice" name="totalPrice" value="<%=request.getAttribute("totalAmount")%>" readonly>
+							<div class="input-group-append">
+								<span class="input-group-text">원</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="form-group row">
+					<label for="tel" class="col-sm-8 col-form-label"> 배송지 전화번호</label>
+					<div class="col-sm-4">
+						<div class="input-group">
+							<input type="tel" class="form-control" id="tel" name="tel">
+						</div>
+					</div>
 				</div>
 
 				<div class="mb-3">
-					<label for="tel">배송지 전화번호:</label><br> <input
-						type="text" class="form-control" id="tel"
-						name="tel" required>
-				</div>
-
-				<div class="mb-3">
-					<button class="btn btn-secondary" id="postSearch"
+					<button class="btn btn-danger" id="postSearch"
 						onclick="execDaumPostcode(); return false;">우편번호 찾기</button>
 					<input type="text" class="form-control" id="zip-code"
 						placeholder="우편번호">
@@ -241,14 +283,11 @@ body {
 					<input type="text" class="form-control" id="address-1"
 						placeholder="도로명주소" name="address">
 				</div>
-				<div class="mb-3">
-					<input type="text" class="form-control" id="address-2"
-						placeholder="상세주소">
+
+				<div class="d-flex justify-content-end">
+					<button type="submit" class="btn btn-lg btn-info" id="payOrder">결제하기</button>
 				</div>
 
-				<div class="d-flex justify-content-center mt-3">
-					<button type="submit" class="btn btn-lg btn-secondary" id="payOrder">결제하기</button>
-				</div>
 			</form>
 		</div>
 		<hr>

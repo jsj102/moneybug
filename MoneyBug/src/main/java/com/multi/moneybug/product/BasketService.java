@@ -1,6 +1,8 @@
 package com.multi.moneybug.product;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,4 +45,15 @@ public class BasketService {
 		List<BasketDTO> basketList = basketDAO.getOrderlists(selectedSeqs);
         return basketList;
 	}
+
+	 public void updateProductCount(String userId, int productId, int seq, int newCount) {
+	        Map<String, Object> params = new HashMap<>();
+	        params.put("userId", userId);
+	        params.put("productId", productId);
+	        params.put("seq", seq);
+	        params.put("newCount", newCount);
+	        
+	        basketDAO.updateProductCount(params);
+	        
+	    }
 }

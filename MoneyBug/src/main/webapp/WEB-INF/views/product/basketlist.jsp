@@ -2,19 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<jsp:include page="/layout/header.jsp"/>
-
-<%-- <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<title>돈벌레 장바구니</title>
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<link rel="stylesheet" type="text/css" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
-<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet"> --%>
-
+<jsp:include page="/layout/header.jsp" />
 <style>
 body {
 	background: #F9F5E7;
@@ -47,31 +35,44 @@ body {
 	object-fit: scale-down;
 	background-color: white;
 }
-
-
 </style>
 
 <script>
 $(document).ready(function() {
+	
+	
     $('input[name="selectedProducts"]').on('change', function() {
         updateTotalAmount();
     });
     
-    function updateTotalAmount() {
+    function updateTotalAmount(inputField) {
         var totalAmount = 0;
         var selectedProductIds = [];
-        var selectedProductSeq = []; // 선택한 상품의 seq 값을 저장하는 배열
+        var selectedProductSeq = [];
 
         $('input[name="selectedProducts"]:checked').each(function() {
-            var valueParts = $(this).val().split(','); // value 값에서 productId와 seq 분리
-            selectedProductIds.push(parseInt(valueParts[0])); // productId를 배열에 추가
-            selectedProductSeq.push(parseInt(valueParts[1])); // seq를 배열에 추가 
+            var valueParts = $(this).val().split(',');
+            selectedProductIds.push(parseInt(valueParts[0]));
+            selectedProductSeq.push(parseInt(valueParts[1]));
         });
 
-        selectedProductIds.forEach(function(productId, index) {
-            var seq = selectedProductSeq[index]; // 현재 인덱스의 seq 값 가져오기
-            var productPrice = parseInt($('#productPrice_' + productId).text());
-            var productCount = parseInt($('#productCount_' + productId).text());
+        selectedProductIds.forEach(function(prodId, index) {
+            var s = selectedProductSeq[index];
+            var productPrice = parseInt($('#productPrice_' + prodId).text());
+            var productCount = 0;
+
+            if (inputField) {
+                var productId = inputField.data('product-id');
+                var seq = inputField.data('product-count');
+                if (productId === prodId && seq === s) {
+                    productCount = parseInt(inputField.val());
+                    $('#productTotal_' + productId + '_' + seq).text(productPrice * productCount + "원");
+                }
+            } else {
+                productCount = parseInt($('#productCount_' + prodId).val());
+                $('#productTotal_' + prodId + '_' + s).text(productPrice * productCount + "원");
+            }
+
             totalAmount += productPrice * productCount;
         });
 
@@ -80,7 +81,61 @@ $(document).ready(function() {
         $('#selectedId_').val(selectedProductIds);
         $('#seletedSeq_').val(selectedProductSeq);
     }
+
+
+    
+    $("#increase").click(function() {
+        var currentQuantity = parseInt($(".quantity").val());
+        $(".quantity").val(currentQuantity + 1);
+    });
+    
+    $("#decrease").click(function() {
+        var currentQuantity = parseInt($(".quantity").val());
+        if (currentQuantity > 1) {
+            $(".quantity").val(currentQuantity - 1);
+        }
+    });
+
+    $("#orderForm").submit(function(event) {
+        event.preventDefault(); // 기본 form 제출 동작 막기
+        
+        var selectedProductIds = [];
+        var selectedProductSeq = [];
+        var newCounts = [];
+
+        $('input[name="selectedProducts"]:checked').each(function() {
+            var valueParts = $(this).val().split(',');
+            selectedProductIds.push(parseInt(valueParts[0]));
+            selectedProductSeq.push(parseInt(valueParts[1]));
+            newCounts.push(parseInt($('#productCount_' + valueParts[0]).val()));
+        });
+
+        var requestData = {
+            userNickname: "사용자의 닉네임", // 사용자의 닉네임 설정
+            productId: selectedProductIds,
+            seq: selectedProductSeq,
+            newCount: newCounts
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/updateQuantity',
+            data: requestData,
+            success: function(response) {
+                console.log('수량 업데이트 성공:', response);
+                // 성공 후 처리할 동작 추가
+            },
+            error: function(error) {
+                console.error('수량 업데이트 실패:', error);
+                // 실패 후 처리할 동작 추가
+            }
+        });
+    });
+
+
 });
+
+
 </script>
 
 
@@ -89,85 +144,95 @@ $(document).ready(function() {
 <body>
 	<div class="basket-container">
 		<div class="user-container d-flex flex-column align-items-center">
-			<%
-				String userNickname = (String) session.getAttribute("userNickname");
-
-				if (userNickname != null && !userNickname.isEmpty()) {
-			%>
-			<h2><%=userNickname%>님의 장바구니
-			</h2>
-			<div class="d-flex justify-content-center mt-2">
-				<button class="btn btn-outline-dark" id="idconfirm"
-					onclick="location.href='/moneybug/member/myPage.do'">사용자
-					정보 확인</button>
-				<button class="btn btn-outline-dark" id="logout"
-					onclick="location.href='/moneybug/logout.do'">로그아웃</button>
-			</div>
-			<%
-				} else {
-			%>
-			<p>사용자 정보가 없습니다.</p>
-			<button class="btn btn-dark" id="login"
-				onclick="location.href='login.jsp'">로그인 페이지로 이동</button>
-			<%
-				}
-			%>
+			<c:if test="${not empty userNickname}">
+				<h2>${userNickname}님의장바구니</h2>
+				<c:choose>
+					<c:when test="${basketIsEmpty}">
+						<div style="margin-top: 20px;">
+							<a
+								href="${pageContext.request.contextPath}/product/shoplist?page=1"
+								class="btn btn-primary ml-2 center">상품 담으러 가기</a>
+						</div>
+					</c:when>
+				</c:choose>
+			</c:if>
+			<c:if test="${empty userNickname}">
+				<p>사용자 정보가 없습니다.</p>
+				<button class="btn btn-dark" id="login"
+					onclick="location.href='login.jsp'">로그인 페이지로 이동</button>
+			</c:if>
 		</div>
-
 		<div class="order-container">
 			<form action="orderlist" method="post">
-				<table
-					class="table table-light table-hover table-striped text-center">
-					<thead>
-						<tr>
-							<th>유형</th>
-							<th>제품 사진</th>
-							<th>제품명</th>
-							<th>가격</th>
-							<th>수량</th>
-							<th>합계</th>
-							<th>선택</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach items="${basketList}" var="basket">
-							<c:forEach items="${productList}" var="product">
-								<c:if test="${basket.productId eq product.productId}">
-									<tr>
-										<td>${product.productType}</td>
-										<td><img src="${product.productImg}" alt="Product Image"
-											width="150px" height="150px" /></td>
-										<td>${product.productName}</td>
-										<td id="productPrice_${product.productId}">${product.productPrice}</td>
-										<td id="productCount_${product.productId}">${basket.productCount}</td>
-										<td>${product.productPrice * basket.productCount}</td>
-										<td><input type="checkbox" name="selectedProducts"
-											value="${basket.productId}, ${basket.seq}" /></td>
+				<c:choose>
+					<c:when test="${basketIsEmpty}">
+						<p>장바구니에 담긴 상품이 없습니다.</p>
+					</c:when>
+					<c:otherwise>
+						<table
+							class="table table-light table-hover table-striped text-center">
+							<thead>
+								<tr>
+									<th>유형</th>
+									<th>제품 사진</th>
+									<th>제품명</th>
+									<th>가격</th>
+									<th>수량</th>
+									<th>합계</th>
+									<th>선택</th>
+									<th>삭제</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${basketList}" var="basket">
+									<c:forEach items="${productList}" var="product">
+										<c:if test="${basket.productId eq product.productId}">
+											<tr>
+												<td>${product.productType}</td>
+												<td><img src="${product.productImg}"
+													alt="Product Image" width="150px" height="150px" /></td>
+												<td>${product.productName}</td>
+												<td id="productPrice_${product.productId}">${product.productPrice}</td>
+												<td>
+													<div class="input-group">
+														<input type="number"
+															class="form-control text-center quantity"
+															id="productCount_${product.productId}"
+															value="${basket.productCount}" min="1"
+															onchange="updateTotalAmount(this, ${product.productId}, ${basket.seq})">
+													</div>
+												</td>
+												<td id="productTotal_${product.productId}_${basket.seq}"
+													class="productTotal">${product.productPrice * basket.productCount}원
+												</td>
 
-
-									</tr>
-								</c:if>
-							</c:forEach>
-						</c:forEach>
-					</tbody>
-				</table>
-				<div class="d-flex justify-content-center mt-3">
-					<input type="hidden" id="totalAmount2" name="totalAmount"
-						value="${totalAmount}"> <input type="hidden"
-						id="selectedId_" name="selectedId" value="${productId}" /> <input
-						type="hidden" id="seletedSeq_" name="seletedSeq"
-						value="${basket.seq}" />
-					<button type="submit" class="btn btn-lg btn-secondary">주문하기</button>
-				</div>
+												<td><input type="checkbox" name="selectedProducts"
+													value="${basket.productId}, ${basket.seq}" /></td>
+												<td><button class="delete-btn"
+														onclick="deleteProduct(${basket.productId}, ${basket.seq})">삭제</button></td>
+											</tr>
+										</c:if>
+									</c:forEach>
+								</c:forEach>
+							</tbody>
+						</table>
+						<div class="orderSum">
+							총 주문 금액: <span id="totalAmount">${totalAmount}원</span>
+						</div>
+						<div class="d-flex justify-content-center mt-3">
+							<form id="orderForm" action="/updateQuantity" method="post">
+								<input type="hidden" id="totalAmount2" name="totalAmount"
+									value="${totalAmount}"> <input type="hidden"
+									id="selectedId_" name="selectedId" value="${productId}" /> <input
+									type="hidden" id="seletedSeq_" name="seletedSeq"
+									value="${basket.seq}" />
+								<button type="submit" class="btn btn-lg btn-secondary">주문하기</button>
+							</form>
+						</div>
+					</c:otherwise>
+				</c:choose>
 			</form>
-		</div>
-
-		<hr>
-		<div class="orderSum">
-			총 주문 금액: <span id="totalAmount">${totalAmount}원</span>
 		</div>
 	</div>
 
-<jsp:include page="/layout/footer.jsp"/>
-<!-- </body>
-</html> -->
+	<jsp:include page="/layout/footer.jsp" />
