@@ -84,8 +84,7 @@
 </div>
 <br>
 
-<form action="TagBoard_update" id="form" name="tagboardupdate" method="post"
-	enctype="multipart/form-data" onsubmit="return validateForm();">
+<form action="TagBoard_update" id="form" onsubmit="return validateForm();">
 	<input name="seq" value="${param.seq}" type="hidden">
 
 
@@ -148,20 +147,6 @@
 		});
 	});
 
-	$('#add_file')
-			.click(
-					function() {
-						$('.file_area')
-								.append(
-										'<div class="uploadfileform">'
-												+ '<input type="file" name="file">'
-												+ ' <button type="button" class="delete_file">삭제</button>'
-												+ '</div>');
-					});
-
-	$('.file_area').on('click', '.delete_file', function() {
-		$(this).closest('div').remove();
-	});
 
 	$('#cancel').click(function() {
 		location.href = "TagBoard_one?seq=${param.seq}";
