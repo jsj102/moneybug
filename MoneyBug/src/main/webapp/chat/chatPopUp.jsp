@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- JSTL 라이브러리 추가 -->
-<%@ include file="../resources/layout/header.jsp"%>
+<%@ include file="/layout/header.jsp"%>
 
 <style>
 .navbar, .footer {
@@ -107,7 +107,7 @@ body {
 	</div>
 
 </div>
-<%@ include file="../resources/layout/footer.jsp"%>
+<%@ include file="/layout/footer.jsp"%>
 
 
 
