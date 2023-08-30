@@ -75,6 +75,9 @@
 		<mapper resource="mapper/accountbudgetMapper.xml" />
 		<mapper resource="mapper/accountgptMapper.xml" />
 
+		<mapper resource="mapper/tagboardMapper.xml" />
+		<mapper resource="mapper/tagreplyMapper.xml" />
+
 		<mapper resource="mapper/bonvoteMapper.xml" />
 		<mapper resource="mapper/bonboardMapper.xml" />
 		<mapper resource="mapper/bonreplyMapper.xml" />

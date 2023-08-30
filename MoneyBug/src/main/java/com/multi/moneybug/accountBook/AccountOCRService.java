@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUpload;
@@ -25,6 +27,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -100,7 +103,6 @@ public class AccountOCRService {
         String numericOnly = inferTextValue.replaceAll("[^0-9]", "");
         return numericOnly;
     }
-
     // 파일 업로드
     private MultipartEntityBuilder createMultipartEntityBuilder(String requestId, long timestamp, HttpServletRequest request) throws IOException {
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();

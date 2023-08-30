@@ -36,9 +36,7 @@ public class AccountBookController {
     public String getSeq(HttpServletRequest request) {
     	HttpSession session = request.getSession();
     	String socialId = (String) session.getAttribute("socialId");
-
     	String seq = accountBookService.insertAccountDetailFindSeq(socialId);
-    	System.out.println(seq);
     	return seq;
     }
 

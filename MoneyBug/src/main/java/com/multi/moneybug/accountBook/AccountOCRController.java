@@ -22,7 +22,6 @@ public class AccountOCRController {
 	 @ResponseBody
 	 public String ocr(HttpServletRequest request) throws IOException {
 	     String result = accountOCRService.processOCR(request);
-	     System.out.println(result);
 	     return result;
 	 }
 }

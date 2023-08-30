@@ -31,7 +31,7 @@
         padding: 10px;
     }
 
-  #header, #footer {
+  .navbar, .footer {
     display: none;
   }
 
