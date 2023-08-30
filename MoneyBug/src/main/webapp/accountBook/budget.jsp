@@ -124,7 +124,7 @@
 <div align="center">
 	<br> <br> <br> <br> <br> <br> <br> <br>
 	<div
-		style="background-color: rgba(255, 255, 255, 0.295); border-radius: 30px; width: 500px;">
+		style="border-radius: 30px; width: 700px;" class="alert alert-success">
 
 		<h1>월간 예산(List)</h1>
 
@@ -149,7 +149,7 @@
 				<option value="기타">기타</option>
 			</select> <input id="moneyinput1" placeholder="금액 입력란" class="moneyinput"
 				value="0">
-			<button id="addBudget">완료</button>
+			<button id="addBudget" class="btn btn-success">완료</button>
 
 		</div>
 		<br>
