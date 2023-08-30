@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ include file="../resources/layout/header.jsp"%>
-<%@ include file="../resources/layout/accountNav.jsp"%>
+<%@ include file="/layout/header.jsp"%>
+<%@ include file="/layout/accountNav.jsp"%>
 
 <style>
 body {
@@ -38,6 +38,6 @@ body {
 	</table>
 </div>
 
-<%@ include file="../resources/layout/accountAside.jsp"%>
-<%@ include file="../resources/layout/footer.jsp"%>
+<%@ include file="/layout/accountAside.jsp"%>
+<%@ include file="/layout/footer.jsp"%>
 
