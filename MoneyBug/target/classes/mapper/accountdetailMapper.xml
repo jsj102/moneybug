@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="accountDetail">
+
+	<insert id="insert" parameterType="accountDetailDTO" useGeneratedKeys="true" keyProperty="SEQ">
+		insert into account_detail values
+		(#{seq},#{accountCategory},#{accountBookId},#{price},#{description},#{accountType},#{usedAt})
+	</insert>
+	
+	<select id="one" parameterType="String" resultType="accountDetailDTO">
+		select * from account_detail where SEQ = #{seq} 
+	</select>
+
+	<select id="list" resultType="accountDetailDTO">
+		select * from account_detail where ACCOUNT_BOOK_ID = #{accountBookId} ORDER BY USED_AT DESC LIMIT 10
+	</select>
+
+	<update id="update" parameterType="accountDetailDTO">
+		update account_detail set
+		PRICE = #{price},
+		DESCRIPTION = #{description},
+		ACCOUNT_TYPE = #{accountType},
+		ACCOUNT_CATEGORY = #{accountCategory},
+		USED_AT = #{usedAt}
+		where SEQ = #{seq}
+	</update>
+
+	<delete id="delete" parameterType="String">
+		delete from account_detail where SEQ = #{seq}
+	</delete>
+	
+	<select id="listPage" parameterType="accountDetailDTO" resultType="accountDetailDTO">
+	    select * from account_detail where ACCOUNT_BOOK_ID = #{accountBookId} limit 10 offset #{offset}
+	</select>
+	
+	<select id="listSearch" parameterType="accountDetailSearchDTO" resultType="accountDetailDTO">
+		select * from (select * from account_detail where 
+		ACCOUNT_BOOK_ID = #{accountBookId} AND 
+		<choose>
+		    <when test="searchMonth &lt; 10">
+		        USED_AT LIKE CONCAT('%-0', #{searchMonth}, '-%')
+		    </when>
+		    <otherwise>
+		        USED_AT LIKE CONCAT('%-', #{searchMonth}, '-%')
+		    </otherwise>
+		</choose>
+		AND USED_AT LIKE CONCAT('%',#{searchYear},'-%')
+		AND ACCOUNT_CATEGORY LIKE CONCAT('%',#{accountCategory},'%')) As a
+		limit 10 
+		offset #{offsetNumber};
+	</select>
+	
+	
+	<select id="listMonth" resultType="accountDetailDTO">
+		select * from account_detail where ACCOUNT_BOOK_ID = #{accountBookId} AND MONTH(USED_AT) = #{currentMonth} AND YEAR(USED_AT) = #{currentYear} ORDER BY SEQ DESC
+	</select>
+	<select id="listAll" resultType="accountDetailDTO">
+		select * from account_detail where ACCOUNT_BOOK_ID = #{accountBookId} ORDER BY SEQ DESC
+	</select>
+	<select id="listMonthAllUser" resultType="accountDetailDTO">
+		select * from account_detail where MONTH(USED_AT) = #{currentMonth} AND YEAR(USED_AT) = #{currentYear} ORDER BY SEQ DESC
+	</select>
+	<select id="listMonthCountUseUser" resultType="int">
+		select COUNT(distinct ACCOUNT_BOOK_ID) from account_detail where MONTH(USED_AT) = #{currentMonth} AND YEAR(USED_AT) = #{currentYear}
+	</select>
+	
+</mapper>

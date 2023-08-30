@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="openApi">
+
+	<insert id="insert" parameterType="openApiDTO">
+		insert into open_api values (#{apiKey}, #{secretKey}, #{expireDate}, #{AccountBookId})
+	</insert>
+
+	<select id="readOne" parameterType="int" resultType="openApiDTO">
+		select * from open_api where ACCOUNT_BOOK_ID = #{accountBookId}
+	</select>
+
+	<select id="readOneKey" parameterType="openApiDTO" resultType="openApiDTO">
+		select ACCOUNT_BOOK_ID from open_api where API_KEY = #{apiKey} and SECRET_KEY = #{secretKey}
+	</select>
+
+	<select id="list" parameterType="Date" resultType="openAPiDTO">
+		select EXPIRE_DATE FROM open_api where EXPIRE_DATE = #{expireDate};
+	</select>
+
+	<delete id="delete" parameterType="Date">
+		delete from open_api where EXPIRE_DATE = #{expireDate}
+	</delete>
+
+	<delete id="deleteId" parameterType="int">
+		delete from open_api where ACCOUNT_BOOK_ID= #{accountBookId}
+	</delete>
+
+	<insert id="insertToken" parameterType="OpenApiTokenDTO" useGeneratedKeys="true" keyProperty="SEQ">
+		insert into open_api_token values (#{seq},#{refillCount},#{refillTime},#{givenToken},#{secretKey})
+	</insert>
+
+	<select id="readToken" parameterType="String" resultType="OpenApiTokenDTO">
+		select * from open_api_token where SECRET_KEY = #{secretKey}
+	</select>
+
+	<update id="updateToken" parameterType="String">
+		UPDATE open_api_token
+		SET SECRET_KEY = #{newSecretKey}
+		WHERE SECRET_KEY = #{oldSecretKey};
+	</update>
+</mapper>

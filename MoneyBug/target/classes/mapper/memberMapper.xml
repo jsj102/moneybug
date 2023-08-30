@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+
+	<insert id="insert" parameterType="MemberDTO">
+		insert into user_member (SOCIAL_ID, EMAIL, USER_NAME)
+		values
+		(#{socialId}, #{email}, #{userName})
+	</insert>
+
+	<select id="find" parameterType="MemberDTO" resultType="int">
+		select count(*) from user_member
+		where SOCIAL_ID = #{socialId}
+	</select>
+
+	<update id="update" parameterType="MemberDTO">
+		UPDATE user_member
+		SET USER_NICKNAME = #{userNickname}
+		WHERE SOCIAL_ID = #{socialId}
+
+	</update>
+
+	<select id="findall" parameterType="String"
+		resultType="MemberDTO">
+		select *
+		from user_member
+		where SOCIAL_ID = #{socialId}
+	</select>
+	
+	<select id="findNick" parameterType="String" resultType="int">
+		select count(*) from user_member
+		where USER_NICKNAME = #{userNickname}
+	</select>
+	
+	<select id="getUserIdByUserNickname" parameterType="String" resultType="String">
+        SELECT user_id
+        FROM user_member
+        WHERE user_nickname = #{userNickname}
+    </select>
+
+</mapper>
