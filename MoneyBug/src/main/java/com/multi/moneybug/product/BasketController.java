@@ -92,6 +92,23 @@ public class BasketController {
 
         return "success";
     }
+    
+    @RequestMapping("/deleteProduct")
+    @ResponseBody
+    public String deleteProduct(
+        @RequestParam String userNickname,
+        @RequestParam int productId,
+        @RequestParam int seq
+    ) {
+        // userNickname로 userId 조회
+        String userId = memberService.getUserIdByUserNickname(userNickname);
+        
+        // 삭제 로직 실행
+        basketService.deleteProductFromBasket(userId, productId, seq);
+
+        return "success";
+    }
+
 
 }
 

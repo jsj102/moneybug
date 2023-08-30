@@ -50,10 +50,16 @@ public class BasketService {
 	        Map<String, Object> params = new HashMap<>();
 	        params.put("userId", userId);
 	        params.put("productId", productId);
-	        params.put("seq", seq);
+	        params.put("SEQ", seq);
 	        params.put("newCount", newCount);
 	        
 	        basketDAO.updateProductCount(params);
 	        
 	    }
+
+	 public void deleteProductFromBasket(String userId, int productId, int seq) {
+		    // userId, productId, seq를 이용하여 해당 상품을 장바구니에서 삭제하는 DAO 메서드 호출
+		    basketDAO.deleteProductFromBasket(userId, productId, seq);
+		}
+
 }

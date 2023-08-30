@@ -81,61 +81,67 @@ $(document).ready(function() {
         $('#selectedId_').val(selectedProductIds);
         $('#seletedSeq_').val(selectedProductSeq);
     }
-
-
-    
-    $("#increase").click(function() {
-        var currentQuantity = parseInt($(".quantity").val());
-        $(".quantity").val(currentQuantity + 1);
-    });
-    
-    $("#decrease").click(function() {
-        var currentQuantity = parseInt($(".quantity").val());
-        if (currentQuantity > 1) {
-            $(".quantity").val(currentQuantity - 1);
-        }
-    });
-
-    $("#orderForm").submit(function(event) {
-        event.preventDefault(); // 기본 form 제출 동작 막기
-        
-        var selectedProductIds = [];
-        var selectedProductSeq = [];
-        var newCounts = [];
-
-        $('input[name="selectedProducts"]:checked').each(function() {
-            var valueParts = $(this).val().split(',');
-            selectedProductIds.push(parseInt(valueParts[0]));
-            selectedProductSeq.push(parseInt(valueParts[1]));
-            newCounts.push(parseInt($('#productCount_' + valueParts[0]).val()));
-        });
-
-        var requestData = {
-            userNickname: "사용자의 닉네임", // 사용자의 닉네임 설정
-            productId: selectedProductIds,
-            seq: selectedProductSeq,
-            newCount: newCounts
-        };
-
-        $.ajax({
-            type: 'POST',
-            url: '/updateQuantity',
-            data: requestData,
-            success: function(response) {
-                console.log('수량 업데이트 성공:', response);
-                // 성공 후 처리할 동작 추가
-            },
-            error: function(error) {
-                console.error('수량 업데이트 실패:', error);
-                // 실패 후 처리할 동작 추가
-            }
-        });
-    });
-
-
 });
 
 
+$("#orderForm").submit(function(event) {
+    event.preventDefault(); // 기본 form 제출 동작 막기
+    
+    var selectedProductIds = [];
+    var selectedProductSeq = [];
+    var newCounts = [];
+
+    $('input[name="selectedProducts"]:checked').each(function() {
+        var valueParts = $(this).val().split(',');
+        selectedProductIds.push(parseInt(valueParts[0]));
+        selectedProductSeq.push(parseInt(valueParts[1]));
+        newCounts.push(parseInt($('#productCount_' + valueParts[0]).val()));
+    });
+
+    var requestData = {
+        userNickname: "사용자의 닉네임", // 사용자의 닉네임 설정
+        productId: selectedProductIds,
+        seq: selectedProductSeq,
+        newCount: newCounts
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/updateQuantity',
+        data: requestData,
+        success: function(response) {
+            console.log('수량 업데이트 성공:', response);
+            // 성공 후 처리할 동작 추가
+        },
+        error: function(error) {
+            console.error('수량 업데이트 실패:', error);
+            // 실패 후 처리할 동작 추가
+        }
+    });
+});
+
+function deleteProduct(userNickname, productId, seq) {
+    if (confirm("정말로 상품을 삭제하시겠습니까?")) {
+        $.ajax({
+            type: 'POST',
+            url: '${pageContext.request.contextPath}/deleteProduct',  // 삭제 요청을 처리할 백엔드 엔드포인트 URL
+            data: {
+                userNickname: userNickname,
+                productId: productId,
+                seq: seq
+                
+            },
+            success: function(response) {
+                alert("상품 삭제 성공");
+                window.location.href = '${pageContext.request.contextPath}/product/basketlist';
+            },
+            error: function(error) {
+                alert("상품 삭제 실패" + error);
+                window.location.href = '${pageContext.request.contextPath}/product/basketlist';
+            }
+        });
+    }
+}
 </script>
 
 
@@ -209,7 +215,7 @@ $(document).ready(function() {
 												<td><input type="checkbox" name="selectedProducts"
 													value="${basket.productId}, ${basket.seq}" /></td>
 												<td><button class="delete-btn"
-														onclick="deleteProduct(${basket.productId}, ${basket.seq})">삭제</button></td>
+														onclick="deleteProduct('${userNickname}', ${basket.productId}, ${basket.seq})">삭제</button></td>
 											</tr>
 										</c:if>
 									</c:forEach>
@@ -220,14 +226,7 @@ $(document).ready(function() {
 							총 주문 금액: <span id="totalAmount">${totalAmount}원</span>
 						</div>
 						<div class="d-flex justify-content-center mt-3">
-							<form id="orderForm" action="/updateQuantity" method="post">
-								<input type="hidden" id="totalAmount2" name="totalAmount"
-									value="${totalAmount}"> <input type="hidden"
-									id="selectedId_" name="selectedId" value="${productId}" /> <input
-									type="hidden" id="seletedSeq_" name="seletedSeq"
-									value="${basket.seq}" />
-								<button type="submit" class="btn btn-lg btn-secondary">주문하기</button>
-							</form>
+							
 						</div>
 					</c:otherwise>
 				</c:choose>

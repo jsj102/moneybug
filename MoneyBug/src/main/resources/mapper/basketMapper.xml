@@ -5,6 +5,7 @@
 	<resultMap id="basketResultMap"
 		type="com.multi.moneybug.product.BasketDTO">
 		<id property="seq" column="seq" />
+		<result property="seq" column="seq" />
 		<result property="userId" column="userId" />
 		<result property="productId" column="productId" />
 		<result property="productCount" column="productCount" />
@@ -40,24 +41,23 @@
 		#{productId}, #{productCount})
 	</insert>
 
-	<select id="order_List" parameterType="java.util.List"
-		resultMap="basketResultMap">
-		SELECT *
-		FROM basket
-		WHERE seq IN
-		<foreach collection="list" item="seq" open="(" separator=","
-			close=")">
-			#{seq}
-		</foreach>
-	</select>
+    <select id="order_List" parameterType="java.util.List" resultMap="basketResultMap">
+    SELECT *
+    FROM basket
+    WHERE seq IN
+    <foreach collection="list" item="seq" open="(" separator="," close=")">
+        #{seq}
+    </foreach>
+</select>
 	
-	<update id="updateProductCount" parameterType="java.util.Map">
-        UPDATE basket
-        SET product_count = #{newCount}
-        WHERE user_id = #{userId}
-        AND product_id = #{productId}
-        AND seq = #{seq}
-    </update>
+<delete id="deleteProductFromBasket" parameterType="java.util.Map">
+    DELETE FROM basket
+    WHERE user_id = #{userId}
+    AND product_id = #{productId}
+    AND SEQ = #{SEQ}
+</delete>
 
+		
+	
 
 </mapper>
