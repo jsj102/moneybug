@@ -126,7 +126,8 @@ p {
 				data: {
 				    'socialId': responsePayload.sub,
 				    'email': responsePayload.email,
-				    'userName': responsePayload.name
+				    'userName': responsePayload.name,
+				    'userNickname' : "구글" + responsePayload.name
 					},
 					success : function(member) {	
 						if(member === 'old') {
@@ -134,7 +135,7 @@ p {
 							sendPostRequest('${pageContext.request.contextPath}/main.do');
 						} else if (member == 'new') {
 							console.log('new');
-							sendPostRequest('${pageContext.request.contextPath}/member/myPage.do');
+							sendPostRequest('${pageContext.request.contextPath}/member/signUp.do');
 						} else {
 							console.log('ajax return error');
 						}				

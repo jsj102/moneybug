@@ -37,5 +37,13 @@ import org.springframework.stereotype.Repository;
 			 return my.selectOne("member.getUserIdByUserNickname", userNickname);
 		}
 
+		public MemberDTO selectByNickname(String userNickname) {
+			return my.selectOne("member.selectByNickname", userNickname);
+		}
+
+		public String getEmailByUserNickname(String userNickname) {
+			return my.selectOne("member.getEmailByUserNickname", userNickname);
+		}
+
 	
 }

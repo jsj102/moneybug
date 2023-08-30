@@ -37,4 +37,22 @@ public class ProductService {
 		return productDAO.count();
 	}
 
+	public List<OrderListDTO> orderlist(OrderListDTO orderListDTO) {
+		return productDAO.orderlist(orderListDTO);
+	}
+
+	public boolean updateOrderStatus(String orderNumber, String newStatus) {
+	    int rowsAffected = productDAO.updateOrderStatus(orderNumber, newStatus);
+	    return rowsAffected > 0; // 업데이트된 행이 있을 경우 true 반환
+	}
+
+	public List<OrderListDTO> myOrderList(String userId) {
+		return productDAO.myOrderList(userId);
+	}
+
+	public void payOrder(OrderListDTO orderListDTO) {
+		productDAO.payOrder(orderListDTO);
+		
+	}
+
 }

@@ -69,21 +69,39 @@ public class MemberController {
 	}
 
 	// 마이페이지로 이동 (신규, 기존회원 모두)
-	@PostMapping("/member/myPage.do")
-	public String myPage(MemberDTO memberDTO, Model model, HttpSession session) {
-		String socialId = (String) session.getAttribute("socialId");
-		memberDTO.setSocialId(socialId);
+		@GetMapping("/member/myPage.do")
+		public String myPage(MemberDTO memberDTO, Model model, HttpSession session) {
+			String socialId = (String) session.getAttribute("socialId");
+			memberDTO.setSocialId(socialId);
 
-		List<MemberDTO> selectedMembers = memberService.select(memberDTO); // select 메서드 실행 후 반환된 리스트
-
-		if (!selectedMembers.isEmpty()) {
-			MemberDTO selectedMember = selectedMembers.get(0); // 첫 번째 멤버 선택
-			model.addAttribute("email", selectedMember.getEmail());
-			model.addAttribute("userName", selectedMember.getUserName());
-			model.addAttribute("socialId", selectedMember.getSocialId());
+			List<MemberDTO> selectedMembers = memberService.select(memberDTO); // select 메서드 실행 후 반환된 리스트
+			if (!selectedMembers.isEmpty()) {
+				MemberDTO selectedMember = selectedMembers.get(0); // 첫 번째 멤버 선택
+				model.addAttribute("email", selectedMember.getEmail());
+				model.addAttribute("userName", selectedMember.getUserName());
+				model.addAttribute("socialId", selectedMember.getSocialId());
+				model.addAttribute("point", selectedMember.getPoint());
+			}
+			return "member/myPage";
 		}
-		return "member/myPage";
-	}
+		
+		// 마이페이지로 이동 (신규, 기존회원 모두)
+		@PostMapping("/member/signUp.do")
+		public String signUp(MemberDTO memberDTO, Model model, HttpSession session) {
+			String socialId = (String) session.getAttribute("socialId");
+			memberDTO.setSocialId(socialId);
+
+			List<MemberDTO> selectedMembers = memberService.select(memberDTO); // select 메서드 실행 후 반환된 리스트
+			if (!selectedMembers.isEmpty()) {
+				MemberDTO selectedMember = selectedMembers.get(0); // 첫 번째 멤버 선택
+				model.addAttribute("email", selectedMember.getEmail());
+				model.addAttribute("userName", selectedMember.getUserName());
+				model.addAttribute("socialId", selectedMember.getSocialId());
+				model.addAttribute("point", selectedMember.getPoint());
+			}
+			return "member/signUp";
+		}
+
 
 
 
@@ -128,4 +146,11 @@ public class MemberController {
             return 0; // 로그인되지 않은 상태면 0 반환
         }
     }
+	
+	@PostMapping("accountBook/getEmail")
+	@ResponseBody
+	public String getEmail(HttpSession session) {
+		String userNickname = (String) session.getAttribute("userNickname");
+		return memberService.getEmailByUserNickname(userNickname);
+	}
 }

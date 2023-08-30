@@ -1,9 +1,7 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ include file="../../../resources/layout/header.jsp" %>
-
+<%@ include file="layout/header.jsp" %>
 <style>
 .container-marketing {
 	margin-top: 10px;
@@ -176,9 +174,6 @@
 			</div>
 		</div>
 
-
-
-
 		<hr class="featurette-divider">
 
 		<div class="row featurette">
@@ -204,4 +199,4 @@
 	</div>
 		
 <!-- footer.jsp를 포함시킴 -->
-<%@ include file="resources/layout/footer.jsp" %>
+<%@ include file="layout/footer.jsp" %>

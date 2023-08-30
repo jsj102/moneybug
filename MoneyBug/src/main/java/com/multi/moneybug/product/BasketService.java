@@ -38,7 +38,7 @@ public class BasketService {
         basketDAO.updateProductInBasket(basket);
 
     }
-
+    
 	public List<BasketDTO> getOrderlists(List<Integer> selectedSeqs) {
 		List<BasketDTO> basketList = basketDAO.getOrderlists(selectedSeqs);
         return basketList;

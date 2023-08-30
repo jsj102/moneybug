@@ -2,6 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<<<<<<< HEAD
+<jsp:include page="/layout/header.jsp"/>
+
+=======
 <%@ include file="../../../resources/layout/header.jsp" %>
 
 <%-- <!DOCTYPE html>
@@ -15,6 +19,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
 <link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet"> --%>
 
+>>>>>>> 41230e5978ad9b92e14247dec223953576232777
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
 body {
@@ -115,7 +120,13 @@ body {
     function DirectBasket() {
         // 세션에 userNickname 정보가 있는지 확인
         var userNickname = "<%= session.getAttribute("userNickname") %>";
+<<<<<<< HEAD
+        
         if (userNickname != "null") {
+        	
+=======
+        if (userNickname != "null") {
+>>>>>>> 41230e5978ad9b92e14247dec223953576232777
             location.href = "basketlist"; // 장바구니 페이지로 이동
         } else if (userNickname = "null") {
             alert("로그인이 필요합니다."); // 로그인 안내 경고창 띄우기
@@ -225,7 +236,7 @@ body {
                     </div>
                 </td>
                 <c:if test="${status.index % 3 == 2 || status.last}">
-                    </tr>
+             		<tr>
                 </c:if>
             </c:forEach>
         </table>
@@ -250,6 +261,10 @@ body {
   </ul>
 </div>
 
+<<<<<<< HEAD
+<jsp:include page="/layout/footer.jsp"/>
+=======
 <%@ include file="../../../resources/layout/footer.jsp" %>
 <!-- </body>
 </html> -->
+>>>>>>> 41230e5978ad9b92e14247dec223953576232777

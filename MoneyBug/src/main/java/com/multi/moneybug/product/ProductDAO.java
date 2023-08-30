@@ -1,7 +1,8 @@
 package com.multi.moneybug.product;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,26 @@ public class ProductDAO {
 	public int count() {
 		return my.selectOne("product.count");
 	}
+
+	public List<OrderListDTO> orderlist(OrderListDTO orderListDTO) {
+		return my.selectList("product.orderList");
+	}
+
+	public int updateOrderStatus(String orderNumber, String newStatus) {
+	    Map<String, String> paramMap = new HashMap<String, String>(); // 타입 인자 명시
+	    paramMap.put("orderNumber", orderNumber);
+	    paramMap.put("newStatus", newStatus);
+	    
+	    return my.update("product.updateOrder", paramMap);
+	}
+
+	public List<OrderListDTO> myOrderList(String userId) {
+		return my.selectList("product.myOrderList",userId);
+	}
+
+	public void payOrder(OrderListDTO orderListDTO) {
+		my.insert("product.orderInsert", orderListDTO);
+	}
+
 
 }
