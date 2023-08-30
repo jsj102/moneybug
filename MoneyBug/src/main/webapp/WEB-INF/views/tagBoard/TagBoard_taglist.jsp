@@ -1,22 +1,76 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ include file="../../../resources/layout/header.jsp"%>
-<%@ include file="../../../resources/layout/TagBoardNav.jsp"%>
-	<h3>커뮤니티</h3>
+<%@ include file="/layout/header.jsp"%>
+<%@ include file="/layout/TagBoardNav.jsp"%>
+
+<style>
+#searchInput {
+    border: none; /* 기본 테두리 제거 */
+    border-bottom: 2px solid #F3969A; /* 밑줄 스타일 적용 */
+    outline: none; /* 포커스시 테두리 제거 */
+    padding: 5px; /* 내부 여백 추가 */
+    width: 600px;
+    align: center;
+}
+
+#searchButton {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* 입력 폼과 버튼 간격 조절 */
+br + #searchButton {
+    margin-top: 10px;
+}
+
+.searchform {
+	display: flex; /* 텍스트를 수직 및 수평으로 가운데 정렬하기 위해 flexbox 사용 */
+    justify-content: center; /* 수직 가운데 정렬 */
+    align-items: center; /* 수평 가운데 정렬 */
+}
+
+#searchButton img {
+    width: 50px; /* 원하는 너비로 조절 */
+}
+
+.pagination {
+  margin: 50px 0 70px 0;
+  justify-content: center;
+  display: flex;
+}
+
+#newinsert{
+ margin :0 0 20px 1180px;
+ padding: 5px 15px;
+	cursor: pointer;
+}
+
+
+a {
+	text-decoration: none;
+}
+</style>
+
+
+
 <div class="container">
 
 	<br>
-	<input type="text" id="searchInput" placeholder="게시글 검색">
-<button id="searchButton">검색</button>
+	<div class="searchform"><input type="text" id="searchInput" placeholder="검색어를 입력하세요!">
+	<button id="searchButton" ><img src="../resources/img/tagboard_search.png"></button>
+	</div>
+	<button id='newinsert' class="btn btn-info">글 쓰기</button>
 	<br>
 	
 	<table class="table table-sm mx-auto">
 		<thead>
 			<tr>
-				<th>No.</th>
-				<th>제목</th>
-				<th>작성자</th>
+				<th style="width: 80px;">No.</th>
+				<th style="width: 780px;">제목</th>
+				<th style="width: 150px;">작성자</th>
 				<th>조회수</th>
 				<th>작성일</th>
 			</tr>
@@ -26,7 +80,7 @@
 				<c:if test="${tagBoardDTO.boardType eq param.boardType}">
 					<tr>
 						<td>${tagBoardDTO.rowNo}</td>
-						<td>[${tagBoardDTO.boardType}] <a
+						<td>[${tagBoardDTO.boardType}]&nbsp <a
 							href="TagBoard_one?seq=${tagBoardDTO.seq}">${tagBoardDTO.title}</a></td>
 						<td>${tagBoardDTO.writerId}</td>
 						<td>${tagBoardDTO.views}</td>
@@ -38,17 +92,25 @@
 		</tbody>
 	</table>
 
-	<button id='newinsert'>글 쓰기</button>
+<c:set var="currentPage" value="${param.page}" />
+<div>
+   <ul class="pagination">
+    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+      <a class="page-link" href="TagBoard_taglist?boardType=${param.boardType}&page=${currentPage - 1}" ${currentPage == 1 ? 'aria-disabled="true"' : ''}>«</a>
+    </li>
+	<c:forEach begin="1" end="${pages}" varStatus="status">
+      <li class="page-item">
+        <a class="page-link" href="TagBoard_taglist?boardType=${param.boardType}&page=${status.index}">${status.index}</a>
+      </li>
+    </c:forEach>
+	<li class="page-item ${currentPage == pages ? 'disabled' : ''}">
+      <a class="page-link" href="TagBoard_taglist?boardType=${param.boardType}&page=${currentPage + 1}" ${currentPage == pages ? 'aria-disabled="true"' : ''}>»</a>
+    </li>
+  </ul>
+</div>
 
-	<%
-		int pages = (int) request.getAttribute("pages");
-	for (int p = 1; p <= pages; p++) {
-	%>
-	<a href="TagBoard_taglist?boardType=${param.boardType}&page=<%=p%>"> <%=p%>
-	</a>
-	<%
-		}
-	%>
+
+</div>
 
 	<script type="text/javascript">
 		$('#newinsert').click(function() {
@@ -78,6 +140,11 @@
 		    var searchKeyword = $('#searchInput').val();
 		    var boardType = "${param.boardType}";
 		    
+		    if (!searchKeyword) {
+		        alert("검색어를 입력해주세요.");
+		        return false; // 댓글 내용이 없으므로 함수 종료
+		    }
+		    
 		    $.ajax({
 		        url: "TagBoard_searchlist",
 		        method: "GET",
@@ -97,4 +164,4 @@
 
 	</script>
 
-	<%@ include file="../../../resources/layout/footer.jsp"%>
+	<%@ include file="/layout/footer.jsp"%>

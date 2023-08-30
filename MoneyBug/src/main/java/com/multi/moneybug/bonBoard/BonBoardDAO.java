@@ -12,20 +12,24 @@ public class BonBoardDAO {
 	SqlSessionTemplate my;
 	
 	
-	public void insert(BonBoardDTO BonBoardDTO) {
-		my.insert("bonboard.insert", BonBoardDTO);
+	public void insert(BonBoardDTO bonBoardDTO) {
+		my.insert("bonboard.insert", bonBoardDTO);
 	}
 	
-	public List<BonBoardDTO> bonBoardList(BonBoardDTO bonBoardDTO){
-		return my.selectList("bonboard.list", bonBoardDTO);
+	public List<BonBoardDTO> list(BonBoardPageDTO bonBoardPageDTO){
+		return my.selectList("bonboard.list", bonBoardPageDTO);
 	}
 	
 	public BonBoardDTO one(int seq) {
 		return my.selectOne("bonboard.one", seq);
 	}
 	
-	public void update(BonBoardDTO bonBoardDTO) {
-		my.update("bonboard.update", bonBoardDTO);
+	public int count() {
+		return my.selectOne("bonboard.count");
+	} 
+	
+	public int update(BonBoardDTO bonBoardDTO) {
+		return my.update("bonboard.update", bonBoardDTO);
 	}
 	
 	public int delete(int seq) {

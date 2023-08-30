@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -71,8 +72,8 @@ public class TagBoardController {
 	}
 	
 	@RequestMapping("tagBoard/TagBoard_taglist")
-	public void taglist(TagBoardPageDTO tagBoardPageDTO, Model model) {
-		int count = tagBoardService.tagcount();
+	public void taglist(String boardType, TagBoardPageDTO tagBoardPageDTO, Model model) {
+		int count = tagBoardService.tagcount(boardType);
 		int pages = 0;
 		if(count % 10 == 0) {
 			pages = count / 10;
@@ -89,7 +90,7 @@ public class TagBoardController {
 	
 	@RequestMapping("tagBoard/TagBoard_searchlist")
 	public void searchlist(TagBoardPageDTO tagBoardPageDTO, Model model) {
-		int count = tagBoardService.searchcount();
+		int count = tagBoardService.searchcount(tagBoardPageDTO);
 		int pages = 0;
 		if(count % 10 == 0) {
 			pages = count / 10;
@@ -120,19 +121,9 @@ public class TagBoardController {
 
 	
 	@RequestMapping("tagBoard/TagBoard_update")
-	public String update(TagBoardDTO tagBoardDTO, HttpServletRequest request, MultipartFile file, Model model)
+	public String update(TagBoardDTO tagBoardDTO, Model model)
 	        throws Exception {
 	    
-
-	    if (!file.isEmpty()) {
-	        String savedName = file.getOriginalFilename();
-	        String uploadPath = request.getSession().getServletContext().getRealPath("resources/upload");
-	        File target = new File(uploadPath + "/" + savedName);
-	        file.transferTo(target);
-
-	        tagBoardDTO.setImage(savedName);
-	    }
-
 	    model.addAttribute("tagBoardDTO", tagBoardDTO);
 	    tagBoardService.update(tagBoardDTO);
 	    

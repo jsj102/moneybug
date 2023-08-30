@@ -139,7 +139,6 @@ public class MemberController {
     public int checkLoginStatus(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String userNickname = (String) session.getAttribute("userNickname");
-        System.out.println(userNickname);
         
         if (userNickname != null) {
             return 1; // 로그인 상태면 1 반환

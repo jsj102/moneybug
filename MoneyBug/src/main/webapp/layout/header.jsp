@@ -40,7 +40,7 @@ $(document).ready(function() {
 
 	<nav class="navbar navbar-expand-xl navbar-light" style="background-color: #F9F5E7;">
 		<div class="container-fluid">
-		<a class="navbar-brand" href="/moneybug/main.jsp">
+		<a class="navbar-brand" href="#">
 			<img src="/moneybug/resources/img/nav_icon.png" width="50" height="50" class="d-inline-block align-center" >
 			<span>돈벌레친구들</span>
 		</a>
@@ -55,7 +55,7 @@ $(document).ready(function() {
             <li class="nav-item active"><a class="nav-link" href="/moneybug/tagBoard/TagBoard_list?page=1">커뮤니티</a></li>
             <li class="nav-item active"><a class="nav-link" href="/moneybug/accountBook/accountbookFrom.jsp">가계부</a></li>
             <li class="nav-item active"><a class="nav-link" href="/moneybug/bonBoard/BonBoard_list?page=1">살까말까</a></li>
-            <li class="nav-item active"><a class="nav-link" href="/moneybug/product/shoplist?page=1">상품Shop</a></li>
+            <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/product/shoplist?page=1">상품Shop</a></li>
             <!-- <li class="nav-item active"><a class="nav-link" href="/Moneybug/event/list.brd">이벤트</a></li> -->
             <!-- <li class="nav-item active"><a class="nav-link" href="/Moneybug/CS/list.brd">고객센터</a></li> -->
 
@@ -65,14 +65,18 @@ $(document).ready(function() {
 					
 					<li class="nav-item dropdown"><a
 						class="nav-link dropdown-toggle"
-						href="#" role="button"
+						href="/moneybug/member/myPage.do" role="button"
 						data-toggle="dropdown" aria-expanded="false"> ${sessionScope.userNickname}님 </a>
 						<ul class="dropdown-menu">
-									<li><a class="dropdown-item" href="/moneybug/logout.do">로그아웃</a></li>
-									<li><a class="dropdown-item" href="/moneybug/member/myPage.do">나의정보수정</a></li>
-									<li><a class="dropdown-item" href="/moneybug/member/managerlogin.jsp">관리자 로그인</a></li>
-									<li><a class="dropdown-item" href="/moneybug/api/showButton">API키 관리</a></li>
-								</ul>
+								<li>
+									<form action="member/myPage.do" method="POST">
+										<button type="submit" class="dropdown-item mypage">나의정보수정</button>
+									</form>
+								</li>
+								<li><a class="dropdown-item" href="/moneybug/logout.do">로그아웃</a></li>
+							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/member/managerlogin.jsp">관리자 로그인</a></li>
+							<li><a class="dropdown-item" href="/moneybug/api/showButton">API키 관리</a></li>
+						</ul>
 					</li>
 				</c:when>
 				
@@ -90,11 +94,6 @@ $(document).ready(function() {
 			</c:choose>
 
 			</ul>
-<!-- 			<form class="d-flex align-items-center ms-auto">
-				<input class="form-control me-sm-2" type="search"
-					placeholder="Search">
-				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-			</form> -->
 		</div>
 		</div>
 </nav>

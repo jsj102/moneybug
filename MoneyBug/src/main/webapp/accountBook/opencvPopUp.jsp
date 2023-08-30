@@ -31,7 +31,7 @@
         padding: 10px;
     }
 
-  #header, #footer {
+  .navbar, .footer {
     display: none;
   }
 
@@ -134,4 +134,3 @@ function checkFileSelection() {
 3. processButton 수동 버튼
  -->
 <script src="/moneybug/resources/js/account/opencvPopUp.js"></script>
-

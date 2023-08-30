@@ -20,8 +20,8 @@ public class BonReplyDAO {
 	
 	
 	//살말 댓글 리스트
-	public List<BonReplyDTO> bonReplyList(BonReplyDTO bonReplyDTO){
-		return my.selectList("bonreply.list", bonReplyDTO);
+	public List<BonReplyDTO> bonReplyList(int boardSeq){
+		return my.selectList("bonreply.list", boardSeq);
 	}
 	
 	
@@ -35,4 +35,7 @@ public class BonReplyDAO {
 		return my.delete("bonreply.delete", seq);
 	}
 
+	public int count(int boardSeq) {
+		return my.selectOne("bonreply.count", boardSeq);
+	}
 }

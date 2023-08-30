@@ -2,9 +2,23 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<<<<<<< HEAD
 <jsp:include page="/layout/header.jsp"/>
 
 
+=======
+<%@ include file="../../../resources/layout/header.jsp" %>	
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet"> -->
+>>>>>>> 41230e5978ad9b92e14247dec223953576232777
 <style>
 body {
 	background: #F9F5E7;
@@ -233,7 +247,11 @@ body {
 
 				<div class="mb-3">
 					<button class="btn btn-secondary" id="postSearch"
+<<<<<<< HEAD
 						onclick="execDaumPostcode(); return false;">우편번호 찾기</button>
+=======
+						onclick="execDaumPostcode()">우편번호 찾기</button>
+>>>>>>> 41230e5978ad9b92e14247dec223953576232777
 					<input type="text" class="form-control" id="zip-code"
 						placeholder="우편번호">
 				</div>
@@ -255,4 +273,10 @@ body {
 	</div>
 
 
+<<<<<<< HEAD
 <jsp:include page="/layout/footer.jsp"/>
+=======
+<%@ include file="../../../resources/layout/footer.jsp" %>
+<!-- </body>
+</html> -->
+>>>>>>> 41230e5978ad9b92e14247dec223953576232777

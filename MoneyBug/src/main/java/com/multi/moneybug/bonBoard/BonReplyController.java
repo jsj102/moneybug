@@ -3,29 +3,26 @@ package com.multi.moneybug.bonBoard;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+@Controller
 public class BonReplyController {
 	@Autowired
 	BonReplyService bonReplyService;
 	
 	
-	@RequestMapping("BonReply_insert")
+	@RequestMapping("bonBoard/BonReply_insert")
 	public String insert(BonReplyDTO bonReplyDTO) {
 		bonReplyService.insert(bonReplyDTO);
-		return "bonBoard/BonBoard_insert";
+		return "redirect:/bonBoard/BonBoard_one?seq="+ bonReplyDTO.getBoardSeq();
 	}
 	
-	@RequestMapping("BonReply_list")   //<에대한 요청을 처리하는 메서드 
-	public String list(BonReplyDTO bonReplyDTO, Model model) {
-		List<BonReplyDTO> list = bonReplyService.list(bonReplyDTO);
-		model.addAttribute("list",list);
-		return "bonReply/BonReply_list";
-	}
 	
-	@RequestMapping("BongReply_update")
+	
+	@RequestMapping("bonBoard/BonReply_update")
 	public String update(int seq, String content, Model model) {
 		
 		BonReplyDTO bonReplyDTO = new BonReplyDTO();
@@ -34,20 +31,31 @@ public class BonReplyController {
 		bonReplyService.update(bonReplyDTO);
 		
 		
-		//"bonReplyDTO"라는 이름으로 갖고온 댓글 정보를 Model에 add함
+		//"bonReplyDTO"�씪�뒗 �씠由꾩쑝濡� 媛뽮퀬�삩 �뙎湲� �젙蹂대�� Model�뿉 add�븿
 		model.addAttribute("bonReplyDTO", bonReplyDTO);
 		
 		
-		//리턴값 = 이동될 뷰 페이지 경로 
-		return "bonReply/BonReply_update"; 
+		//由ы꽩媛� = �씠�룞�맆 酉� �럹�씠吏� 寃쎈줈 
+		return "/bonBoard/BonReply_update"; 
 	}
 	
 	
-	@RequestMapping("BonReply_delete")
-	@ResponseBody
+	
+	@RequestMapping("/bonBoard/BonReply_delete")
+
 	public int delete(int seq) {
 		int result = bonReplyService.delete(seq);
-		return result;   //리턴값:  삭제 성공-1   삭제실패 -0 (int타입 )  <-이에 대한 처리는 뷰 페이지에서 
+		return result;   //由ы꽩媛�:  �궘�젣 �꽦怨�-1   �궘�젣�떎�뙣 -0 (int���엯 )  <-�씠�뿉 ���븳 泥섎━�뒗 酉� �럹�씠吏��뿉�꽌 
 	}
+	
+	@RequestMapping("/bonBoard/BonReply_count")
+	public int count(int boardSeq) {
+		int count = bonReplyService.count(boardSeq);
+		return count;
+	}
+	
+	
+	
+	
 
 }

@@ -22,4 +22,7 @@
 		select * from account_budget
 		where ACCOUNT_BOOK_ID = #{accountBookId}
 	</select>
+	<insert id="insertDate" parameterType="accountBudgetDTO" useGeneratedKeys="true" keyProperty="SEQ">
+		insert into account_budget values (#{seq},#{accountBookId},#{fixedCategory},#{price},#{usedAt})
+	</insert>
 </mapper>

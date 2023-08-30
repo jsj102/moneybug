@@ -11,10 +11,10 @@
 		insert into tag_reply (SEQ,
 		BOARD_SEQ, CONTENT, WRITER_ID, CREATE_AT,
 		ORIGIN_SEQ, REPLY_ORDER,
-		REPLY_LEVEL, GROUP_SEQ)
+		REPLY_LEVEL, GROUP_SEQ, ORIGIN_WRITER)
 		values (null,
 		#{boardSeq}, #{content}, #{writerId}, now(),
-		null, 0, 0, #{groupSeq})
+		null, 0, 0, #{groupSeq}, null)
 	</insert>
 
 	<insert id="reinsert" parameterType="tagreplyDTO"
@@ -25,11 +25,11 @@
 		</selectKey>
 		insert into tag_reply (SEQ,
 		BOARD_SEQ, CONTENT, WRITER_ID, CREATE_AT, ORIGIN_SEQ, REPLY_ORDER,
-		REPLY_LEVEL, GROUP_SEQ)
+		REPLY_LEVEL, GROUP_SEQ, ORIGIN_WRITER)
 		SELECT
 		null, #{boardSeq}, #{content}, #{writerId}, now(),
 		#{originSeq},
-		COALESCE(MAX(REPLY_ORDER), 0) + 1, 1, #{groupSeq}
+		COALESCE(MAX(REPLY_ORDER), 0) + 1, 1, #{groupSeq}, #{originWriter}
 		FROM tag_reply WHERE
 		ORIGIN_SEQ = #{originSeq}
 	</insert>
@@ -54,6 +54,15 @@
 		update tag_reply set CONTENT =
 		#{content} WHERE SEQ = #{seq}
 	</update>
+	
+	<update id="delupdate" parameterType="tagreplyDTO">
+    UPDATE tag_reply
+    SET CONTENT = #{content},
+        WRITER_ID = null,
+        CREATE_AT = null
+    WHERE SEQ = #{seq}
+</update>
+
 
 	<delete id="delete">
 		delete from tag_reply WHERE SEQ = #{seq}

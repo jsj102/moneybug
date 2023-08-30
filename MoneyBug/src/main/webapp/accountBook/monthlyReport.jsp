@@ -2,8 +2,51 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <script></script>
-<jsp:include page="/layout/header.jsp"/>
-<jsp:include page="/layout/accountNav.jsp"/>
+<%@ include file="/layout/header.jsp"%>
+<%@ include file="/layout/accountNav.jsp"%>
+
+<style>
+.MonthlyDiv{display: flex; width:1100px; height:655px; background-color: #F7FFE5;  text-align: center; border: 1px solid #E1ECC8;}
+.MonthlyDiv2{display: flex; width:1100px; height:340px; background-color: #F7FFE5;  text-align: center; border: 1px solid #E1ECC8;}
+.MonthlyDiv3{display: flex; width:1100px; height:340px; background-color: #F7FFE5;  text-align: left; border: 1px solid #993300; position: relative; 	color: purple;
+	font-weight: bold; padding: 5px;  }
+.RecentTable {
+    width: 500px;
+    height: 340px;
+    background-color: rgba(255, 255, 255, 0.472);
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.RecentTable th,
+.RecentTable td {
+	color: purple;
+	font-weight: bold;
+    border: 1px solid #F7FFE5;
+    padding: 8px; /* 셀 내용과 테두리 사이의 간격 */
+}
+
+.RecentTable th {
+	font-weight: bold;
+    background-color: rgba(200, 200, 200, 0.472); /* 테이블 헤더 배경색 */
+}
+.MonthlyTable{width:500px; height:655px; background-color: rgba(255, 255, 255, 0.472);  text-align: center; border: 1px solid #993300;}
+.MonthlyTable th,
+.MonthlyTable td {
+	color: purple;
+	font-weight: bold;
+    border: 1px solid #993300;
+    padding: 8px; /* 셀 내용과 테두리 사이의 간격 */
+}
+
+.MonthlyTable th {
+	font-weight: bold;
+    background-color: rgba(200, 200, 200, 0.472); /* 테이블 헤더 배경색 */
+
+}
+
+</style>
+
 <div align="center" id="section">
 	<!-- 날짜로 월간 넘어가게 설정가능해야함 -->
 	<!--  ajax로 div에 gpt에서 받아온 결과 넣어줘야함. -->
@@ -18,8 +61,10 @@
 		<button id="moveReport" class="btn btn-success">이동</button>
 		<button id="reportDownloadPDF" class="btn btn-success">다운로드(pdf)</button>
 		<button id="reportDownloadExcel" class="btn btn-success">다운로드(excel)</button>
+		<button id="snedToEmailReport" class="btn btn-success">이메일로 보내기</button>
 	</div>
-	<h3>월간 지출 차트</h3>
+<div id="report">
+	<h3>월간 지출(카테고리별)</h3>
 	<div id="monthlyDivPart1" class="MonthlyDiv">
 		<div style="flex: 1;" id="chartdiv">
 			<div id="myChartPart1"
@@ -27,7 +72,7 @@
 				<canvas id="myChart" style="width: 600px; height: 655px;"></canvas>
 			</div>
 		</div>
-		<div style="flex: 1;" id="MonthlyTalbe"></div>
+		<div style="flex: 1;" id="MonthlyTable"></div>
 	</div>
 	<br>
 	<h3>최근 사용 내역(5회)</h3>
@@ -46,7 +91,8 @@
 	<div id="resultGPT" class="MonthlyDiv3">
 		GPT : 분석중!
 		<!-- DB에서 GPT답변 받아오는 div -->
-	</div>
+	</div>	
+</div>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script type="text/javascript">
 	$(function() {
@@ -409,6 +455,40 @@
 					    }
 					});
 			    }); // reportDownloadExcel
+			    
+		$('#snedToEmailReport').click(function() {
+		    let tableContent = document.getElementById("MonthlyTable").innerHTML;
+		    let tableContent2 = document.getElementById("RecentTable").innerHTML;
+		    let gptContent = document.getElementById("resultGPT").innerHTML;
+		    let chartImage = ctx.toDataURL('image/png'); 
+		    let graphImage = ctx2.toDataURL('image/png'); 
+		    let email;
+		    $.ajax({
+				url : "getEmail",
+				method : "POST",
+				success : function(useremail){
+				    email = useremail;
+					$.ajax({
+					    url : "sendEmailReport",
+					    method : "POST",
+					    data : {
+							email : email,
+							tableContent : tableContent,
+							tableContent2 : tableContent2,
+							gptContent : gptContent,
+							chartImage : chartImage,
+							graphImage : graphImage
+					    },
+					    success : function(){
+							alert("메일로 보고서가 전송 되었습니다.")
+					    },
+					    error : function(){
+							alert("실패.")
+					    }
+					}); //ajax sendEmailReport
+				}//ajax get Email success
+		    })//ajax get Email
+		}); //snedToEmailReport
 
 	});//$
 	function listTableFunc(list, detailSomeDataPlusList,
@@ -454,7 +534,7 @@
 		detailTotalDataList.push(map[key]);
 	    }
 	    mapTable += '</table>'; //1차 ajax로부터 데이터
-	    $('#MonthlyTalbe').html(mapTable);//1차 ajax로부터 데이터
+	    $('#MonthlyTable').html(mapTable);//1차 ajax로부터 데이터
 	}//endfunction
 	function setChart1Data(labelList, detailTotalDataList, budgetDataList) {
 	    //Chart.js 에서는 getContext('2d') 를 사용하지않아도됨.
@@ -565,5 +645,6 @@
 	    return config2;
 	}//endfunction
     </script>
+
 </div>
-<jsp:include page="/layout/footer.jsp"/>
+<%@ include file="/layout/footer.jsp"%>

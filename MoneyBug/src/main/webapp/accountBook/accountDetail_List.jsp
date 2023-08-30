@@ -2,9 +2,9 @@
 	pageEncoding="UTF-8"%>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="../resources/js/account/accountDetail_RUD.js"></script>
-<jsp:include page="/layout/header.jsp"/>
-<jsp:include page="/layout/accountNav.jsp"/>
-<%@ include file="/layout/accountDetail_Search.jsp"%>
+<%@ include file="../layout/header.jsp"%>
+<%@ include file="../layout/accountNav.jsp"%>
+<%@ include file="../layout/accountDetail_Search.jsp"%>
 
 <style>
 body {
@@ -35,5 +35,5 @@ body {
 	</a>
 	<div id="accountList"></div>
 </div>
-<%@ include file="/layout/accountAside.jsp"%>
-<%@ include file="/layout/footer.jsp"%>
+<%@ include file="../layout/accountAside.jsp"%>
+<%@ include file="../layout/footer.jsp"%>
