@@ -47,7 +47,6 @@
 
 </style>
 
-
 <div align="center" id="section">
 	<!-- 날짜로 월간 넘어가게 설정가능해야함 -->
 	<!--  ajax로 div에 gpt에서 받아온 결과 넣어줘야함. -->
@@ -62,8 +61,10 @@
 		<button id="moveReport" class="btn btn-success">이동</button>
 		<button id="reportDownloadPDF" class="btn btn-success">다운로드(pdf)</button>
 		<button id="reportDownloadExcel" class="btn btn-success">다운로드(excel)</button>
+		<button id="snedToEmailReport" class="btn btn-success">이메일로 보내기</button>
 	</div>
-	<h3>월간 지출 차트</h3>
+<div id="report">
+	<h3>월간 지출(카테고리별)</h3>
 	<div id="monthlyDivPart1" class="MonthlyDiv">
 		<div style="flex: 1;" id="chartdiv">
 			<div id="myChartPart1"
@@ -71,7 +72,7 @@
 				<canvas id="myChart" style="width: 600px; height: 655px;"></canvas>
 			</div>
 		</div>
-		<div style="flex: 1;" id="MonthlyTalbe"></div>
+		<div style="flex: 1;" id="MonthlyTable"></div>
 	</div>
 	<br>
 	<h3>최근 사용 내역(5회)</h3>
@@ -90,7 +91,8 @@
 	<div id="resultGPT" class="MonthlyDiv3">
 		GPT : 분석중!
 		<!-- DB에서 GPT답변 받아오는 div -->
-	</div>
+	</div>	
+</div>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script type="text/javascript">
 	$(function() {
@@ -453,6 +455,33 @@
 					    }
 					});
 			    }); // reportDownloadExcel
+			    
+		$('#snedToEmailReport').click(function() {
+		    let tableContent = document.getElementById("MonthlyTable").innerHTML;
+		    let tableContent2 = document.getElementById("RecentTable").innerHTML;
+		    let gptContent = document.getElementById("resultGPT").innerHTML;
+		    let chartImage = ctx.toDataURL('image/png'); 
+		    let graphImage = ctx2.toDataURL('image/png'); 
+		    let email = prompt;
+					$.ajax({
+					    url : "sendEmailReport",
+					    method : "POST",
+					    data : {
+							email : email,
+							tableContent : tableContent,
+							tableContent2 : tableContent2,
+							gptContent : gptContent,
+							chartImage : chartImage,
+							graphImage : graphImage
+					    },
+					    success : function(){
+							alert("메일로 보고서가 전송 되었습니다.")
+					    },
+					    error : function(){
+							alert("실패.")
+					    }
+					}); //ajax
+		}); //snedToEmailReport
 
 	});//$
 	function listTableFunc(list, detailSomeDataPlusList,
@@ -498,7 +527,7 @@
 		detailTotalDataList.push(map[key]);
 	    }
 	    mapTable += '</table>'; //1차 ajax로부터 데이터
-	    $('#MonthlyTalbe').html(mapTable);//1차 ajax로부터 데이터
+	    $('#MonthlyTable').html(mapTable);//1차 ajax로부터 데이터
 	}//endfunction
 	function setChart1Data(labelList, detailTotalDataList, budgetDataList) {
 	    //Chart.js 에서는 getContext('2d') 를 사용하지않아도됨.
@@ -609,5 +638,6 @@
 	    return config2;
 	}//endfunction
     </script>
+
 </div>
 <%@ include file="../resources/layout/footer.jsp"%>
