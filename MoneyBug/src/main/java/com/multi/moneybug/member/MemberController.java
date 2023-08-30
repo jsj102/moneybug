@@ -69,7 +69,7 @@ public class MemberController {
 	}
 
 	// 마이페이지로 이동 (신규, 기존회원 모두)
-		@PostMapping("/member/myPage.do")
+		@GetMapping("/member/myPage.do")
 		public String myPage(MemberDTO memberDTO, Model model, HttpSession session) {
 			String socialId = (String) session.getAttribute("socialId");
 			memberDTO.setSocialId(socialId);

@@ -2,9 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <script></script>
-<%@ include file="../resources/layout/header.jsp"%>
-<%@ include file="../resources/layout/accountNav.jsp"%>
-
+<jsp:include page="/layout/header.jsp"/>
+<jsp:include page="/layout/accountNav.jsp"/>
 <div align="center" id="section">
 	<!-- 날짜로 월간 넘어가게 설정가능해야함 -->
 	<!--  ajax로 div에 gpt에서 받아온 결과 넣어줘야함. -->
@@ -567,4 +566,4 @@
 	}//endfunction
     </script>
 </div>
-<%@ include file="../resources/layout/footer.jsp"%>
+<jsp:include page="/layout/footer.jsp"/>

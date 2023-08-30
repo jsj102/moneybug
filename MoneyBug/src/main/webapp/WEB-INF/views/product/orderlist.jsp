@@ -2,17 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ include file="../../../resources/layout/header.jsp" %>	
+<jsp:include page="/layout/header.jsp"/>
 
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-	rel="stylesheet"> -->
+
 <style>
 body {
 	background: #F9F5E7;
@@ -64,8 +56,8 @@ body {
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script
-	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <script>
 	function execDaumPostcode() {
 		new daum.Postcode({
@@ -101,6 +93,39 @@ body {
 	    });
 	});
 
+	   $(function() {
+           $('#payOrder').click(function() {
+               var IMP = window.IMP; // 생략가능
+               IMP.init('iamport'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
+               IMP.request_pay({
+                   pg : 'inicis', // version 1.1.0부터 지원.
+                   pay_method : 'card',
+                   merchant_uid : 'merchant_' + new Date().getTime(),
+                   name : '주문명:결제테스트',
+                   amount : 14000,
+                   buyer_email : 'iamport@siot.do',
+                   buyer_name : '구매자이름',
+                   buyer_tel : '010-1234-5678',
+                   buyer_addr : '서울특별시 강남구 삼성동',
+                   buyer_postcode : '123-456',
+                   m_redirect_url : 'www.yourdomain.com/payments/complete'
+           }, function(rsp) {
+               if ( rsp.success ) {
+                   var msg = '결제가 완료되었습니다.';
+                   msg += '고유ID : ' + rsp.imp_uid;
+                   msg += '상점 거래ID : ' + rsp.merchant_uid;
+                   msg += '결제 금액 : ' + rsp.paid_amount;
+                   msg += '카드 승인번호 : ' + rsp.apply_num;
+               } else {
+                   var msg = '결제에 실패하였습니다.';
+                   msg += '에러내용 : ' + rsp.error_msg;
+               }
+               alert(msg);
+           });
+
+           })
+       })
+
     
 </script>
 
@@ -128,7 +153,7 @@ body {
 			%>
 		</div>
 		<div class="pay-container">
-			<form action="payOrder.do" method="post">
+			<form action="paySuccess.do" method="post">
 				<table
 					class="table table-light table-hover table-striped text-center">
 					<thead>
@@ -162,13 +187,11 @@ body {
 				</table>
 
 				<blockquote class="blockquote">
-					<p id="paySum">
+					<p id="paySum" name="price">
 						<strong>선택 금액: <%=request.getAttribute("totalAmount")%>원 </strong>
 					</p>
 				</blockquote>
 				
-				<c:choose>
-					<c:when test="${member.point >= 0}">
 						<blockquote class="blockquote">
 							<p id="myPoint">
 								<strong>현재 나의 포인트: ${member.point } p </strong>
@@ -182,15 +205,10 @@ body {
 							<button class="btn btn-secondary mt-2" id="applyPoint">적용하기</button>
 						</div>
 
-					</c:when>
-					<c:otherwise>
-						<p>Invalid point value</p>
-					</c:otherwise>
-				</c:choose>
 
 				<blockquote class="blockquote">
 					<p id="finalPay">
-						<strong>최종 고객님께서 결제하실 금액은 <span id="calculatedAmount"></span>원입니다.
+						<strong>최종 고객님께서 결제하실 금액은 <span id="calculatedAmount"  name="discountPrice"></span>원입니다.
 						</strong>
 					</p>
 				</blockquote>
@@ -221,7 +239,7 @@ body {
 				</div>
 				<div class="mb-3">
 					<input type="text" class="form-control" id="address-1"
-						placeholder="도로명주소">
+						placeholder="도로명주소" name="address">
 				</div>
 				<div class="mb-3">
 					<input type="text" class="form-control" id="address-2"
@@ -229,7 +247,7 @@ body {
 				</div>
 
 				<div class="d-flex justify-content-center mt-3">
-					<button type="submit" class="btn btn-lg btn-custom">결제하기</button>
+					<button type="submit" class="btn btn-lg btn-secondary" id="payOrder">결제하기</button>
 				</div>
 			</form>
 		</div>
@@ -237,6 +255,4 @@ body {
 	</div>
 
 
-<%@ include file="../../../resources/layout/footer.jsp" %>
-<!-- </body>
-</html> -->
+<jsp:include page="/layout/footer.jsp"/>

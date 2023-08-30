@@ -18,9 +18,9 @@
         }
     }
 </script>
-<%@ include file="../resources/layout/header.jsp"%>
+<%@ include file="/layout/header.jsp"%>
 <!-- header -->
-<%@ include file="../resources/layout/accountNav.jsp"%>
+<%@ include file="/layout/accountNav.jsp"%>
 <!-- Nav -->
 
 <!-- 입력 테이블 스타일 -->
@@ -114,8 +114,8 @@
 	</form>
 </div>
 
-<%@ include file="../resources/layout/accountAside.jsp"%>
-<%@ include file="../resources/layout/footer.jsp"%>
+<%@ include file="/layout/accountAside.jsp"%>
+<%@ include file="/layout/footer.jsp"%>
 
 
 <script type="text/javascript">

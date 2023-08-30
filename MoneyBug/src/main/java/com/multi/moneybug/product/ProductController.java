@@ -159,12 +159,14 @@ public class ProductController {
 	}
 
 	//결제 창 연결
-	@PostMapping("product/payOrder.do") 
+	@PostMapping("product/paySuccess.do") 
 	public String payOrder(OrderListDTO orderListDTO, Model model){ 
 		System.out.println(orderListDTO);
 		productService.payOrder(orderListDTO);
 		return "redirect:/main.jsp"; 
 	}
+	
+	
 
 
 }
