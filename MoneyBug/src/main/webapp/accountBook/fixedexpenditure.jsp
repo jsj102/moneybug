@@ -7,11 +7,6 @@
 
 <
 <style>
-#expenses-table {
-	background-color: rgba(255, 255, 255, 0.472);
-	width: 400px;
-}
-
 #addline {
 	background-color: rgba(255, 255, 255, 0.472);
 	width: 350px;
@@ -77,7 +72,7 @@
 						    + '<option value="기타">기타</option>'
 						    + '</select> '
 						    + '<input id="moneyinput'
-													+countinput+'" placeholder="금액 입력란" class="moneyinput" value="0">');
+													+countinput+'" placeholder="금액 입력란" class="moneyinput" value="0">     ');
 
 			    $('#moneyinput' + countinput).on(
 				    'input',
@@ -121,7 +116,7 @@
     })
 </script>
 <div id="section" align="center">
-	<br> <br> <br> <br> <br> <br> <br> <br>
+	<br> <br> 
 	<div
 		style="border-radius: 30px; width: 700px;" class="alert alert-success">
 		<h1>고정지출(List)</h1>
