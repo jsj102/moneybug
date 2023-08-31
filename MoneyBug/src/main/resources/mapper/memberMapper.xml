@@ -37,5 +37,18 @@
         FROM user_member
         WHERE user_nickname = #{userNickname}
     </select>
+    
+	<select id="selectByNickname" parameterType="String" resultType="MemberDTO">
+        SELECT *
+        FROM user_member
+        WHERE user_nickname = #{userNickname}
+    </select>
+    
+    <update id="usePoint" parameterType="MemberDTO">
+		UPDATE user_member
+		SET
+		POINT = #{point}
+		WHERE user_nickname = #{userNickname}
+	</update>
 
 </mapper>

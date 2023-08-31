@@ -37,4 +37,22 @@ public class BasketDAO {
 	public List<BasketDTO> getOrderlists(List<Integer> selectedSeqs) {
 		return my.selectList("basket.order_List", selectedSeqs);
 	}
+
+	public void updateProductCount(Map<String, Object> params) {
+        my.update("basket.updateProductCount", params);
+    }
+
+	public void deleteProductFromBasket(String userId, int productId, int seq) {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("userId", userId);
+	    params.put("productId", productId);
+	    params.put("SEQ", seq);
+	    
+	    my.delete("basket.deleteProductFromBasket", params);
+	}
+
+	public List<Integer> getSeqList() {
+		return my.selectList("basket.seqList");
+	}
+
 }

@@ -2,8 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<jsp:include page="/layout/header.jsp"/>
 
-<!DOCTYPE html>
+<%-- <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -12,7 +13,8 @@
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <link rel="stylesheet" type="text/css" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
-<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet"> --%>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
 body {
@@ -109,8 +111,19 @@ body {
 }
 
 </style>
-<%@ include file="../../../resources/layout/header.jsp" %>
     <script>
+    function DirectBasket() {
+        // 세션에 userNickname 정보가 있는지 확인
+        var userNickname = "<%= session.getAttribute("userNickname") %>";
+        if (userNickname != "null") {
+            location.href = "basketlist"; // 장바구니 페이지로 이동
+        } else if (userNickname = "null") {
+            alert("로그인이 필요합니다."); // 로그인 안내 경고창 띄우기
+            location.href = "../login.jsp";
+        }
+    }
+    
+    
     function goToBasket(productId) {
         // 세션에 userNickname 정보가 있는지 확인
         var userNickname = "<%= session.getAttribute("userNickname") %>";
@@ -171,8 +184,7 @@ body {
 			<!-- 광고 배너 버튼 -->
 			<a href="../product/shopDetail?productId=1"
 				class="btn btn-light">오늘의 특가</a>
-				
-			<a href="${pageContext.request.contextPath}/product/basketlist" class="btn btn-light">장바구니</a>
+			<button class="btn btn-light" onclick="DirectBasket()">장바구니</button>
 			
 		</div>
 	</div>
@@ -238,6 +250,4 @@ body {
   </ul>
 </div>
 
-<%@ include file="../../../resources/layout/footer.jsp" %>
-</body>
-</html>
+<jsp:include page="/layout/footer.jsp"/>

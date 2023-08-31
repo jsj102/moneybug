@@ -1,6 +1,8 @@
 package com.multi.moneybug.product;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,11 +38,29 @@ public class BasketService {
         basket.setProductCount(count);
 
         basketDAO.updateProductInBasket(basket);
-
+    }
+    
+    public List<BasketDTO> getOrderlists(List<Integer> selectedSeqs) {
+        List<BasketDTO> basketList = basketDAO.getOrderlists(selectedSeqs);
+        return basketList;
     }
 
-	public List<BasketDTO> getOrderlists(List<Integer> selectedSeqs) {
-		List<BasketDTO> basketList = basketDAO.getOrderlists(selectedSeqs);
-        return basketList;
-	}
+    public void updateProductCount(String userId, int productId, int seq, int newCount) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("productId", productId);
+        params.put("SEQ", seq);
+        params.put("newCount", newCount);
+
+        basketDAO.updateProductCount(params);
+    }
+
+    public void deleteProductFromBasket(String userId, int productId, int seq) {
+        // userId, productId, seq를 이용하여 해당 상품을 장바구니에서 삭제하는 DAO 메서드 호출
+        basketDAO.deleteProductFromBasket(userId, productId, seq);
+    }
+
+    public List<Integer> getSeqList() {
+        return basketDAO.getSeqList();
+    }
 }

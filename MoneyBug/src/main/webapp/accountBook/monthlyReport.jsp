@@ -2,8 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <script></script>
-<%@ include file="../resources/layout/header.jsp"%>
-<%@ include file="../resources/layout/accountNav.jsp"%>
+<%@ include file="/layout/header.jsp"%>
+<%@ include file="/layout/accountNav.jsp"%>
 
 <div align="center" id="section">
 	<!-- 날짜로 월간 넘어가게 설정가능해야함 -->
@@ -567,4 +567,4 @@
 	}//endfunction
     </script>
 </div>
-<%@ include file="../resources/layout/footer.jsp"%>
+<%@ include file="/layout/footer.jsp"%>

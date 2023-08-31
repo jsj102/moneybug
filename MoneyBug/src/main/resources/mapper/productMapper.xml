@@ -12,6 +12,23 @@
     <result property="productInfo" column="productInfo"/>
 </resultMap>
 
+	<resultMap id="orderListMap" type="com.multi.moneybug.product.OrderListDTO">
+    <id property="orderNumber" column="orderNumber"/>
+    <result property="basketSeq" column="basketSeq"/>
+    <result property="userId" column="userId"/>
+    <result property="orderAt" column="orderAt"/>
+    <result property="userName" column="userName"/>
+    <result property="address" column="address"/>
+    <result property="tel" column="tel"/>
+    <result property="price" column="price"/>
+    <result property="discountPrice" column="discountPrice"/>
+    <result property="totalPrice" column="totalPrice"/>
+    <result property="payTool" column="payTool"/>
+    <result property="orderStatus" column="orderStatus"/>
+    
+</resultMap>
+
+
 	
 <!-- 	<select id="product_List" resultMap="productResultMap">
 		select * from product
@@ -50,6 +67,30 @@
 	<insert id="insert" parameterType="productDTO" useGeneratedKeys="true" >
 	  insert into product 
 	  values (null,#{productType}, #{productName}, #{productImg}, #{productOriprice}, #{productPrice}, #{productInfo})
+	</insert>
+	
+	<select id="orderList" resultMap="orderListMap">
+		select * from order_list
+	</select>
+	
+	<select id="myOrderList" resultMap="orderListMap">
+		select * from order_list where USER_ID = #{userId}
+	</select>
+	
+	<update id="updateOrder" parameterType="java.util.Map">
+	    update order_list
+	    set order_status = #{newStatus}
+	    WHERE ORDER_NUMBER = #{orderNumber}
+	</update>
+
+	<insert id="orderInsert"
+		parameterType="com.multi.moneybug.product.OrderListDTO">
+		INSERT INTO order_list
+		VALUES (null, #{basketSeq},
+		#{userId}, CURRENT_TIMESTAMP, #{userName},
+		#{address}, #{tel},
+		#{price}, #{discountPrice}, #{totalPrice},
+		"inicis","배송준비")
 	</insert>
 	
 </mapper>
