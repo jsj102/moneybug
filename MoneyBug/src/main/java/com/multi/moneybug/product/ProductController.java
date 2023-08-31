@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.multi.moneybug.member.MemberDTO;
 import com.multi.moneybug.member.MemberService;
@@ -160,10 +161,10 @@ public class ProductController {
 
 	//결제 창 연결
 	@PostMapping("product/paySuccess.do") 
+	@ResponseBody
 	public String payOrder(OrderListDTO orderListDTO, Model model){ 
-		System.out.println(orderListDTO);
-		productService.payOrder(orderListDTO);
-		return "redirect:/main.jsp"; 
+		int result = productService.payOrder(orderListDTO);
+		return result + ""; 
 	}
 	
 	

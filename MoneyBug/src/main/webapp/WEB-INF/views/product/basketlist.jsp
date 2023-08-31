@@ -4,8 +4,17 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <jsp:include page="/layout/header.jsp" />
 <style>
+html, body {
+	height: 100%;
+}
+
 body {
 	background: #F9F5E7;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	flex: 1;
+	margin: 0;
 }
 
 .basket-container {
@@ -39,48 +48,51 @@ body {
 
 <script>
 $(document).ready(function() {
+	let countinput = 0;
+	$('.form-control').on('input', function() {
+		countinput = $('#hiddenNumber').val();
+		for(let i = 1; i <= countinput ; i++){
+			$('#product_total' +i).html($('#productPrice_' +i).html()*$('#product_count' +i).val());
+		}
+	});//$('#productPrice_' +i) 부분만 해결하면 끝 
 	
-	
-    $('input[name="selectedProducts"]').on('change', function() {
-        updateTotalAmount();
-    });
-    
-    function updateTotalAmount(inputField) {
-        var totalAmount = 0;
-        var selectedProductIds = [];
-        var selectedProductSeq = [];
 
-        $('input[name="selectedProducts"]:checked').each(function() {
-            var valueParts = $(this).val().split(',');
-            selectedProductIds.push(parseInt(valueParts[0]));
-            selectedProductSeq.push(parseInt(valueParts[1]));
-        });
-
-        selectedProductIds.forEach(function(prodId, index) {
-            var s = selectedProductSeq[index];
-            var productPrice = parseInt($('#productPrice_' + prodId).text());
-            var productCount = 0;
-
-            if (inputField) {
-                var productId = inputField.data('product-id');
-                var seq = inputField.data('product-count');
-                if (productId === prodId && seq === s) {
-                    productCount = parseInt(inputField.val());
-                    $('#productTotal_' + productId + '_' + seq).text(productPrice * productCount + "원");
-                }
+    $('.checkboxclass1').on('change', function() {
+        countinput = $('#hiddenNumber').val();
+        let totalPrice = parseInt(0);
+        for(let i = 1 ; i <= countinput ; i ++){
+            var checkbox = document.getElementById("checkbox"+i);
+            var ischecked = checkbox.checked;
+            // checkbox가 체크되어 있는지 확인
+            if (ischecked) {
+            	totalPrice = totalPrice + parseInt($('#product_total' +i).html());
             } else {
-                productCount = parseInt($('#productCount_' + prodId).val());
-                $('#productTotal_' + prodId + '_' + s).text(productPrice * productCount + "원");
             }
-
-            totalAmount += productPrice * productCount;
-        });
-
-        $('#totalAmount').text(totalAmount + "원");
-        $('#totalAmount2').val(totalAmount);
-        $('#selectedId_').val(selectedProductIds);
-        $('#seletedSeq_').val(selectedProductSeq);
-    }
+        }
+            $('#totalAmount').html(totalPrice);
+    });
+	$('#order').click(function() {
+		let productId;
+		let seq;
+		let newCount;
+		countinput = $('#hiddenNumber').val();
+		for(let i = 1 ; i <=countinput ; i ++){
+			newCount = $('#product_count' +i).val();
+			productId =  $('#productId' +i).val();
+		$.ajax({
+			url : "${pageContext.request.contextPath}/updateQuantity",
+			data : {
+				productId : productId,
+				newCount : newCount
+			},
+			method : "POST",
+			success: function(){
+				//window.location.href = '${pageContext.request.contextPath}/product/orderlist';
+			}
+		})//ajax udate
+		}//for
+	})
+    
 });
 
 
@@ -107,7 +119,7 @@ $("#orderForm").submit(function(event) {
 
     $.ajax({
         type: 'POST',
-        url: '/updateQuantity',
+        url: '${pageContext.request.contextPath}/updateQuantity',
         data: requestData,
         success: function(response) {
             console.log('수량 업데이트 성공:', response);
@@ -142,6 +154,7 @@ function deleteProduct(userNickname, productId, seq) {
         });
     }
 }
+
 </script>
 
 
@@ -190,7 +203,12 @@ function deleteProduct(userNickname, productId, seq) {
 								</tr>
 							</thead>
 							<tbody>
+							<c:set var="stepnumber" value="1"/>
+							<c:set var="countnumber" value="0"/>
+							
+							
 								<c:forEach items="${basketList}" var="basket">
+							<c:set var="countnumber" value="${countnumber+stepnumber}"/>
 									<c:forEach items="${productList}" var="product">
 										<c:if test="${basket.productId eq product.productId}">
 											<tr>
@@ -198,24 +216,22 @@ function deleteProduct(userNickname, productId, seq) {
 												<td><img src="${product.productImg}"
 													alt="Product Image" width="150px" height="150px" /></td>
 												<td>${product.productName}</td>
-												<td id="productPrice_${product.productId}">${product.productPrice}</td>
-												<td>
-													<div class="input-group">
-														<input type="number"
-															class="form-control text-center quantity"
-															id="productCount_${product.productId}"
-															value="${basket.productCount}" min="1"
-															onchange="updateTotalAmount(this, ${product.productId}, ${basket.seq})">
-													</div>
-												</td>
-												<td id="productTotal_${product.productId}_${basket.seq}"
-													class="productTotal">${product.productPrice * basket.productCount}원
-												</td>
+												<td id="productPrice_<c:out value="${countnumber}"/>">${product.productPrice}</td>
+												<td><input type="number"
+													class="form-control text-center" id="product_count<c:out value="${countnumber}"/>"
+													value="${basket.productCount}" min="" required></td>
+												<td id="product_total<c:out value="${countnumber}"/>" class="productTotal"/>0</td>
+												<!-- 결과를 출력할 공간 -->
 
-												<td><input type="checkbox" name="selectedProducts"
-													value="${basket.productId}, ${basket.seq}" /></td>
-												<td><button class="delete-btn"
-														onclick="deleteProduct('${userNickname}', ${basket.productId}, ${basket.seq})">삭제</button></td>
+
+												<td><input type="checkbox" name="selectedProducts" id="checkbox<c:out value="${countnumber}"/>" 
+													value="${basket.productId}, ${basket.seq}" class="checkboxclass1"/></td>
+												<td><button type="button"
+														class="delete-btn btn btn-info"
+														onclick="deleteProduct('${userNickname}', ${basket.productId}, ${basket.seq})">삭제</button>
+														<input type="hidden" id="productId<c:out value="${countnumber}"/>" value="${basket.productId}">
+														
+														</td>
 											</tr>
 										</c:if>
 									</c:forEach>
@@ -225,11 +241,18 @@ function deleteProduct(userNickname, productId, seq) {
 						<div class="orderSum">
 							총 주문 금액: <span id="totalAmount">${totalAmount}원</span>
 						</div>
-						<div class="d-flex justify-content-center mt-3">
-							
-						</div>
+						<input id="hiddenNumber" value="<c:out value="${countnumber}"/>" type="hidden">
 					</c:otherwise>
 				</c:choose>
+
+				<div class="d-flex justify-content-center mt-3">
+					<input type="hidden" id="totalAmount2" name="totalAmount"
+						value="${totalAmount}"> <input type="hidden"
+						id="selectedId_" name="selectedId" value="${productId}" /> <input
+						type="hidden" id="seletedSeq_" name="seletedSeq"
+						value="${basket.seq}" />
+				</div>
+				<button type="button" class="btn btn-lg btn-secondary" id="order">주문하기</button>
 			</form>
 		</div>
 	</div>

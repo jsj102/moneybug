@@ -79,20 +79,26 @@ public class BasketController {
     @RequestMapping("/updateQuantity")
     @ResponseBody
     public String updateQuantity(
-        @RequestParam String userNickname,
-        @RequestParam int productId,
-        @RequestParam int seq,
-        @RequestParam int newCount
+        @RequestParam("productId") int productId,
+        @RequestParam("newCount") int newCount, HttpSession session
     ) {
+    	System.out.println("Count는"+newCount+"id는"+productId);
         // userNickname로 userId 조회
+        String userNickname = (String) session.getAttribute("userNickname");
         String userId = memberService.getUserIdByUserNickname(userNickname);
+
+        List<Integer> seqList = basketService.getSeqList(); // getSeqList() 메소드는 List<String> 타입으로 seq 값을 반환하는 것으로 가정합니다
         
         // 업데이트 로직 실행
-        basketService.updateProductCount(userId, productId, seq, newCount);
+        for (int seq : seqList) {
+            basketService.updateProductCount(userId, productId, seq, newCount);
+            System.out.println("실행완료");
+        }
 
         return "success";
     }
-    
+
+
     @RequestMapping("/deleteProduct")
     @ResponseBody
     public String deleteProduct(

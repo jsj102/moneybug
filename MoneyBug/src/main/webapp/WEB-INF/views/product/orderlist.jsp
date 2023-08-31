@@ -55,8 +55,8 @@ body {
 }
 </style>
 
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <script>
 	function execDaumPostcode() {
@@ -83,50 +83,75 @@ body {
 	        });
 	   });
 
-
+	   
 	   $(function() {
-           $('#payOrder').click(function() {
-               var IMP = window.IMP; // 생략가능
-               IMP.init('iamport'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
-               IMP.request_pay({
-                   pg : 'inicis', // version 1.1.0부터 지원.
-                   pay_method : 'card',
-                   merchant_uid : 'merchant_' + new Date().getTime(),
-                   name : '주문명:결제테스트',
-                   amount : 1000,
-                   buyer_email : 'iamport@siot.do',
-                   buyer_name : '구매자이름',
-                   buyer_tel : '010-1234-5678',
-                   buyer_addr : '서울특별시 강남구 삼성동',
-                   buyer_postcode : '123-456',
-                   m_redirect_url : 'www.yourdomain.com/payments/complete'
-           }, function(rsp) {
-               if ( rsp.success ) {
-                   var msg = '결제가 완료되었습니다.';
-                   msg += '고유ID : ' + rsp.imp_uid;
-                   msg += '상점 거래ID : ' + rsp.merchant_uid;
-                   msg += '결제 금액 : ' + rsp.paid_amount;
-                   msg += '카드 승인번호 : ' + rsp.apply_num;
-               } else {
-                   var msg = '결제에 실패하였습니다.';
-                   msg += '에러내용 : ' + rsp.error_msg;
-               }
-               alert(msg);
-           });
+		    $('#payOrder').click(function() {
+		        var IMP = window.IMP; // 생략 가능
+		        IMP.init('iamport'); // 'iamport' 대신 제공된 "제휴사 식별코드" 사용
+		        IMP.request_pay({
+		            pg: 'inicis', // 1.1.0 버전부터 지원됨
+		            pay_method: 'card',
+		            merchant_uid: 'merchant_' + new Date().getTime(),
+		            name: '멀개미:결제테스트 1원',
+		            amount: 1,
+		            buyer_email: "TEST@NAVER.COM",
+		            buyer_name: $('#userName').val(),
+		            buyer_tel: $('#tel').val(),
+		            buyer_addr: $('#address').val(),
+		            buyer_postcode: $('#zip-code').val(),
+		        }, function(rsp) {
+		            if (rsp.success) {
+		                //[1] imp_uid를 서버 측에서 결제정보를 조회하기 위해 jQuery ajax로 전달
+		                alert("OK....------");
+		                jQuery.ajax({
+		                    url: "paySuccess.do",
+		                    type: 'POST',
+		                    dataType: 'text',
+		                    data: {
+		                        imp_uid: rsp.imp_uid,
+		                        "totalPrice": rsp.paid_amount,
+		                        "userName": $('#userName').val()
+		                        // 필요한 경우 추가 데이터 전송
+		                    }
+		                }).done(function(data) {
+		                	alert(data)
+		                    //[2] 결제 정보가 확인되고 서버에서 정상적인 서비스 루틴을 사용하는 경우
+		                    if (data == '1') {
+		                        var msg = '결제가 완료되었습니다.';
+		                       /*  msg += '\n고유 ID: ' + rsp.imp_uid;
+		                        msg += '\n상점 거래 ID: ' + rsp.merchant_uid;
+		                        msg += '\n결제 금액: ' + rsp.paid_amount;
+		                        msg += '\n카드 승인번호: ' + rsp.apply_num; */
+		                        
+		                        alert(msg);
+		                        location.href = '/moneybug/main.jsp';
+		                    } else {
+		                        //[3] 결제가 아직 제대로 이루어지지 않았습니다.
+		                        //[4] 요청한 금액과 다른 금액으로 결제가 자동 취소되었습니다.
+		                       alert("fail!"); 
+		                    }
+		                });
+		            } else {
+		                var msg = '결제에 실패했습니다.';
+		                msg += '\n에러 상세 정보: ' + rsp.error_msg;
+		                
+		                alert(msg);
+		                document.location.href = 'redirect:/main.jsp';
+		            }
+		        });
+		    });
+		});
 
-           })
-       })
        
-       document.getElementById("applyPoint").addEventListener("click", function(event) {
-        var discountPriceInput = document.getElementById("discountPrice");
-        var maxPoint = parseInt(discountPriceInput.max);
-        var enteredValue = parseInt(discountPriceInput.value);
         
-        if (enteredValue > maxPoint) {
-            alert("The entered value exceeds the maximum point value.");
-            event.preventDefault();
+        function combineAddresses() {
+            var address1 = document.getElementById("address-1").value;
+            var address2 = document.getElementById("address-2").value;
+            var combinedAddress = address1 + " " + address2;
+            document.getElementById("address").value = combinedAddress;
+            return true; 
         }
-    });
+        
        
 
 </script>
@@ -149,7 +174,7 @@ body {
 			%>
 			<p>사용자 정보가 없습니다.</p>
 			<button class="btn btn-dark" id="login"
-				onclick="location.href='login.jsp'">로그인 페이지로 이동</button>
+				onclick="location.href='/moneybug/login.jsp'">로그인 페이지로 이동</button>
 			<%
 				}
 			%>
@@ -187,7 +212,7 @@ body {
 					</tbody>
 				</table>
 
-			<!-- <form action="payOrder" method="post"> -->
+			<!-- <form action="paySuccess" method="post"> -->
 		
 				<div class="form-group row">
 					<label for="basketSeq" class="col-sm-8 col-form-label"> 장바구니 번호</label>
@@ -203,7 +228,7 @@ body {
 					<label for="userId" class="col-sm-8 col-form-label"> 회원 아이디</label>
 					<div class="col-sm-4">
 						<div class="input-group">
-							<input type="text" class="form-control" id="userId" name="userId" value="<%=request.getAttribute("userId")%>" readonly>
+							<input type="text" class="form-control" id="userId" name="userId" value="${orderlist[0].userId}" readonly>
 						</div>
 					</div>
 				</div>
@@ -211,7 +236,7 @@ body {
 					<label for="userName" class="col-sm-8 col-form-label"> 회원 이름</label>
 					<div class="col-sm-4">
 						<div class="input-group">
-							<input type="text" class="form-control" id="userName" name="userName" value="<%=request.getAttribute("userName")%>" readonly>
+							<input type="text" class="form-control" id="userName" name="userName" value="${member.userName}" readonly>
 						</div>
 					</div>
 				</div>
@@ -247,7 +272,7 @@ body {
 						<div class="input-group">
 							<input type="number" class="form-control" id="discountPrice"
 								name="discountPrice" max="${member.point}" min="0" step="5"/>
-							<button class="btn btn-danger" id="applyPoint">적용</button>
+							<button type="button" class="btn btn-danger" id="applyPoint">적용</button>
 						</div>
 					</div>
 				</div>
@@ -274,15 +299,20 @@ body {
 				</div>
 
 				<div class="mb-3">
-					<button class="btn btn-danger" id="postSearch"
+					<button type="button" class="btn btn-danger" id="postSearch"
 						onclick="execDaumPostcode(); return false;">우편번호 찾기</button>
-					<input type="text" class="form-control" id="zip-code"
+					<input type="text" class="form-control" id="zip-code" name="zip-code"
 						placeholder="우편번호">
 				</div>
 				<div class="mb-3">
 					<input type="text" class="form-control" id="address-1"
-						placeholder="도로명주소" name="address">
+						placeholder="도로명주소" name="address-1">
 				</div>
+				<div class="mb-3">
+					<input type="text" class="form-control" id="address-2"
+						placeholder="상세주소" name="address-2">
+				</div>
+				<input type="hidden" id="address" name="address">
 
 				<div class="d-flex justify-content-end">
 					<button type="submit" class="btn btn-lg btn-info" id="payOrder">결제하기</button>

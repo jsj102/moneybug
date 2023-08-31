@@ -38,28 +38,23 @@ public class BasketService {
         basket.setProductCount(count);
 
         basketDAO.updateProductInBasket(basket);
-
     }
     
-	public List<BasketDTO> getOrderlists(List<Integer> selectedSeqs) {
-		List<BasketDTO> basketList = basketDAO.getOrderlists(selectedSeqs);
+    public List<BasketDTO> getOrderlists(List<Integer> selectedSeqs) {
+        List<BasketDTO> basketList = basketDAO.getOrderlists(selectedSeqs);
         return basketList;
-	}
+    }
 
-	 public void updateProductCount(String userId, int productId, int seq, int newCount) {
-	        Map<String, Object> params = new HashMap<>();
-	        params.put("userId", userId);
-	        params.put("productId", productId);
-	        params.put("SEQ", seq);
-	        params.put("newCount", newCount);
-	        
-	        basketDAO.updateProductCount(params);
-	        
-	    }
+    public void updateProductCount(String userId, int productId, int seq, int newCount) {
+        basketDAO.updateProductCount(userId,productId,seq,newCount);
+    }
 
-	 public void deleteProductFromBasket(String userId, int productId, int seq) {
-		    // userId, productId, seq를 이용하여 해당 상품을 장바구니에서 삭제하는 DAO 메서드 호출
-		    basketDAO.deleteProductFromBasket(userId, productId, seq);
-		}
+    public void deleteProductFromBasket(String userId, int productId, int seq) {
+        // userId, productId, seq를 이용하여 해당 상품을 장바구니에서 삭제하는 DAO 메서드 호출
+        basketDAO.deleteProductFromBasket(userId, productId, seq);
+    }
 
+    public List<Integer> getSeqList() {
+        return basketDAO.getSeqList();
+    }
 }

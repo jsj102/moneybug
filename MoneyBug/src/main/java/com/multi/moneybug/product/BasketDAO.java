@@ -38,8 +38,14 @@ public class BasketDAO {
 		return my.selectList("basket.order_List", selectedSeqs);
 	}
 
-	public void updateProductCount(Map<String, Object> params) {
-        my.update("basket.updateProductCount", params);
+	public void updateProductCount(String userId, int productId, int seq, int newCount) {
+		Map<String, Object> parameters = new HashMap<>();
+        parameters.put("userId", userId);
+        parameters.put("productId", productId);
+        parameters.put("seq", seq);
+        parameters.put("newCount", newCount);
+        
+        my.update("basket.updateBasket",parameters);
     }
 
 	public void deleteProductFromBasket(String userId, int productId, int seq) {
@@ -49,6 +55,10 @@ public class BasketDAO {
 	    params.put("SEQ", seq);
 	    
 	    my.delete("basket.deleteProductFromBasket", params);
+	}
+
+	public List<Integer> getSeqList() {
+		return my.selectList("basket.seqList");
 	}
 
 }

@@ -54,8 +54,8 @@ public class ProductDAO {
 		return my.selectList("product.myOrderList",userId);
 	}
 
-	public void payOrder(OrderListDTO orderListDTO) {
-		my.insert("product.orderInsert", orderListDTO);
+	public int payOrder(OrderListDTO orderListDTO) {
+		return my.insert("product.orderInsert", orderListDTO);
 	}
 
 
