@@ -49,6 +49,14 @@ body {
 <script>
 $(document).ready(function() {
 	let countinput = 0;
+	countinput = $('#hiddenNumber').val();
+	for(let i = 1; i <= countinput ; i++){
+		$('#product_total' +i).html($('#productPrice_' +i).html()*$('#product_count' +i).val());
+	}
+	
+	
+	
+	
 	$('.form-control').on('input', function() {
 		countinput = $('#hiddenNumber').val();
 		for(let i = 1; i <= countinput ; i++){
@@ -70,67 +78,46 @@ $(document).ready(function() {
             }
         }
             $('#totalAmount').html(totalPrice);
-    });
+    });//checkbox
+    
 	$('#order').click(function() {
 		let productId;
 		let seq;
 		let newCount;
+		let seqList = [];
+		let idList = [];
 		countinput = $('#hiddenNumber').val();
 		for(let i = 1 ; i <=countinput ; i ++){
 			newCount = $('#product_count' +i).val();
 			productId =  $('#productId' +i).val();
+			var checkbox = document.getElementById("checkbox"+i);
+			var ischecked = checkbox.checked;
+			if (ischecked) {
+            	seqList.push($('#productSeq' +i).val());
+            	idList.push($('#productId' +i).val());
+            }
+			console.log(idList)
+			console.log(seqList)
+			
 		$.ajax({
 			url : "${pageContext.request.contextPath}/updateQuantity",
 			data : {
 				productId : productId,
 				newCount : newCount
-			},
+				},
 			method : "POST",
-			success: function(){
-				//window.location.href = '${pageContext.request.contextPath}/product/orderlist';
-			}
-		})//ajax udate
+			success: function(seq){
+				}
+			})//ajax udate
 		}//for
-	})
+	    $('#totalAmount2').val($('#totalAmount').html());
+	    $('#selectedId_').val(idList);
+	    $('#seletedSeq_').val(seqList);
+	})//order
+	
     
 });
 
-
-$("#orderForm").submit(function(event) {
-    event.preventDefault(); // 기본 form 제출 동작 막기
-    
-    var selectedProductIds = [];
-    var selectedProductSeq = [];
-    var newCounts = [];
-
-    $('input[name="selectedProducts"]:checked').each(function() {
-        var valueParts = $(this).val().split(',');
-        selectedProductIds.push(parseInt(valueParts[0]));
-        selectedProductSeq.push(parseInt(valueParts[1]));
-        newCounts.push(parseInt($('#productCount_' + valueParts[0]).val()));
-    });
-
-    var requestData = {
-        userNickname: "사용자의 닉네임", // 사용자의 닉네임 설정
-        productId: selectedProductIds,
-        seq: selectedProductSeq,
-        newCount: newCounts
-    };
-
-    $.ajax({
-        type: 'POST',
-        url: '${pageContext.request.contextPath}/updateQuantity',
-        data: requestData,
-        success: function(response) {
-            console.log('수량 업데이트 성공:', response);
-            // 성공 후 처리할 동작 추가
-        },
-        error: function(error) {
-            console.error('수량 업데이트 실패:', error);
-            // 실패 후 처리할 동작 추가
-        }
-    });
-});
 
 function deleteProduct(userNickname, productId, seq) {
     if (confirm("정말로 상품을 삭제하시겠습니까?")) {
@@ -138,12 +125,12 @@ function deleteProduct(userNickname, productId, seq) {
             type: 'POST',
             url: '${pageContext.request.contextPath}/deleteProduct',  // 삭제 요청을 처리할 백엔드 엔드포인트 URL
             data: {
-                userNickname: userNickname,
                 productId: productId,
                 seq: seq
                 
             },
             success: function(response) {
+            	alert(response)
                 alert("상품 삭제 성공");
                 window.location.href = '${pageContext.request.contextPath}/product/basketlist';
             },
@@ -203,12 +190,12 @@ function deleteProduct(userNickname, productId, seq) {
 								</tr>
 							</thead>
 							<tbody>
-							<c:set var="stepnumber" value="1"/>
-							<c:set var="countnumber" value="0"/>
-							
-							
+								<c:set var="stepnumber" value="1" />
+								<c:set var="countnumber" value="0" />
+
+
 								<c:forEach items="${basketList}" var="basket">
-							<c:set var="countnumber" value="${countnumber+stepnumber}"/>
+									<c:set var="countnumber" value="${countnumber+stepnumber}" />
 									<c:forEach items="${productList}" var="product">
 										<c:if test="${basket.productId eq product.productId}">
 											<tr>
@@ -218,20 +205,29 @@ function deleteProduct(userNickname, productId, seq) {
 												<td>${product.productName}</td>
 												<td id="productPrice_<c:out value="${countnumber}"/>">${product.productPrice}</td>
 												<td><input type="number"
-													class="form-control text-center" id="product_count<c:out value="${countnumber}"/>"
+													class="form-control text-center"
+													id="product_count<c:out value="${countnumber}"/>"
 													value="${basket.productCount}" min="" required></td>
-												<td id="product_total<c:out value="${countnumber}"/>" class="productTotal"/>0</td>
+												<td id="product_total<c:out value="${countnumber}"/>"
+													class="productTotal" />
+												</td>
 												<!-- 결과를 출력할 공간 -->
 
 
-												<td><input type="checkbox" name="selectedProducts" id="checkbox<c:out value="${countnumber}"/>" 
-													value="${basket.productId}, ${basket.seq}" class="checkboxclass1"/></td>
+												<td><input type="checkbox" name="selectedProducts"
+													id="checkbox<c:out value="${countnumber}"/>"
+													value="${basket.productId}, ${basket.seq}"
+													class="checkboxclass1" /></td>
 												<td><button type="button"
 														class="delete-btn btn btn-info"
 														onclick="deleteProduct('${userNickname}', ${basket.productId}, ${basket.seq})">삭제</button>
-														<input type="hidden" id="productId<c:out value="${countnumber}"/>" value="${basket.productId}">
-														
-														</td>
+													<input type="hidden"
+													id="productId<c:out value="${countnumber}"/>"
+													value="${basket.productId}">
+													<input type="hidden"
+													id="productSeq<c:out value="${countnumber}"/>"
+													value="${basket.seq}">
+													</td>
 											</tr>
 										</c:if>
 									</c:forEach>
@@ -241,18 +237,19 @@ function deleteProduct(userNickname, productId, seq) {
 						<div class="orderSum">
 							총 주문 금액: <span id="totalAmount">${totalAmount}원</span>
 						</div>
-						<input id="hiddenNumber" value="<c:out value="${countnumber}"/>" type="hidden">
+						<input id="hiddenNumber" value="<c:out value="${countnumber}"/>"
+							type="hidden">
 					</c:otherwise>
 				</c:choose>
 
-				<div class="d-flex justify-content-center mt-3">
+	<div class="d-flex justify-content-center mt-3">
 					<input type="hidden" id="totalAmount2" name="totalAmount"
 						value="${totalAmount}"> <input type="hidden"
 						id="selectedId_" name="selectedId" value="${productId}" /> <input
 						type="hidden" id="seletedSeq_" name="seletedSeq"
 						value="${basket.seq}" />
+					<button type="submit" class="btn btn-lg btn-secondary" id="order">주문하기</button>
 				</div>
-				<button type="button" class="btn btn-lg btn-secondary" id="order">주문하기</button>
 			</form>
 		</div>
 	</div>

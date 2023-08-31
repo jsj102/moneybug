@@ -90,50 +90,50 @@ public class ProductController {
 	}
 
 	//주문서로 이동
-	@PostMapping("product/orderlist")
-	public String submitOrder(
-			@RequestParam("totalAmount") String totalAmount,
-			@RequestParam("selectedId") List<String> selectedIdsStr,
-			@RequestParam("seletedSeq") List<String> selectedSeqsStr,// 변경된 변수명
-			ProductDTO productDTO, MemberDTO memberDTO, Model model, HttpSession session
-			) {
+		@PostMapping("product/orderlist")
+		public String submitOrder(
+				@RequestParam("totalAmount") String totalAmount,
+				@RequestParam("selectedId") List<String> selectedIdsStr,
+				@RequestParam("seletedSeq") List<String> selectedSeqsStr,// 변경된 변수명
+				ProductDTO productDTO, MemberDTO memberDTO, Model model, HttpSession session
+				) {
 
-		//int형으로 형변환
-		List<Integer> selectedIds = new ArrayList<>();       
-		for (String idStr : selectedIdsStr) {
-			selectedIds.add(Integer.parseInt(idStr));
+			//int형으로 형변환
+			List<Integer> selectedIds = new ArrayList<>();       
+			for (String idStr : selectedIdsStr) {
+				selectedIds.add(Integer.parseInt(idStr));
+			}
+
+			//int형으로 형변환
+			List<Integer> selectedSeqs = new ArrayList<>();       
+			for (String idStr : selectedSeqsStr) {
+				selectedSeqs.add(Integer.parseInt(idStr));
+			}
+
+			List<BasketDTO> orderlist = basketService.getOrderlists(selectedSeqs);        
+			// selectedIds를 이용하여 필요한 처리 수행
+			List<ProductDTO> productlist = productService.getProductsByIds(selectedIds);     
+
+
+			String userNickname = (String) session.getAttribute("userNickname");
+
+			if (userNickname != null && !userNickname.isEmpty()) {
+				MemberDTO memberDTO1 = new MemberDTO();
+				memberDTO1.setUserNickname(userNickname);
+				MemberDTO member = memberService.selectByNickname(memberDTO1.getUserNickname());
+				memberDTO.setPoint(member.getPoint());
+				memberDTO.setUserName(member.getUserName());
+				memberDTO.setUserNickname(member.getUserNickname());
+			} else {
+				System.out.println("session없음");
+			}
+
+			model.addAttribute("orderlist", orderlist);
+			model.addAttribute("productlist", productlist);
+			model.addAttribute("totalAmount", totalAmount);
+			model.addAttribute("member", memberDTO);
+			return "product/orderlist"; // orderlist.jsp와 매핑되는 뷰 이름
 		}
-
-		//int형으로 형변환
-		List<Integer> selectedSeqs = new ArrayList<>();       
-		for (String idStr : selectedSeqsStr) {
-			selectedSeqs.add(Integer.parseInt(idStr));
-		}
-
-		List<BasketDTO> orderlist = basketService.getOrderlists(selectedSeqs);        
-		// selectedIds를 이용하여 필요한 처리 수행
-		List<ProductDTO> productlist = productService.getProductsByIds(selectedIds);     
-
-
-		String userNickname = (String) session.getAttribute("userNickname");
-
-		if (userNickname != null && !userNickname.isEmpty()) {
-			MemberDTO memberDTO1 = new MemberDTO();
-			memberDTO1.setUserNickname(userNickname);
-			MemberDTO member = memberService.selectByNickname(memberDTO1.getUserNickname());
-			memberDTO.setPoint(member.getPoint());
-			memberDTO.setUserName(member.getUserName());
-			memberDTO.setUserNickname(member.getUserNickname());
-		} else {
-			System.out.println("session없음");
-		}
-
-		model.addAttribute("orderlist", orderlist);
-		model.addAttribute("productlist", productlist);
-		model.addAttribute("totalAmount", totalAmount);
-		model.addAttribute("member", memberDTO);
-		return "product/orderlist"; // orderlist.jsp와 매핑되는 뷰 이름
-	}
 
 	@PostMapping("product/updateOrderStatus")
 	public String updateOrderStatus(@ModelAttribute("orderNumber") String orderNumber,
@@ -159,11 +159,14 @@ public class ProductController {
 		return "product/manageOrder"; // 주문 관리 페이지로 리다이렉트
 	}
 
-	//결제 창 연결
+	//결제 후 이동
 	@PostMapping("product/paySuccess.do") 
 	@ResponseBody
-	public String payOrder(OrderListDTO orderListDTO, Model model){ 
+	public String payOrder(OrderListDTO orderListDTO, MemberDTO memberDTO, Model model, HttpSession session){ 
 		int result = productService.payOrder(orderListDTO);
+		String userNickname = (String) session.getAttribute("userNickname");
+		memberDTO.setUserNickname(userNickname);
+		memberService.usePoint(orderListDTO, memberDTO);
 		return result + ""; 
 	}
 	

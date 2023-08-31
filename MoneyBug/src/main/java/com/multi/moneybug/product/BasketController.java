@@ -82,7 +82,7 @@ public class BasketController {
         @RequestParam("productId") int productId,
         @RequestParam("newCount") int newCount, HttpSession session
     ) {
-    	System.out.println("Count는"+newCount+"id는"+productId);
+    	
         // userNickname로 userId 조회
         String userNickname = (String) session.getAttribute("userNickname");
         String userId = memberService.getUserIdByUserNickname(userNickname);
@@ -92,7 +92,6 @@ public class BasketController {
         // 업데이트 로직 실행
         for (int seq : seqList) {
             basketService.updateProductCount(userId, productId, seq, newCount);
-            System.out.println("실행완료");
         }
 
         return "success";
@@ -102,10 +101,11 @@ public class BasketController {
     @RequestMapping("/deleteProduct")
     @ResponseBody
     public String deleteProduct(
-        @RequestParam String userNickname,
         @RequestParam int productId,
-        @RequestParam int seq
+        @RequestParam int seq, HttpSession session
     ) {
+    	
+    	 String userNickname = (String) session.getAttribute("userNickname");
         // userNickname로 userId 조회
         String userId = memberService.getUserIdByUserNickname(userNickname);
         

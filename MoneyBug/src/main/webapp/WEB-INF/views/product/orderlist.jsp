@@ -59,6 +59,7 @@ body {
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <script>
+
 	function execDaumPostcode() {
 		new daum.Postcode({
 			oncomplete : function(data) {
@@ -94,7 +95,7 @@ body {
 		            merchant_uid: 'merchant_' + new Date().getTime(),
 		            name: '멀개미:결제테스트 1원',
 		            amount: 1,
-		            buyer_email: "TEST@NAVER.COM",
+		            buyer_email: 'test@naver.com',
 		            buyer_name: $('#userName').val(),
 		            buyer_tel: $('#tel').val(),
 		            buyer_addr: $('#address').val(),
@@ -109,9 +110,18 @@ body {
 		                    dataType: 'text',
 		                    data: {
 		                        imp_uid: rsp.imp_uid,
+		                        "basketSeq": $('#basketSeq').val(),
+		                        "userId": $('#userId').val(),
+		                        "userName": $('#userName').val(),
+		                        "address": $('#address-1').val() +" "+ $('#address-2').val(),
+		                        "tel": $('#tel').val(),
+		                        "price": $('#price').val(),
+		                        "discountPrice": $('#discountPrice').val(),
 		                        "totalPrice": rsp.paid_amount,
-		                        "userName": $('#userName').val()
-		                        // 필요한 경우 추가 데이터 전송
+		                        "socialId": $('#socialId').val(),
+		                        "email": $('#email').val(),
+		
+		                        "point": $('#point').val()
 		                    }
 		                }).done(function(data) {
 		                	alert(data)
@@ -142,17 +152,6 @@ body {
 		    });
 		});
 
-       
-        
-        function combineAddresses() {
-            var address1 = document.getElementById("address-1").value;
-            var address2 = document.getElementById("address-2").value;
-            var combinedAddress = address1 + " " + address2;
-            document.getElementById("address").value = combinedAddress;
-            return true; 
-        }
-        
-       
 
 </script>
 
@@ -312,7 +311,6 @@ body {
 					<input type="text" class="form-control" id="address-2"
 						placeholder="상세주소" name="address-2">
 				</div>
-				<input type="hidden" id="address" name="address">
 
 				<div class="d-flex justify-content-end">
 					<button type="submit" class="btn btn-lg btn-info" id="payOrder">결제하기</button>

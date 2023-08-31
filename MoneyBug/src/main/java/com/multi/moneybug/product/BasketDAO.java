@@ -52,8 +52,7 @@ public class BasketDAO {
 	    Map<String, Object> params = new HashMap<>();
 	    params.put("userId", userId);
 	    params.put("productId", productId);
-	    params.put("SEQ", seq);
-	    
+	    params.put("seq", seq);
 	    my.delete("basket.deleteProductFromBasket", params);
 	}
 

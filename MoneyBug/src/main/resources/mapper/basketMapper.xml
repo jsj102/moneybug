@@ -56,7 +56,7 @@
         DELETE FROM basket
         WHERE user_id = #{userId}
         AND product_id = #{productId}
-        AND seq = #{seq}
+        AND SEQ = #{seq}
     </delete>
 
     <select id="seqList" resultType="Integer">
