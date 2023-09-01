@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,7 +59,7 @@ button.update{
 				<option value="식비">식비</option>
 				<option value="교통/차량">교통/차량</option>
 				<option value="의료/건강">의료/건강</option>
-				<option value="교육" selected="selected">교육</option>
+				<option value="교육">교육</option>
 				<option value="금융">금융</option>
 				<option value="생활용품">생활용품</option>
 				<option value="패션/미용">패션/미용</option>

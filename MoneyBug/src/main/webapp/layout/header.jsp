@@ -38,7 +38,7 @@ $(document).ready(function() {
 </head>
 <body>
 
-	<nav class="navbar navbar-expand-xl navbar-light" style="background-color: #F9F5E7;">
+	<nav class="navbar navbar-expand-xl navbar-light" 	style="background-color: #F9F5E7;">
 		<div class="container-fluid">
 		<a class="navbar-brand" href="#">
 			<img src="/moneybug/resources/img/nav_icon.png" width="50" height="50" class="d-inline-block align-center" >
