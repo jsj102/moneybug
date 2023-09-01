@@ -97,21 +97,19 @@ body {
 	   $(function() {
 		    $('#payOrder').click(function() {
 				seqListSize = $('#hiddenSeqCount').val();
-        		console.log(seqListSize);
         		seqList = $('#basketSeq1').val();
         		for(let i = 2; i<=seqListSize ; i ++){
         		    seqList = $('#basketSeq'+i).val() + "," + seqList;
         		}
-        		console.log(seqList);
 		        var IMP = window.IMP; // 생략 가능
 		        IMP.init('iamport'); // 'iamport' 대신 제공된 "제휴사 식별코드" 사용
 		        IMP.request_pay({
 		            pg: 'inicis', // 1.1.0 버전부터 지원됨
 		            pay_method: 'card',
 		            merchant_uid: 'merchant_' + new Date().getTime(),
-		            name: '멀개미:결제테스트 1원',
-		            amount: 100,
-		            buyer_email: 'wspces@gmail.com',
+		            name: '멀개미:결제테스트',
+		            amount: 1,
+		            buyer_email: 'test@naver.com',
 		            buyer_name: $('#userName').val(),
 		            buyer_tel: $('#tel').val(),
 		            buyer_addr: $('#address').val(),
@@ -120,7 +118,6 @@ body {
 		            if (rsp.success) {
 		        		
 		                //[1] imp_uid를 서버 측에서 결제정보를 조회하기 위해 jQuery ajax로 전달
-		                alert("OK....------");
 		                jQuery.ajax({
 		                    url: "paySuccess.do",
 		                    type: 'POST',

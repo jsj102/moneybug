@@ -16,7 +16,7 @@
 	rel="stylesheet" />
 <style>
 body {
-	background-color: #E4D5FF;
+	background-color: #F9F5E7;
 	display: flex;
 	justify-content: center;
 	align-items: center;

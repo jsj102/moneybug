@@ -27,6 +27,7 @@ a {
     justify-content: center;
     align-items: center;
     text-align: center; /* 텍스트 가운데 정렬 */
+    overflow: hidden; 
 }
 
 .plmi table {
@@ -47,6 +48,7 @@ a {
 .maincontents {
     text-align: center; /* 가운데 정렬 */
     font-size: 25px;
+    overflow: hidden; 
 }
 
  
@@ -56,6 +58,7 @@ a {
 	border-radius: 20px; /* 모서리 둥글게 만듦 */
  	margin : 50px 80px 55px 80px;  
  	padding-bottom: 35px; 
+ 	overflow: hidden; 
 }
 
 .tagreply-container{
@@ -65,6 +68,7 @@ a {
     height: 600px; 
     overflow: auto;
     padding-top: 10px;
+    overflow: hidden; 
     }
 .replyinsert {
 	display: flex; /* 텍스트를 수직 및 수평으로 가운데 정렬하기 위해 flexbox 사용 */
@@ -75,6 +79,7 @@ a {
     border-radius: 20px; /* 테두리 스타일 및 색상 설정 */
     padding: 10px; /* 테두리와 내용 사이의 간격 설정 */
     margin : 0 150px 0 150px;
+    overflow: hidden; 
 }
 #replycontent {
     border: none; /* 기본 테두리 제거 */
@@ -84,6 +89,7 @@ a {
     width: 650px;
     background-color: #ffffff; /* 배경색 설정 */
     text-align: left; /* 가운데 정렬을 위한 속성 */
+    overflow: hidden; 
 }
 
 /* textarea의 스타일 수정 */
@@ -124,7 +130,7 @@ br + #searchButton {
 	${tagBoardDTO.content} 
 	</div>
 	<br><br><br><br><br>
-	<div class="mainbuttons">
+	<div class="mainbuttons" style="overflow: hidden;">
 	<div class="row">
 	<c:choose>
 		<c:when test="${sessionScope.userNickname eq tagBoardDTO.writerId }">

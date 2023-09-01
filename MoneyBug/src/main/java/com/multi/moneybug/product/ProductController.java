@@ -139,9 +139,6 @@ public class ProductController {
 		model.addAttribute("totalAmount", totalAmount);
 		model.addAttribute("member", memberDTO);
 		model.addAttribute("basket", basketDTO);
-		System.out.println(orderlist);
-		System.out.println(productlist);
-		System.out.println(memberDTO);
 		return "product/orderlist"; // orderlist.jsp와 매핑되는 뷰 이름
 	}
 
@@ -184,5 +181,6 @@ public class ProductController {
 		memberService.usePoint(orderListDTO, memberDTO);
 		return result + ""; 
 	}
+
 	
 }

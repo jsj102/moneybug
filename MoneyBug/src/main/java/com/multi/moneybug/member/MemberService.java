@@ -48,8 +48,6 @@ public class MemberService {
 
 	public int usePoint(OrderListDTO orderListDTO, MemberDTO memberDTO) {
 	    int newPoint = memberDTO.getPoint() - orderListDTO.getDiscountPrice();
-	    System.out.println(memberDTO.getPoint());
-	    System.out.println(orderListDTO.getDiscountPrice());
 	    memberDTO.setPoint(newPoint);  
 	    return memberDAO.usePoint(memberDTO);
 	}

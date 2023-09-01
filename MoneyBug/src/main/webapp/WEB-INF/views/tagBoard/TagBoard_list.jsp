@@ -18,6 +18,7 @@ html, body{
 	display: flex; /* 텍스트를 수직 및 수평으로 가운데 정렬하기 위해 flexbox 사용 */
     flex-direction: column;
     align-items: center; /* 수평 가운데 정렬 */
+    overflow: hidden; 
 	
 }
 
@@ -28,6 +29,7 @@ html, body{
 	display: flex; /* 텍스트를 수직 및 수평으로 가운데 정렬하기 위해 flexbox 사용 */
     flex-direction: column;
     align-items: center; /* 수평 가운데 정렬 */
+    overflow: hidden; 
 }
 
 #searchInput {
@@ -37,6 +39,7 @@ html, body{
     padding: 5px; /* 내부 여백 추가 */
     width: 600px;
     align: center;
+    overflow: hidden; 
 }
 
 #searchButton {
@@ -44,6 +47,7 @@ html, body{
     border: none;
     padding: 0;
     cursor: pointer;
+    overflow: hidden; 
 }
 
 /* 입력 폼과 버튼 간격 조절 */
@@ -60,6 +64,7 @@ br + #searchButton {
 	display: flex; /* 텍스트를 수직 및 수평으로 가운데 정렬하기 위해 flexbox 사용 */
     justify-content: center; /* 수직 가운데 정렬 */
     align-items: center; /* 수평 가운데 정렬 */
+    overflow: hidden; 
 }
 
 #searchButton img {
@@ -70,12 +75,14 @@ br + #searchButton {
   margin: 50px 0 70px 0;
   justify-content: center;
   display: flex;
+  overflow: hidden; 
 }
 
 #newinsert{
  margin :0 0 20px 1180px;
  padding: 5px 15px;
 	cursor: pointer;
+	overflow: hidden; 
 }
 
 
