@@ -135,24 +135,35 @@
 <script type="text/javascript">
 
 
-	$('#insert').click(function() {
-		var selectedValue1 = document.getElementById("boardType").value;
-		var selectedValue2 = document.getElementById("title").value;
-		var selectedValue3 = document.getElementById("content").value;
-		if (selectedValue1 === "") {
-			alert("말머리를 선택하세요.");
-			return false; // 폼 제출 막기
-		}
-		if (selectedValue2 === "") {
-			alert("제목을 입력하세요.");
-			return false; // 폼 제출 막기
-		}
-		if (selectedValue3 === "") {
-			alert("내용을 입력하세요.");
-			return false; // 폼 제출 막기
-		}
-		return true; // 폼 제출 허용
-	});
+$('#insert').click(function() {
+    var selectedValue1 = document.getElementById("boardType").value;
+    var selectedValue2 = document.getElementById("title").value;
+    var selectedValue3 = document.getElementById("content").value;
+    var maxLength = 20; // 최대 길이를 20으로 변경 (원하는 길이로 설정)
+    
+    if (selectedValue1 === "") {
+        alert("말머리를 선택하세요.");
+        return false; // 폼 제출 막기
+    }
+    
+    if (selectedValue2 === "") {
+        alert("제목을 입력하세요.");
+        return false; // 폼 제출 막기
+    }
+    
+    if (selectedValue3 === "") {
+        alert("내용을 입력하세요.");
+        return false; // 폼 제출 막기
+    }
+    
+    if (selectedValue2.length > maxLength) {
+        alert("제목은 " + maxLength + "자까지 입력 가능합니다!");
+        return false; // 폼 제출 막기
+    }
+    
+    return true; // 폼 제출 허용
+});
+
 
 	$('#cancel').click(function() {
 		location.href = "TagBoard_list?page=1";
@@ -187,6 +198,8 @@
               }
           });
       });
+	  
+	
 	
 </script>
 

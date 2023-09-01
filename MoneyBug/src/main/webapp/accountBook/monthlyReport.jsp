@@ -79,8 +79,8 @@ body {
 	<div id="monthlyDivPart1" class="MonthlyDiv">
 		<div style="flex: 1;" id="chartdiv">
 			<div id="myChartPart1"
-				style="width: 600px; height: 655px; border: 1px solid #F7FFE5;">
-				<canvas id="myChart" style="width: 600px; height: 655px;"></canvas>
+				style="width: 700px; height: 755px;">
+				<canvas id="myChart" style="width: 700px; height: 755px;"></canvas>
 			</div>
 		</div>
 		<div style="flex: 1;" id="MonthlyTable"></div>
@@ -90,10 +90,10 @@ body {
 	<div id="monthlyDivPart2" class="MonthlyDiv2">
 		<div id="myChartPart2" style="flex: 1;">
 			<canvas id="myChart2"
-				style="width: 600px; height: 340px; border: 1px solid #993300;"></canvas>
+				style="width: 700px; height: 340px; "></canvas>
 		</div>
 		<div style="flex: 1;">
-			<div style="border: 1px solid #993300; height: 340px;"
+			<div style=" height: 340px;"
 				id="RecentTable"></div>
 		</div>
 	</div>
