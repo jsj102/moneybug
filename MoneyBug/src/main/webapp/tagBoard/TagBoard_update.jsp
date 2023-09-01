@@ -7,6 +7,7 @@
 
 <style>
 
+
 /* 글 쓰기 페이지 스타일 추가 */
 #form {
 	height: 100%;
@@ -77,15 +78,15 @@
 <div class="banner-container" align="center">
 	<div class="banner-text">
 		<br> <a class="nav-link"
-			href="/moneybug/tagBoard/TagBoard_list?page=1"><h1>MoneyBug
-				Community</h1></a>
+			href="/moneybug/tagBoard/TagBoard_list?page=1">
+			<h1>MoneyBug Community</h1></a>
 		<p>나만의 이야기를 수정하고 있어요!</p>
 	</div>
 </div>
 <br>
 
-<form action="TagBoard_update" id="form" name="tagboardupdate" method="post"
-	enctype="multipart/form-data" onsubmit="return validateForm();">
+<form action="TagBoard_update" id="form" name="tagboardupdate" method="post" 
+	 onsubmit="return validateForm();">
 	<input name="seq" value="${param.seq}" type="hidden">
 
 
@@ -148,20 +149,6 @@
 		});
 	});
 
-	$('#add_file')
-			.click(
-					function() {
-						$('.file_area')
-								.append(
-										'<div class="uploadfileform">'
-												+ '<input type="file" name="file">'
-												+ ' <button type="button" class="delete_file">삭제</button>'
-												+ '</div>');
-					});
-
-	$('.file_area').on('click', '.delete_file', function() {
-		$(this).closest('div').remove();
-	});
 
 	$('#cancel').click(function() {
 		location.href = "TagBoard_one?seq=${param.seq}";
@@ -184,6 +171,28 @@
 			alert("내용을 입력하세요.");
 			return false; // 폼 제출 막기
 		}
+		
 		return true; // 폼 제출 허용
 	});
+	
+	$(document).ready(function() {
+	    // 서버로부터 로그인 상태 값을 확인하여 처리
+	    $.ajax({
+	        url: "../checkLogin",
+	        method: "GET",
+	        success: function(response) {
+	            let loginStatus = parseInt(response);
+	            if (loginStatus !== 1) {
+	                location.href = "/moneybug/login.jsp"; // 실제 로그인 페이지 URL로 변경
+	            } else {
+	                 if ("${userNickname}" !== "${param.writerId}") {
+	                    location.href = "TagBoard_one?seq=${param.seq}";
+	                } //else
+	            }//else
+	        },//success
+	   		error : function() {
+				alert("실패!")
+			} //error
+	    }); //ajax
+	});//$
 </script>

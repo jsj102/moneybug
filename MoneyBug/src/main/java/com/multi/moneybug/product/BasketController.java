@@ -75,6 +75,46 @@ public class BasketController {
 
         return "successfully";
     }
+    
+    @RequestMapping("/updateQuantity")
+    @ResponseBody
+    public String updateQuantity(
+        @RequestParam("productId") int productId,
+        @RequestParam("newCount") int newCount, HttpSession session
+    ) {
+
+        // userNickname로 userId 조회
+        String userNickname = (String) session.getAttribute("userNickname");
+        String userId = memberService.getUserIdByUserNickname(userNickname);
+
+        List<Integer> seqList = basketService.getSeqList(); // getSeqList() 메소드는 List<String> 타입으로 seq 값을 반환하는 것으로 가정합니다
+        
+        // 업데이트 로직 실행
+        for (int seq : seqList) {
+            basketService.updateProductCount(userId, productId, seq, newCount);
+        }
+
+        return "success";
+    }
+
+
+    @RequestMapping("/deleteProduct")
+    @ResponseBody
+    public String deleteProduct(
+        @RequestParam int productId,
+        @RequestParam int seq, HttpSession session
+    ) {
+    	
+    	 String userNickname = (String) session.getAttribute("userNickname");
+        // userNickname로 userId 조회
+        String userId = memberService.getUserIdByUserNickname(userNickname);
+        
+        // 삭제 로직 실행
+        basketService.deleteProductFromBasket(userId, productId, seq);
+
+        return "success";
+    }
+
 
 }
 

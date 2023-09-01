@@ -4,6 +4,8 @@
 <%@ include file="/layout/header.jsp" %>
 <%@ include file="/layout/TagBoardNav.jsp"%>
 <style>
+
+
 a {
 	text-decoration: none;
 }
@@ -47,25 +49,32 @@ a {
     font-size: 25px;
 }
 
-.mainbuttons {
-    margin-right : 90px;
-    text-align: right; 
-  }
+ 
 .replycontainer {
    	height: 100%;
 	background-color: #F9F5E7; /* 테두리 색상과 두께 설정 */
 	border-radius: 20px; /* 모서리 둥글게 만듦 */
- 	margin : 50px 80px 55px 80px;   
+ 	margin : 50px 80px 55px 80px;  
+ 	padding-bottom: 35px; 
 }
 
 .tagreply-container{
-	margin-left : 80px;
+	margin : 0 80px 20px 80px;
+	background-color: #ffffff;
+    border-radius: 20px;
+    height: 600px; 
+    overflow: auto;
+    padding-top: 10px;
     }
 .replyinsert {
 	display: flex; /* 텍스트를 수직 및 수평으로 가운데 정렬하기 위해 flexbox 사용 */
     justify-content: center; /* 수직 가운데 정렬 */
     align-items: center; /* 수평 가운데 정렬 */
     font-size: 18px;
+    background-color: #ffffff;
+    border-radius: 20px; /* 테두리 스타일 및 색상 설정 */
+    padding: 10px; /* 테두리와 내용 사이의 간격 설정 */
+    margin : 0 150px 0 150px;
 }
 #replycontent {
     border: none; /* 기본 테두리 제거 */
@@ -73,7 +82,7 @@ a {
     outline: none; /* 포커스시 테두리 제거 */
     padding: 15px; /* 내부 여백 추가 */
     width: 650px;
-    background-color: #F9F5E7; /* 배경색 설정 */
+    background-color: #ffffff; /* 배경색 설정 */
     text-align: left; /* 가운데 정렬을 위한 속성 */
 }
 
@@ -112,46 +121,60 @@ br + #searchButton {
 
 <div class = "maincontents">
 <br>
-	${tagBoardDTO.content} <br> <br>
-	<c:if test="${tagBoardDTO.image ne null}">
-		<img src="../resources/upload/${tagBoardDTO.image}" width="300">
-	</c:if>
+	${tagBoardDTO.content} 
 	</div>
-	<br><br><br>
+	<br><br><br><br><br>
 	<div class="mainbuttons">
+	<div class="row">
 	<c:choose>
 		<c:when test="${sessionScope.userNickname eq tagBoardDTO.writerId }">
-			<a
-				href="TagBoard_update.jsp?seq=${tagBoardDTO.seq}&title=${tagBoardDTO.title}&content=${tagBoardDTO.content}&boardType=${tagBoardDTO.boardType}">
-				<button id="tagboardupdate" class="btn btn-warning">수정</button>
-			</a>
-			<button id="tagboarddelete" class="btn btn-danger">삭제</button>
-			<a href="TagBoard_list?Page=1"><button
-					class="btn btn-secondary">목록</button></a>
+		<div class="btn-group" role="group">
+        <div class="col-md-0.5"style="margin:0 10px 0 120px;">
+        <form action="TagBoard_update.jsp" method="post">
+            <input type="hidden" name="seq" value="${tagBoardDTO.seq}">
+            <input type="hidden" name="title" value="${tagBoardDTO.title}">
+            <input type="hidden" name="content" value="${tagBoardDTO.content}">
+            <input type="hidden" name="boardType" value="${tagBoardDTO.boardType}">
+            <input type="hidden" name="writerId" value="${tagBoardDTO.writerId}">
+            <button type="submit" id="tagboardupdate" class="btn btn-warning btn-block">수정</button>
+        </form>
+        </div>
+        <div class="col-md-0.5" style="margin-right: 870px;">
+        <button id="tagboarddelete" class="btn btn-danger btn-block">삭제</button>
+        </div>
+		<div class="col-md-0.5">
+        <a href="TagBoard_list?Page=1">
+            <button class="btn btn-secondary btn-block">목록</button>
+        </a>
+        </div>
+		</div>
 			<br>
 		</c:when>
 		<c:otherwise>
+		<div class="col-md-0.5" style="margin-left: 1105px;">
 			<a href="TagBoard_list?Page=1"><button
 					class="btn btn-secondary">목록</button></a>
-			<br>
+					</div>
 		</c:otherwise>
 	</c:choose>
+</div>
 </div>
 	
 
 	<div class="replycontainer">
 	<br>
 	<h3 style="margin: 10px 0 15px 40px;"> 댓글</h3>
-		<div class="replyinsert"><input id="replycontent" placeholder="댓글을 입력하세요. . ."">&nbsp&nbsp
-		<button id="tagreplyinsert" class="btn btn-secondary">입력</button></div>
+		<div class="replyinsert" ><input id="replycontent" placeholder="댓글을 입력하세요. . ."">&nbsp&nbsp
+		<button id="tagreplyinsert" class="btn btn-secondary" style="margin-left: 10px;">입력</button></div>
 		<br><br>
 		
 
 
-		<div class="tagreply-container" style="height: 800px; overflow: auto;">
+		<div class="tagreply-container">
+
 			<c:forEach items="${tagreplylist}" var="tagReplyDTO">
 				<c:if test="${tagReplyDTO.replyLevel eq 0}">
-					<div class="tagreply original-reply">
+					<div class="tagreply original-reply" style="margin-left: 60px;">
 						<br> <span style="font-weight: 600; color:#56CC9D;">${tagReplyDTO.writerId}</span> <br> <span style="font-size:18px;">${tagReplyDTO.content}</span>
 
 						<br>
@@ -197,13 +220,14 @@ br + #searchButton {
 						</form>
 						<br>
 					</div>
+					<hr style="margin: 15px 30px -12px 30px;">
 
 					<!-- 대댓글 표시 -->
 					<div>
 						<c:forEach items="${tagreplylist}" var="reply">
 							<c:if
 								test="${reply.replyLevel eq 1 and reply.groupSeq eq tagReplyDTO.groupSeq}">
-								<div class="tagreply indented-reply" style="margin-left: 40px;">
+								<div class="tagreply indented-reply" style="margin-left: 105px;">
 									<br><span style="font-weight: 600; color:#56CC9D;"> ${reply.writerId}</span> <br> <span style="font-size:18px;"><c:if
 											test="${not empty reply.originWriter}"><span style="font-weight: 600; font-size: 17px;">@${reply.originWriter}</span></c:if>
 									&nbsp${reply.content} </span><br>
@@ -248,7 +272,7 @@ br + #searchButton {
 									<br>
 
 								</div>
-
+								<hr style="margin: 15px 30px -12px 30px;">
 
 
 							</c:if>
