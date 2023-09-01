@@ -71,27 +71,29 @@
 		values (null,#{productType}, #{productName}, #{productImg},
 		#{productOriprice}, #{productPrice}, #{productInfo})
 	</insert>
-
+	
 	<select id="orderList" resultMap="orderListMap">
 		select * from order_list
 	</select>
-
+	
 	<select id="myOrderList" resultMap="orderListMap">
-		select * from order_list
-		where USER_ID = #{userId}
+		select * from order_list where USER_ID = #{userId}
 	</select>
-
+	
 	<update id="updateOrder" parameterType="java.util.Map">
-		update order_list
-		set order_status = #{newStatus}
-		WHERE ORDER_NUMBER = #{orderNumber}
+	    update order_list
+	    set order_status = #{newStatus}
+	    WHERE ORDER_NUMBER = #{orderNumber}
 	</update>
 
-	<insert id="orderInsert" parameterType="com.multi.moneybug.product.OrderListDTO">
+	<insert id="orderInsert"
+		parameterType="com.multi.moneybug.product.OrderListDTO">
 		INSERT INTO order_list
-		VALUES (null, #{basketSeq}, #{userId}, CURRENT_TIMESTAMP, #{userName},
-		#{address}, #{tel}, #{price}, #{discountPrice}, #{totalPrice},
-		#{payTool},"배송준비")
+		VALUES (null, #{basketSeq},
+		#{userId}, CURRENT_TIMESTAMP, #{userName},
+		#{address}, #{tel},
+		#{price}, #{discountPrice}, #{totalPrice},
+		"inicis","배송준비")
 	</insert>
-
+	
 </mapper>

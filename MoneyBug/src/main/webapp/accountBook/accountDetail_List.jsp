@@ -7,8 +7,19 @@
 <%@ include file="/layout/accountNav.jsp"%>
 <%@ include file="/layout/accountDetail_Search.jsp"%>
 
+
 <style>
+html, body{
+	height: 100%;
+	
+}
+
 body {
+	background: #F9F5E7;
+	display:flex;
+	flex-direction:column;
+	height:100%;
+	flex:1;
 	margin: 0;
 }
 
@@ -23,14 +34,19 @@ body {
 	align-items: center;
 	padding-left: 250px;
 }
+
 </style>
 
 <div class="account_section">
 	<h3>가계부 내역 페이지</h3>
-	<a style="text-align: right; display: block;" href="/moneybug/accountBook/accountDetail_Insert.jsp">
-	<button >작성</button>
+
+	<br>
+
+	<a href="/moneybug/accountBook/accountDetail_Insert.jsp">
+		<button class="btn btn-info">작성</button>
 	</a>
 	<div id="accountList"></div>
 </div>
 <%@ include file="/layout/accountAside.jsp"%>
 <%@ include file="/layout/footer.jsp"%>
+

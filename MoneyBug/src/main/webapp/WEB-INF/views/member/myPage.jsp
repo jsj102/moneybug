@@ -31,7 +31,7 @@ body {
 .info-container {
 	padding: 40px;
 	justify-content: center;
-	box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
 	background-color: white;
 	border-radius: 20px;
 }

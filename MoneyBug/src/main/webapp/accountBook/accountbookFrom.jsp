@@ -1,12 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ include file="/layout/header.jsp"%>
+<jsp:include page="/layout/header.jsp"/>
 <%@ include file="/layout/accountNav.jsp"%>
 
 <style>
+
+html, body{
+	height: 100%;
+	
+}
+
 body {
+	background: #F9F5E7;
+	display:flex;
+	flex-direction:column;
+	height:100%;
+	flex:1;
 	margin: 0;
 }
+
 
   .account_section {
     width: 80vw;
@@ -39,5 +51,5 @@ body {
 </div>
 
 <%@ include file="/layout/accountAside.jsp"%>
-<%@ include file="/layout/footer.jsp"%>
+<jsp:include page="/layout/footer.jsp"/>
 
