@@ -13,7 +13,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <style>
     body {
-    	background-color: #E4D5FF;
+    	background-color: #F9F5E7;
         display: flex;
         justify-content: center;
         align-items: center;

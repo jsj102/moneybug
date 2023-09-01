@@ -7,6 +7,19 @@
 
 
 <style>
+html, body {
+	height: 100%;
+}
+
+body {
+	background: #F9F5E7;
+	display:flex;
+	flex-direction:column;
+	height:100%;
+	flex:1;
+	margin: 0;
+}
+
 #addline {
 	background-color: rgba(255, 255, 255, 0.472);
 	width: 350px;
