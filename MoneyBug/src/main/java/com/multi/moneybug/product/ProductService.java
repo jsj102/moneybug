@@ -50,8 +50,8 @@ public class ProductService {
 		return productDAO.myOrderList(userId);
 	}
 
-	public void payOrder(OrderListDTO orderListDTO) {
-		productDAO.payOrder(orderListDTO);
+	public int payOrder(OrderListDTO orderListDTO) {
+		return productDAO.payOrder(orderListDTO);
 		
 	}
 

@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.multi.moneybug.member.MemberDTO;
+import com.multi.moneybug.member.MemberService;
 
 import com.multi.moneybug.member.MemberDTO;
 import com.multi.moneybug.member.MemberService;
@@ -94,7 +98,9 @@ public class ProductController {
 			@RequestParam("totalAmount") String totalAmount,
 			@RequestParam("selectedId") List<String> selectedIdsStr,
 			@RequestParam("seletedSeq") List<String> selectedSeqsStr,// 변경된 변수명
-			ProductDTO productDTO, MemberDTO memberDTO, Model model, HttpSession session
+
+			ProductDTO productDTO, MemberDTO memberDTO, BasketDTO basketDTO, Model model, HttpSession session
+
 			) {
 
 		//int형으로 형변환
@@ -113,13 +119,14 @@ public class ProductController {
 		// selectedIds를 이용하여 필요한 처리 수행
 		List<ProductDTO> productlist = productService.getProductsByIds(selectedIds);     
 
-
 		String userNickname = (String) session.getAttribute("userNickname");
 
 		if (userNickname != null && !userNickname.isEmpty()) {
-			MemberDTO memberDTO1 = new MemberDTO();
-			memberDTO1.setUserNickname(userNickname);
-			MemberDTO member = memberService.selectByNickname(memberDTO1.getUserNickname());
+			/* MemberDTO memberDTO1 = new MemberDTO(); */
+			memberDTO.setUserNickname(userNickname);
+			MemberDTO member = memberService.selectByNickname(memberDTO.getUserNickname());
+			memberDTO.setUserId(member.getUserId());
+			memberDTO.setEmail(member.getEmail());
 			memberDTO.setPoint(member.getPoint());
 			memberDTO.setUserName(member.getUserName());
 			memberDTO.setUserNickname(member.getUserNickname());
@@ -131,6 +138,10 @@ public class ProductController {
 		model.addAttribute("productlist", productlist);
 		model.addAttribute("totalAmount", totalAmount);
 		model.addAttribute("member", memberDTO);
+		model.addAttribute("basket", basketDTO);
+		System.out.println(orderlist);
+		System.out.println(productlist);
+		System.out.println(memberDTO);
 		return "product/orderlist"; // orderlist.jsp와 매핑되는 뷰 이름
 	}
 
@@ -158,15 +169,17 @@ public class ProductController {
 		return "product/manageOrder"; // 주문 관리 페이지로 리다이렉트
 	}
 
-	//결제 창 연결
+	//결제 후 이동
 	@PostMapping("product/paySuccess.do") 
-	public String payOrder(OrderListDTO orderListDTO, Model model){ 
-		System.out.println(orderListDTO);
-		productService.payOrder(orderListDTO);
-		return "redirect:/main.jsp"; 
+	@ResponseBody
+	public String payOrder(OrderListDTO orderListDTO, MemberDTO memberDTO, Model model, BasketDTO basketDTO, HttpSession session, String userId, int productId, int seq){ 
+		int result = productService.payOrder(orderListDTO);
+		String userNickname = (String) session.getAttribute("userNickname");
+		memberDTO.setUserNickname(userNickname);
+		memberService.usePoint(orderListDTO, memberDTO);
+		System.out.println(basketDTO);
+		basketService.deleteProductFromBasket(userId,productId,seq);
+		return result + ""; 
 	}
 	
-	
-
-
 }
