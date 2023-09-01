@@ -36,7 +36,7 @@ public class AccountGPTController {
 	}
 
 	// try catch
-	@Scheduled(cron = "0 48 10 * * *") // 초 분 시
+	@Scheduled(cron = "0 0 0 1 * *") // 초 분 시
 	public void montlyGptInsert() {
 		List<Integer> idList = accountBookService.readList();
 		AccountDetailDTO account = new AccountDetailDTO();
