@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -26,7 +28,13 @@ public class TagBoardController {
 
 	@RequestMapping("tagBoard/TagBoard_insert")
 	public String insert(TagBoardDTO tagBoardDTO, Model model){
-	    tagBoardService.insert(tagBoardDTO); 
+
+	    if (tagBoardDTO.getTitle() != null && tagBoardDTO.getContent() != null) {
+	        tagBoardService.insert(tagBoardDTO); // 데이터가 null이 아닐 때만 데이터 삽입 시도
+	    } else {
+	        // 데이터 중 하나라도 null인 경우 리다이렉션
+	        return "redirect:/tagBoard/TagBoard_list?page=1";
+	    }
 
 	    return "redirect:/tagBoard/TagBoard_list?page=1";
 	}
@@ -100,13 +108,18 @@ public class TagBoardController {
 
 	}
 
-	
-	@RequestMapping("tagBoard/TagBoard_update")
-	public String update(TagBoardDTO tagBoardDTO, Model model)
-	        throws Exception {
-	    
-	    model.addAttribute("tagBoardDTO", tagBoardDTO);
-	    tagBoardService.update(tagBoardDTO);
+
+	@RequestMapping(value = "tagBoard/TagBoard_update", method = {RequestMethod.GET, RequestMethod.POST})
+	public String update(TagBoardDTO tagBoardDTO, Model model){
+
+		model.addAttribute("tagBoardDTO", tagBoardDTO);
+	    if (tagBoardDTO.getTitle() != null && tagBoardDTO.getContent() != null) {
+	        tagBoardService.update(tagBoardDTO); // 데이터가 null이 아닐 때만 데이터 삽입 시도
+	    } else {
+	        // 데이터 중 하나라도 null인 경우 리다이렉션
+	        return "redirect:/tagBoard/TagBoard_list?page=1";
+	    }
+
 	    
 	    return "redirect:TagBoard_one?seq=" + tagBoardDTO.getSeq();
 	}

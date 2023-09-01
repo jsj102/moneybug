@@ -5,6 +5,11 @@
 <%@ include file="/layout/TagBoardNav.jsp"%>
 
 <style>
+html, body{
+	height: 100%;
+	
+}
+
 #searchInput {
     border: none; /* 기본 테두리 제거 */
     border-bottom: 2px solid #F3969A; /* 밑줄 스타일 적용 */
@@ -52,6 +57,11 @@ br + #searchButton {
 a {
 	text-decoration: none;
 }
+
+.page-item.active .page-link {
+    background-color: #F3969A; 
+    border-color: #F3969A; 
+}
 </style>
 
 
@@ -68,8 +78,8 @@ a {
 	<table class="table table-sm mx-auto">
 		<thead>
 			<tr>
-				<th style="width: 80px;">No.</th>
-				<th style="width: 780px;">제목</th>
+				<th style="width: 90px;">No.</th>
+				<th style="width: 770px;">제목</th>
 				<th style="width: 150px;">작성자</th>
 				<th>조회수</th>
 				<th>작성일</th>
@@ -91,27 +101,45 @@ a {
 			</c:forEach>
 		</tbody>
 	</table>
+<br>
 
 <c:set var="currentPage" value="${param.page}" />
 <div>
    <ul class="pagination">
     <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-      <a class="page-link" href="TagBoard_taglist?boardType=${param.boardType}&page=${currentPage - 1}" ${currentPage == 1 ? 'aria-disabled="true"' : ''}>«</a>
+      <a class="page-link" href="TagBoard_taglist?boardType=${param.boardType}&page=1" ${currentPage == 1 ? 'aria-disabled="true"' : ''}><<</a>
     </li>
-	<c:forEach begin="1" end="${pages}" varStatus="status">
-      <li class="page-item">
+    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+      <a class="page-link" href="TagBoard_taglist?boardType=${param.boardType}&page=${currentPage - 1}" ${currentPage == 1 ? 'aria-disabled="true"' : ''}><</a>
+    </li>
+	<c:set var="startPage" value="${currentPage - (currentPage % 5 == 0 ? 4 : (currentPage % 5) - 1)}" />
+	<c:choose>
+    <c:when test="${startPage < 1}">
+        <c:set var="startPage" value="1" />
+    </c:when>
+</c:choose>
+	<c:set var="endPage" value="${startPage + 4}" />
+	<c:choose>
+    <c:when test="${endPage > pages}">
+        <c:set var="endPage" value="${pages}" />
+    </c:when>
+</c:choose>
+	<c:forEach begin="${startPage}" end="${endPage}" varStatus="status">
+      <li class="page-item ${currentPage == status.index ? 'active' : ''}">
         <a class="page-link" href="TagBoard_taglist?boardType=${param.boardType}&page=${status.index}">${status.index}</a>
       </li>
     </c:forEach>
 	<li class="page-item ${currentPage == pages ? 'disabled' : ''}">
-      <a class="page-link" href="TagBoard_taglist?boardType=${param.boardType}&page=${currentPage + 1}" ${currentPage == pages ? 'aria-disabled="true"' : ''}>»</a>
+      <a class="page-link" href="TagBoard_taglist?boardType=${param.boardType}&page=${currentPage + 1}" ${currentPage == pages ? 'aria-disabled="true"' : ''}>></a>
+    </li>
+	<li class="page-item ${currentPage == pages ? 'disabled' : ''}">
+      <a class="page-link" href="TagBoard_taglist?boardType=${param.boardType}&page=${pages}" ${currentPage == pages ? 'aria-disabled="true"' : ''}>>></a>
     </li>
   </ul>
 </div>
 
-
+<br>
 </div>
-
 	<script type="text/javascript">
 		$('#newinsert').click(function() {
 			// 서버로부터 로그인 상태 값을 확인하여 처리
