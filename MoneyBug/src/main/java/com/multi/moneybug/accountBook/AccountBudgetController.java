@@ -47,7 +47,6 @@ public class AccountBudgetController {
 		List<AccountBudgetDTO> budgetList = accountBudgetService.getListBudget(accountBookId,year,month);
 		List<AccountExpensesDTO> expensesList = accountExpensesService.getListExpenses(accountBookId);
 		LinkedHashMap<String,Integer> sumMap = accountBudgetService.sumBudgetAndExpensesToMap(budgetList,expensesList);
-		System.out.println("예산");
 		return sumMap;
 	}
 	

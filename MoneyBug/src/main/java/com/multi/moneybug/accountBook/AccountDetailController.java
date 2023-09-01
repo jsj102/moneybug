@@ -84,7 +84,6 @@ public class AccountDetailController {
 		
 		map.put("list", accountDetailList = accountDetailList.subList(0, (accountDetailList.size()<5) ? accountDetailList.size() : 5)); //0~4번까지 5개 리스트 입력
 		map.put("map", accountDetailMap);
-		System.out.println("디테일");
 		return map;
 	}
 	

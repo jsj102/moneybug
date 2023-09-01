@@ -22,7 +22,6 @@ public class ChatController {
     @ResponseBody
     public List<ChatMessage> showChatPage(@RequestParam(required = false) String channel) throws InterruptedException, ExecutionException {
         List<ChatMessage> messages = chatService.getAllMessages(channel);
-        log.info("요청옴");
         return messages;
     }
 
@@ -34,7 +33,6 @@ public class ChatController {
     	    chatBot(name, text, channel);
     	} else {
     	    chatService.sendMessage(name, text, channel);
-    	    log.info("요청들어감");
     	}
 
         return "redirect:/chat"; // 채팅 페이지로 리다이렉트
