@@ -12,7 +12,7 @@ body {
 
 .banner-container {
 	height: 320px;
-	background-color: #F3969A;
+	background-color: #6cc3d5;
 	background-position: center;
 	display: flex;
 	flex-direction: column;
@@ -104,9 +104,7 @@ body {
     function DirectBasket() {
         // 세션에 userNickname 정보가 있는지 확인
         var userNickname = "<%= session.getAttribute("userNickname") %>";
-        
         if (userNickname != "null") {
-        	
             location.href = "basketlist"; // 장바구니 페이지로 이동
         } else if (userNickname = "null") {
             alert("로그인이 필요합니다."); // 로그인 안내 경고창 띄우기

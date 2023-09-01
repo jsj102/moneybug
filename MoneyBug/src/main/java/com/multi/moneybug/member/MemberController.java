@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.multi.moneybug.product.OrderListDTO;
+import com.multi.moneybug.product.ProductService;
+
 import lombok.extern.java.Log;
 
 @Log
@@ -24,6 +27,9 @@ public class MemberController {
 
 	@Autowired
 	MemberService memberService;
+	
+	@Autowired
+	ProductService productService;
 
 	// 중복회원 검사
 	@PostMapping("/member/findMember.do")
@@ -69,10 +75,12 @@ public class MemberController {
 	}
 
 	// 마이페이지로 이동 (신규, 기존회원 모두)
-		@GetMapping("/member/myPage.do")
+
+		@RequestMapping("/member/myPage.do")
 		public String myPage(MemberDTO memberDTO, Model model, HttpSession session) {
 			String socialId = (String) session.getAttribute("socialId");
 			memberDTO.setSocialId(socialId);
+			String userId = null;
 
 			List<MemberDTO> selectedMembers = memberService.select(memberDTO); // select 메서드 실행 후 반환된 리스트
 			if (!selectedMembers.isEmpty()) {
@@ -81,27 +89,34 @@ public class MemberController {
 				model.addAttribute("userName", selectedMember.getUserName());
 				model.addAttribute("socialId", selectedMember.getSocialId());
 				model.addAttribute("point", selectedMember.getPoint());
+
+				userId = selectedMember.getUserId();
 			}
+
+			List<OrderListDTO> orderlist = productService.myOrderList(userId);
+			model.addAttribute("orderlist", orderlist);
+
 			return "member/myPage";
 		}
+
+
 		
 		// 마이페이지로 이동 (신규, 기존회원 모두)
-		@PostMapping("/member/signUp.do")
-		public String signUp(MemberDTO memberDTO, Model model, HttpSession session) {
-			String socialId = (String) session.getAttribute("socialId");
-			memberDTO.setSocialId(socialId);
+				@PostMapping("/member/signUp.do")
+				public String signUp(MemberDTO memberDTO, Model model, HttpSession session) {
+					String socialId = (String) session.getAttribute("socialId");
+					memberDTO.setSocialId(socialId);
 
-			List<MemberDTO> selectedMembers = memberService.select(memberDTO); // select 메서드 실행 후 반환된 리스트
-			if (!selectedMembers.isEmpty()) {
-				MemberDTO selectedMember = selectedMembers.get(0); // 첫 번째 멤버 선택
-				model.addAttribute("email", selectedMember.getEmail());
-				model.addAttribute("userName", selectedMember.getUserName());
-				model.addAttribute("socialId", selectedMember.getSocialId());
-				model.addAttribute("point", selectedMember.getPoint());
-			}
-			return "member/signUp";
-		}
-
+					List<MemberDTO> selectedMembers = memberService.select(memberDTO); // select 메서드 실행 후 반환된 리스트
+					if (!selectedMembers.isEmpty()) {
+						MemberDTO selectedMember = selectedMembers.get(0); // 첫 번째 멤버 선택
+						model.addAttribute("email", selectedMember.getEmail());
+						model.addAttribute("userName", selectedMember.getUserName());
+						model.addAttribute("socialId", selectedMember.getSocialId());
+						model.addAttribute("point", selectedMember.getPoint());
+					}
+					return "member/signUp";
+				}
 
 
 

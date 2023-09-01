@@ -6,9 +6,22 @@
 <%@ include file="/layout/accountNav.jsp"%>
 
 <style>
-.MonthlyDiv{display: flex; width:1100px; height:655px; background-color: #F7FFE5;  text-align: center; border: 1px solid #E1ECC8;}
-.MonthlyDiv2{display: flex; width:1100px; height:340px; background-color: #F7FFE5;  text-align: center; border: 1px solid #E1ECC8;}
-.MonthlyDiv3{display: flex; width:1100px; height:340px; background-color: #F7FFE5;  text-align: left; border: 1px solid #993300; position: relative; 	color: purple;
+html, body{
+	height: 100%;
+	
+}
+
+body {
+	background: #F9F5E7; //본인이 원하는 색깔로 페이지
+	display:flex;
+	flex-direction:column;
+	height:100%;
+	flex:1;
+	margin: 0;
+}
+.MonthlyDiv{display: flex; width:1200px; height:755px; background-color: #ffffff;  text-align: center; border: 1px solid #E1ECC8;}
+.MonthlyDiv2{display: flex; width:1200px; height:340px; background-color: #ffffff;  text-align: center; border: 1px solid #E1ECC8;}
+.MonthlyDiv3{display: flex; width:1200px; height:340px; background-color: #ffffff;  text-align: left; border: 1px solid #993300; position: relative; 	color: black;
 	font-weight: bold; padding: 5px;  }
 .RecentTable {
     width: 500px;
@@ -20,9 +33,8 @@
 
 .RecentTable th,
 .RecentTable td {
-	color: purple;
+	color: black;
 	font-weight: bold;
-    border: 1px solid #F7FFE5;
     padding: 8px; /* 셀 내용과 테두리 사이의 간격 */
 }
 
@@ -30,12 +42,11 @@
 	font-weight: bold;
     background-color: rgba(200, 200, 200, 0.472); /* 테이블 헤더 배경색 */
 }
-.MonthlyTable{width:500px; height:655px; background-color: rgba(255, 255, 255, 0.472);  text-align: center; border: 1px solid #993300;}
+.MonthlyTable{width:500px; height:755px; background-color: rgba(255, 255, 255, 0.472);  text-align: center; }
 .MonthlyTable th,
 .MonthlyTable td {
-	color: purple;
+	color: black;
 	font-weight: bold;
-    border: 1px solid #993300;
     padding: 8px; /* 셀 내용과 테두리 사이의 간격 */
 }
 

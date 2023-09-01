@@ -44,6 +44,13 @@
         WHERE user_nickname = #{userNickname}
     </select>
     
+    <update id="usePoint" parameterType="MemberDTO">
+		UPDATE user_member
+		SET
+		POINT = #{point}
+		WHERE user_nickname = #{userNickname}
+	</update>
+
     	<select id="getEmailByUserNickname" parameterType="String" resultType="String">
         SELECT EMAIL
         FROM user_member
