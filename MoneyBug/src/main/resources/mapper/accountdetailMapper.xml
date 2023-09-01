@@ -31,7 +31,7 @@
 	</delete>
 	
 	<select id="listPage" parameterType="accountDetailDTO" resultType="accountDetailDTO">
-	    select * from account_detail where ACCOUNT_BOOK_ID = #{accountBookId} limit 10 offset #{offset}
+	    select * from account_detail where ACCOUNT_BOOK_ID = #{accountBookId} ORDER BY USED_AT DESC limit 10 offset #{offset}
 	</select>
 	
 	<select id="listSearch" parameterType="accountDetailSearchDTO" resultType="accountDetailDTO">
@@ -46,7 +46,8 @@
 		    </otherwise>
 		</choose>
 		AND USED_AT LIKE CONCAT('%',#{searchYear},'-%')
-		AND ACCOUNT_CATEGORY LIKE CONCAT('%',#{accountCategory},'%')) As a
+		AND ACCOUNT_CATEGORY LIKE CONCAT('%',#{accountCategory},'%')
+		ORDER BY USED_AT DESC) As a
 		limit 10 
 		offset #{offsetNumber};
 	</select>
