@@ -46,13 +46,7 @@ public class BasketService {
     }
 
     public void updateProductCount(String userId, int productId, int seq, int newCount) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("userId", userId);
-        params.put("productId", productId);
-        params.put("SEQ", seq);
-        params.put("newCount", newCount);
-
-        basketDAO.updateProductCount(params);
+        basketDAO.updateProductCount(userId,productId,seq,newCount);
     }
 
     public void deleteProductFromBasket(String userId, int productId, int seq) {

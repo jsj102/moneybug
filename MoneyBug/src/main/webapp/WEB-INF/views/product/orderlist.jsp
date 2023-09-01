@@ -24,13 +24,13 @@ body {
 }
 
 .pay-container {
+	background: #FAFAFA;
 	margin-top: 30px;
 	flex-direction: column;
 	align-items: center;
-}
-
-.table {
-	border: 1px solid;
+	padding: 30px;
+	border-radius: 20px;
+	box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
 }
 
 .td img {
@@ -69,20 +69,27 @@ body {
 		}).open();
 	}
 
-	   $(document).ready(function() {
-	        $("#applyPoint").click(function(event) {
-	            event.preventDefault(); 
-	            var discountPrice = parseInt($("#discountPrice").val()) || 0;
-	            var totalAmount = <%= request.getAttribute("totalAmount") %>;
-	            var totalPrice = totalAmount - discountPrice;
+	$(document).ready(function() {
+	    $("#applyPoint").click(function(event) {
+	        event.preventDefault(); 
+	        var discountPrice = parseInt($("#discountPrice").val()) || 0;
+	        var maxDiscount = parseInt($("#discountPrice").attr("max")) || 0; // 최대값 가져오기
+	        var totalAmount = <%= request.getAttribute("totalAmount") %>;
+	        
+	        // discountPrice가 max보다 크면 max 값으로 설정
+	        if (discountPrice > maxDiscount) {
+	            discountPrice = maxDiscount;
+	        }
+	        
+	        var totalPrice = totalAmount - discountPrice;
 
-	            if (totalPrice < 0) {
-	                totalPrice = 0;
-	            }
+	        if (totalPrice < 0) {
+	            totalPrice = 0;
+	        }
 
-	            $("#totalPrice").val(totalPrice); 
-	        });
-	   });
+	        $("#totalPrice").val(totalPrice); 
+	    });
+	});
 
 	   
 	   $(function() {
@@ -95,7 +102,7 @@ body {
 		            merchant_uid: 'merchant_' + new Date().getTime(),
 		            name: '멀개미:결제테스트 1원',
 		            amount: 1,
-		            buyer_email: 'test@naver.com',
+		            buyer_email: 'jiyun3664@gmail.com',
 		            buyer_name: $('#userName').val(),
 		            buyer_tel: $('#tel').val(),
 		            buyer_addr: $('#address').val(),
@@ -104,13 +111,15 @@ body {
 		            if (rsp.success) {
 		                //[1] imp_uid를 서버 측에서 결제정보를 조회하기 위해 jQuery ajax로 전달
 		                alert("OK....------");
+		                var seq_value = $(this).attr("selected_id");
+		                console.log(seq_value);
 		                jQuery.ajax({
 		                    url: "paySuccess.do",
 		                    type: 'POST',
 		                    dataType: 'text',
 		                    data: {
 		                        imp_uid: rsp.imp_uid,
-		                        "basketSeq": $('#basketSeq').val(),
+		                        "seq": seq_value,
 		                        "userId": $('#userId').val(),
 		                        "userName": $('#userName').val(),
 		                        "address": $('#address-1').val() +" "+ $('#address-2').val(),
@@ -120,8 +129,8 @@ body {
 		                        "totalPrice": rsp.paid_amount,
 		                        "socialId": $('#socialId').val(),
 		                        "email": $('#email').val(),
-		
-		                        "point": $('#point').val()
+		                        "point": $('#point').val(),
+		                        "productId" : $('#productId').val()
 		                    }
 		                }).done(function(data) {
 		                	alert(data)
@@ -218,8 +227,18 @@ body {
 					<div class="col-sm-4">
 						<div class="input-group">
 						<c:forEach items="${orderlist}" var="order">
-							<input type="text" class="form-control" id="basketSeq" name="basketSeq" value="${order.seq}" readonly>
+							<input type="number" class="form-control" selected_id="basketSeq" name="basketSeq" value="${order.seq}" readonly>
 							</c:forEach>
+						</div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="productId" class="col-sm-8 col-form-label"> 상품 번호</label>
+					<div class="col-sm-4">
+						<div class="input-group">
+						<c:forEach items="${orderlist}" var="order">
+							<input type="number" class="form-control" id="productId" name="productId" value="${order.productId}" readonly>
+						</c:forEach>
 						</div>
 					</div>
 				</div>
@@ -270,7 +289,7 @@ body {
 					<div class="col-sm-4">
 						<div class="input-group">
 							<input type="number" class="form-control" id="discountPrice"
-								name="discountPrice" max="${member.point}" min="0" step="5"/>
+								name="discountPrice" max="${member.point}" min="0" step="5" value="0"/>
 							<button type="button" class="btn btn-danger" id="applyPoint">적용</button>
 						</div>
 					</div>

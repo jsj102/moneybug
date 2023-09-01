@@ -2,62 +2,64 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="basket">
 
-	<resultMap id="basketResultMap"
-		type="com.multi.moneybug.product.BasketDTO">
-		<id property="seq" column="seq" />
-		<result property="seq" column="seq" />
-		<result property="userId" column="userId" />
-		<result property="productId" column="productId" />
-		<result property="productCount" column="productCount" />
-	</resultMap>
+    <resultMap id="basketResultMap" type="com.multi.moneybug.product.BasketDTO">
+        <id property="seq" column="seq"/>
+        <result property="userId" column="user_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="productCount" column="product_count"/>
+    </resultMap>
 
+    <select id="basket_List" parameterType="String" resultMap="basketResultMap">
+        SELECT *
+        FROM basket
+        WHERE user_id = #{userId}
+    </select>
 
-	<select id="basket_List" parameterType="String"
-		resultMap="basketResultMap">
-		SELECT *
-		FROM basket
-		WHERE user_id = #{userId}
-	</select>
+    <!-- 장바구니에 상품이 있는지 체크하는 쿼리 -->
+    <select id="checkProductInBasket" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM basket
+        WHERE user_id = #{userId}
+        AND product_id = #{productId}
+    </select>
 
-	<!-- 장바구니에 상품이 있는지 체크하는 쿼리 -->
-	<select id="checkProductInBasket" parameterType="java.util.Map"
-		resultType="java.lang.Integer">
-		SELECT COUNT(*) FROM basket
-		WHERE user_id = #{userId}
-		AND product_id = #{productId}
-	</select>
+    <!-- 장바구니에 상품 업데이트하는 쿼리 -->
+    <update id="updateProductInBasket" parameterType="java.util.Map">
+        UPDATE basket
+        SET product_count = product_count + #{productCount}
+        WHERE user_id = #{userId}
+        AND product_id = #{productId}
+    </update>
+    
+    <!-- 장바구니에서 수량 업데이트하는 쿼리 -->
+    <update id="updateBasket" parameterType="java.util.Map">
+        UPDATE basket
+        SET product_count = #{newCount}
+        WHERE SEQ = #{seq} AND user_id = #{userId} AND product_id = #{productId}
+        
+    </update>
 
-	<!-- 장바구니에 상품 업데이트하는 쿼리 -->
-	<update id="updateProductInBasket"
-		parameterType="com.multi.moneybug.product.BasketDTO">
-		UPDATE basket
-		SET product_count = product_count + #{productCount}
-		WHERE user_id = #{userId}
-		AND product_id = #{productId}
-	</update>
-
-	<insert id="addToBasket" parameterType="BasketDTO">
-		INSERT INTO basket (user_id, product_id, product_count) VALUES (#{userId},
-		#{productId}, #{productCount})
-	</insert>
+    <insert id="addToBasket" parameterType="com.multi.moneybug.product.BasketDTO">
+        INSERT INTO basket (user_id, product_id, product_count)
+        VALUES (#{userId}, #{productId}, #{productCount})
+    </insert>
 
     <select id="order_List" parameterType="java.util.List" resultMap="basketResultMap">
-    SELECT *
-    FROM basket
-    WHERE SEQ IN
-    <foreach collection="list" item="seq" open="(" separator="," close=")">
-        #{seq}
-    </foreach>
-</select>
-	
-<delete id="deleteProductFromBasket" parameterType="java.util.Map">
-    DELETE FROM basket
-    WHERE user_id = #{userId}
-    AND product_id = #{productId}
-    AND SEQ = #{SEQ}
-</delete>
+        SELECT *
+        FROM basket
+        WHERE SEQ IN
+        <foreach collection="list" item="seq" open="(" separator="," close=")">
+            #{seq}
+        </foreach>
+    </select>
 
-		
-	
+    <delete id="deleteProductFromBasket" parameterType="java.util.Map">
+        DELETE FROM basket
+        WHERE SEQ = #{seq}
+    </delete>
+
+    <select id="seqList" resultType="Integer">
+        SELECT SEQ FROM basket;
+    </select>
+
 
 </mapper>

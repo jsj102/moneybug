@@ -95,7 +95,7 @@ public class ProductController {
 			@RequestParam("totalAmount") String totalAmount,
 			@RequestParam("selectedId") List<String> selectedIdsStr,
 			@RequestParam("seletedSeq") List<String> selectedSeqsStr,// 변경된 변수명
-			ProductDTO productDTO, MemberDTO memberDTO, Model model, HttpSession session
+			ProductDTO productDTO, MemberDTO memberDTO, BasketDTO basketDTO, Model model, HttpSession session
 			) {
 
 		//int형으로 형변환
@@ -114,13 +114,12 @@ public class ProductController {
 		// selectedIds를 이용하여 필요한 처리 수행
 		List<ProductDTO> productlist = productService.getProductsByIds(selectedIds);     
 
-
 		String userNickname = (String) session.getAttribute("userNickname");
 
 		if (userNickname != null && !userNickname.isEmpty()) {
-			MemberDTO memberDTO1 = new MemberDTO();
-			memberDTO1.setUserNickname(userNickname);
-			MemberDTO member = memberService.selectByNickname(memberDTO1.getUserNickname());
+			/* MemberDTO memberDTO1 = new MemberDTO(); */
+			memberDTO.setUserNickname(userNickname);
+			MemberDTO member = memberService.selectByNickname(memberDTO.getUserNickname());
 			memberDTO.setUserId(member.getUserId());
 			memberDTO.setEmail(member.getEmail());
 			memberDTO.setPoint(member.getPoint());
@@ -134,6 +133,10 @@ public class ProductController {
 		model.addAttribute("productlist", productlist);
 		model.addAttribute("totalAmount", totalAmount);
 		model.addAttribute("member", memberDTO);
+		model.addAttribute("basket", basketDTO);
+		System.out.println(orderlist);
+		System.out.println(productlist);
+		System.out.println(memberDTO);
 		return "product/orderlist"; // orderlist.jsp와 매핑되는 뷰 이름
 	}
 
@@ -164,11 +167,13 @@ public class ProductController {
 	//결제 후 이동
 	@PostMapping("product/paySuccess.do") 
 	@ResponseBody
-	public String payOrder(OrderListDTO orderListDTO, MemberDTO memberDTO, Model model, HttpSession session){ 
+	public String payOrder(OrderListDTO orderListDTO, MemberDTO memberDTO, Model model, BasketDTO basketDTO, HttpSession session, String userId, int productId, int seq){ 
 		int result = productService.payOrder(orderListDTO);
 		String userNickname = (String) session.getAttribute("userNickname");
 		memberDTO.setUserNickname(userNickname);
 		memberService.usePoint(orderListDTO, memberDTO);
+		System.out.println(basketDTO);
+		basketService.deleteProductFromBasket(userId,productId,seq);
 		return result + ""; 
 	}
 	

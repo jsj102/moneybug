@@ -4,18 +4,16 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <jsp:include page="/layout/header.jsp" />
 <style>
-
-html, body{
+html, body {
 	height: 100%;
-	
 }
 
 body {
 	background: #F9F5E7;
-	display:flex;
-	flex-direction:column;
-	height:100%;
-	flex:1;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	flex: 1;
 	margin: 0;
 }
 
@@ -50,86 +48,76 @@ body {
 
 <script>
 $(document).ready(function() {
+	let countinput = 0;
+	countinput = $('#hiddenNumber').val();
+	for(let i = 1; i <= countinput ; i++){
+		$('#product_total' +i).html($('#productPrice_' +i).html()*$('#product_count' +i).val());
+	}
 	
 	
-    $('input[name="selectedProducts"]').on('change', function() {
-        updateTotalAmount();
-    });
-    
-    function updateTotalAmount(inputField) {
-        var totalAmount = 0;
-        var selectedProductIds = [];
-        var selectedProductSeq = [];
+	
+	
+	$('.form-control').on('input', function() {
+		countinput = $('#hiddenNumber').val();
+		for(let i = 1; i <= countinput ; i++){
+			$('#product_total' +i).html($('#productPrice_' +i).html()*$('#product_count' +i).val());
+		}
+	});//$('#productPrice_' +i) 부분만 해결하면 끝 
+	
 
-        $('input[name="selectedProducts"]:checked').each(function() {
-            var valueParts = $(this).val().split(',');
-            selectedProductIds.push(parseInt(valueParts[0]));
-            selectedProductSeq.push(parseInt(valueParts[1]));
-        });
-
-        selectedProductIds.forEach(function(prodId, index) {
-            var s = selectedProductSeq[index];
-            var productPrice = parseInt($('#productPrice_' + prodId).text());
-            var productCount = 0;
-
-            if (inputField) {
-                var productId = inputField.data('product-id');
-                var seq = inputField.data('product-count');
-                if (productId === prodId && seq === s) {
-                    productCount = parseInt(inputField.val());
-                    $('#productTotal_' + productId + '_' + seq).text(productPrice * productCount + "원");
-                }
+    $('.checkboxclass1').on('change', function() {
+        countinput = $('#hiddenNumber').val();
+        let totalPrice = parseInt(0);
+        for(let i = 1 ; i <= countinput ; i ++){
+            var checkbox = document.getElementById("checkbox"+i);
+            var ischecked = checkbox.checked;
+            // checkbox가 체크되어 있는지 확인
+            if (ischecked) {
+            	totalPrice = totalPrice + parseInt($('#product_total' +i).html());
             } else {
-                productCount = parseInt($('#productCount_' + prodId).val());
-                $('#productTotal_' + prodId + '_' + s).text(productPrice * productCount + "원");
             }
-
-            totalAmount += productPrice * productCount;
-        });
-
-        $('#totalAmount').text(totalAmount + "원");
-        $('#totalAmount2').val(totalAmount);
-        $('#selectedId_').val(selectedProductIds);
-        $('#seletedSeq_').val(selectedProductSeq);
-    }
-});
-
-
-$("#orderForm").submit(function(event) {
-    event.preventDefault(); // 기본 form 제출 동작 막기
-    
-    var selectedProductIds = [];
-    var selectedProductSeq = [];
-    var newCounts = [];
-
-    $('input[name="selectedProducts"]:checked').each(function() {
-        var valueParts = $(this).val().split(',');
-        selectedProductIds.push(parseInt(valueParts[0]));
-        selectedProductSeq.push(parseInt(valueParts[1]));
-        newCounts.push(parseInt($('#productCount_' + valueParts[0]).val()));
-    });
-
-    var requestData = {
-        userNickname: "사용자의 닉네임", // 사용자의 닉네임 설정
-        productId: selectedProductIds,
-        seq: selectedProductSeq,
-        newCount: newCounts
-    };
-
-    $.ajax({
-        type: 'POST',
-        url: '/updateQuantity',
-        data: requestData,
-        success: function(response) {
-            console.log('수량 업데이트 성공:', response);
-            // 성공 후 처리할 동작 추가
-        },
-        error: function(error) {
-            console.error('수량 업데이트 실패:', error);
-            // 실패 후 처리할 동작 추가
         }
-    });
+            $('#totalAmount').html(totalPrice);
+    });//checkbox
+    
+	$('#order').click(function() {
+		let productId;
+		let seq;
+		let newCount;
+		let seqList = [];
+		let idList = [];
+		countinput = $('#hiddenNumber').val();
+		for(let i = 1 ; i <=countinput ; i ++){
+			newCount = $('#product_count' +i).val();
+			productId =  $('#productId' +i).val();
+			var checkbox = document.getElementById("checkbox"+i);
+			var ischecked = checkbox.checked;
+			if (ischecked) {
+            	seqList.push($('#productSeq' +i).val());
+            	idList.push($('#productId' +i).val());
+            }
+			console.log(idList)
+			console.log(seqList)
+			
+		$.ajax({
+			url : "${pageContext.request.contextPath}/updateQuantity",
+			data : {
+				productId : productId,
+				newCount : newCount
+				},
+			method : "POST",
+			success: function(seq){
+				}
+			})//ajax udate
+		}//for
+	    $('#totalAmount2').val($('#totalAmount').html());
+	    $('#selectedId_').val(idList);
+	    $('#seletedSeq_').val(seqList);
+	})//order
+	
+    
 });
+
 
 function deleteProduct(userNickname, productId, seq) {
     if (confirm("정말로 상품을 삭제하시겠습니까?")) {
@@ -137,12 +125,12 @@ function deleteProduct(userNickname, productId, seq) {
             type: 'POST',
             url: '${pageContext.request.contextPath}/deleteProduct',  // 삭제 요청을 처리할 백엔드 엔드포인트 URL
             data: {
-                userNickname: userNickname,
                 productId: productId,
                 seq: seq
                 
             },
             success: function(response) {
+            	alert(response)
                 alert("상품 삭제 성공");
                 window.location.href = '${pageContext.request.contextPath}/product/basketlist';
             },
@@ -153,6 +141,7 @@ function deleteProduct(userNickname, productId, seq) {
         });
     }
 }
+
 </script>
 
 
@@ -162,7 +151,7 @@ function deleteProduct(userNickname, productId, seq) {
 	<div class="basket-container">
 		<div class="user-container d-flex flex-column align-items-center">
 			<c:if test="${not empty userNickname}">
-				<h2>${userNickname}님의장바구니</h2>
+				<h2>${userNickname}님의 장바구니</h2>
 				<c:choose>
 					<c:when test="${basketIsEmpty}">
 						<div style="margin-top: 20px;">
@@ -201,7 +190,12 @@ function deleteProduct(userNickname, productId, seq) {
 								</tr>
 							</thead>
 							<tbody>
+								<c:set var="stepnumber" value="1" />
+								<c:set var="countnumber" value="0" />
+
+
 								<c:forEach items="${basketList}" var="basket">
+									<c:set var="countnumber" value="${countnumber+stepnumber}" />
 									<c:forEach items="${productList}" var="product">
 										<c:if test="${basket.productId eq product.productId}">
 											<tr>
@@ -209,24 +203,31 @@ function deleteProduct(userNickname, productId, seq) {
 												<td><img src="${product.productImg}"
 													alt="Product Image" width="150px" height="150px" /></td>
 												<td>${product.productName}</td>
-												<td id="productPrice_${product.productId}">${product.productPrice}</td>
-												<td>
-													<div class="input-group">
-														<input type="number"
-															class="form-control text-center quantity"
-															id="productCount_${product.productId}"
-															value="${basket.productCount}" min="1"
-															onchange="updateTotalAmount(this, ${product.productId}, ${basket.seq})">
-													</div>
+												<td id="productPrice_<c:out value="${countnumber}"/>">${product.productPrice}</td>
+												<td><input type="number"
+													class="form-control text-center"
+													id="product_count<c:out value="${countnumber}"/>"
+													value="${basket.productCount}" min="" required></td>
+												<td id="product_total<c:out value="${countnumber}"/>"
+													class="productTotal" />
 												</td>
-												<td id="productTotal_${product.productId}_${basket.seq}"
-													class="productTotal">${product.productPrice * basket.productCount}원
-												</td>
+												<!-- 결과를 출력할 공간 -->
+
 
 												<td><input type="checkbox" name="selectedProducts"
-													value="${basket.productId}, ${basket.seq}" /></td>
-												<td><button type="button" class="delete-btn btn btn-info"
-														onclick="deleteProduct('${userNickname}', ${basket.productId}, ${basket.seq})" >삭제</button></td>
+													id="checkbox<c:out value="${countnumber}"/>"
+													value="${basket.productId}, ${basket.seq}"
+													class="checkboxclass1" /></td>
+												<td><button type="button"
+														class="delete-btn btn btn-info"
+														onclick="deleteProduct('${userNickname}', ${basket.productId}, ${basket.seq})">삭제</button>
+													<input type="hidden"
+													id="productId<c:out value="${countnumber}"/>"
+													value="${basket.productId}">
+													<input type="hidden"
+													id="productSeq<c:out value="${countnumber}"/>"
+													value="${basket.seq}">
+													</td>
 											</tr>
 										</c:if>
 									</c:forEach>
@@ -236,18 +237,19 @@ function deleteProduct(userNickname, productId, seq) {
 						<div class="orderSum">
 							총 주문 금액: <span id="totalAmount">${totalAmount}원</span>
 						</div>
-						
+						<input id="hiddenNumber" value="<c:out value="${countnumber}"/>"
+							type="hidden">
 					</c:otherwise>
 				</c:choose>
 
-				<div class="d-flex justify-content-center mt-3">
+	<div class="d-flex justify-content-center mt-3">
 					<input type="hidden" id="totalAmount2" name="totalAmount"
 						value="${totalAmount}"> <input type="hidden"
 						id="selectedId_" name="selectedId" value="${productId}" /> <input
 						type="hidden" id="seletedSeq_" name="seletedSeq"
 						value="${basket.seq}" />
+					<button type="submit" class="btn btn-lg btn-secondary" id="order">주문하기</button>
 				</div>
-					<button type="submit" class="btn btn-lg btn-secondary">주문하기</button>
 			</form>
 		</div>
 	</div>

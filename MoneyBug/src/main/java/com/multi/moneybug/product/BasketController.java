@@ -101,10 +101,11 @@ public class BasketController {
     @RequestMapping("/deleteProduct")
     @ResponseBody
     public String deleteProduct(
-        @RequestParam String userNickname,
         @RequestParam int productId,
-        @RequestParam int seq
+        @RequestParam int seq, HttpSession session
     ) {
+    	
+    	 String userNickname = (String) session.getAttribute("userNickname");
         // userNickname로 userId 조회
         String userId = memberService.getUserIdByUserNickname(userNickname);
         

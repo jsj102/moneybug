@@ -25,7 +25,7 @@ body {
 
 .banner-container {
 	height: 250px;
-	background-color: #F3969A;
+	background-color: #6cc3d5;
 	background-position: center;
 	display: flex;
 	flex-direction: column;

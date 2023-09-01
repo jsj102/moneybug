@@ -53,7 +53,7 @@ $(document).ready(function() {
         <ul class="navbar-nav">
             <li class="nav-item active"><a class="nav-link" href="/moneybug/main.jsp">Home<span class="sr-only">(current)</span></a></li>
             <li class="nav-item active"><a class="nav-link" href="/moneybug/tagBoard/TagBoard_list?page=1">커뮤니티</a></li>
-            <li class="nav-item active"><a class="nav-link" href="/moneybug/accountBook/accountbookFrom.jsp">가계부</a></li>
+            <li class="nav-item active"><a class="nav-link" href="/moneybug/accountBook/accountDetail_List.jsp">가계부</a></li>
             <li class="nav-item active"><a class="nav-link" href="/moneybug/bonBoard/BonBoard_list?page=1">살까말까</a></li>
             <li class="nav-item active"><a class="nav-link" href="/moneybug/product/shoplist?page=1">상품Shop</a></li>
             <!-- <li class="nav-item active"><a class="nav-link" href="/Moneybug/event/list.brd">이벤트</a></li> -->
