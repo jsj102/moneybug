@@ -52,7 +52,7 @@
         </foreach>
     </select>
 
-    <delete id="deleteProductFromBasket" parameterType="java.util.Map">
+    <delete id="deleteProductFromBasket" parameterType="Integer">
         DELETE FROM basket
         WHERE SEQ = #{seq}
     </delete>

@@ -5,8 +5,17 @@
 <jsp:include page="/layout/header.jsp"/>
 
 <style>
+html, body {
+	height: 100%;
+}
+
 body {
 	background: #F9F5E7;
+	display:flex;
+	flex-direction:column;
+	height:100%;
+	flex:1;
+	margin: 0;
 }
 
 .banner-container {
@@ -181,9 +190,8 @@ function addToCart(productId, userNickname, count) {
 
 			<hr>
 			<div class="buttons">
-				<button class="btn btn-success cart-button">장바구니</button>
-				<button class="btn btn-info buy-button" onclick="location.href='#'">바로
-					주문하기</button>
+				<button class="btn btn-success cart-button">장바구니에 넣기</button>
+				
 			</div>
 		</div>
 	</div>
