@@ -42,12 +42,17 @@ public class AccountGPTController {
 		AccountDetailDTO account = new AccountDetailDTO();
 		AccountGPTDTO accountGPTDTO = new AccountGPTDTO();
 		LocalDate today = LocalDate.now();
-
+		int year = today.getYear();
+		int month = today.getMonthValue()-1;
+		if(month==0) {
+			month=12;
+			year -=1;
+		}
 		// 데이터 삽입
 		for (Integer accountBookId : idList) {
 			account.setAccountBookId(accountBookId);
-			account.setCurrentMonth(today.getMonthValue());
-			account.setCurrentYear(today.getYear());
+			account.setCurrentMonth(month);
+			account.setCurrentYear(year);
 			HashMap<String, List<AccountDetailDTO>> data = gptService.accountSort(account);
 			HashMap<String, Integer> sendData = gptService.cosumptionSort(data.get("consumption"));
 			System.out.println(sendData.toString());
@@ -104,6 +109,11 @@ public class AccountGPTController {
 			@RequestParam("month") int month) {
 		AccountGPTDTO accountGPTDTO = new AccountGPTDTO();
 		accountGPTDTO.setAccountBookId(accountBookId);
+		month+=1;
+		if(month==13) {
+			month=1;
+			year+=1;
+		}
 		accountGPTDTO.setCurrentYear(year);
 		accountGPTDTO.setCurrentMonth(month);
 		accountGPTDTO = gptService.readOne(accountGPTDTO);
