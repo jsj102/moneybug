@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
-<html >
+<html>
 <head>
 	<title>Bootstrap Example</title>
 	<meta charset="UTF-8">
@@ -35,7 +35,7 @@ body {
 	justify-content: center;
 	height: 100vh;
 }
-.container {
+.container1 {
 	background-color: #A1C59E;
 	color: #b5c59e; 
 	border-radius: 20px;
@@ -99,7 +99,7 @@ background-color: #799c58; /* 버튼 마우스 호버 시 배경 색상 변경 *
 	color: green;
 }
 /* 버튼을 오른쪽 상단에 배치하는 스타일 */
-.btn-container {
+.btn-container1 {
 	display: flex;
 	justify-content: flex-end;
 }
@@ -121,10 +121,10 @@ background-color: #799c58; /* 버튼 마우스 호버 시 배경 색상 변경 *
 </script>
 </head>
 <body>
-	<div class="container">
+	<div class="container1">
 		<br>
 		<h1 >살까말까 게시글 작성</h1>
-		<form id="writeForm" action="BonBoard_insert">
+		<form id="writeForm" action="/moneybug/bonBoard/BonBoard_insert">
     <input type="hidden" name="userNickname" value="<%=session.getAttribute("userNickname")%>">
     
     <label for="title">제목</label>
@@ -142,7 +142,7 @@ background-color: #799c58; /* 버튼 마우스 호버 시 배경 색상 변경 *
         <input type="date" class="form-control" name="voteEndAt" required="required">
     </div>
     
-    <div class="btn-container">
+    <div class="btn-container1">
         <button type="submit" class="btn btn-purple">작성 완료</button>
     
     <button id="cancel" class="btn btn-purple">작성취소</button>

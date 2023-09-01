@@ -7,55 +7,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BonBoard Update</title>
-    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-           /* 페이지 배경색 변경 */
-            font-family: 'HakgyoansimWoojuR'; /* 폰트 변경 */
-            font-size: 18px;
-            margin: 10px;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            background-color: #E2EDC9;
+            font-family: Arial, sans-serif;
         }
         .container {
-            background-color: #E2EDC9;
+            background-color: #ffffff;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-            margin: 20px auto;
-            max-width: 800px;
+            margin: 20px auto; /* 페이지 중앙 정렬을 위해 수정 */
+            max-width: 800px; /* 최대 폭 지정 */
         }
         h1 {
-            color:   #A1C59E; ; /* 제목 색상 변경 */
-            text-align: center;
-            font-size: 30px;
+            color: #A1C59E;
         }
         .form-control {
-            border: 1px solid #ccc;
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            font-size: 18px;
+            border: 1px solid #dddddd;
+            width: 100%; /* 폼 요소 너비 100%로 수정 */
         }
         .table-striped th {
             background-color: #eeeeee;
             text-align: center;
         }
         .btn-primary {
-            background-color: #BCD6BA; /* 버튼 배경색 변경 */
-            border-color:#BCD6BA; ;
-            color: #fff; /* 버튼 텍스트 색상 변경 */
-            padding: 15px 20px;
-            border-radius: 20px;
-            font-size: 18px;
+            background-color: #BCD6BA;
+            border-color: #BCD6BA;
         }
         .btn-primary:hover {
-            background-color: #C4D7B2; /* 버튼 호버 배경색 변경 */
+            background-color: #C4D7B2;
+            border-color: #C4D7B2;
         }
     </style>
 </head>
@@ -63,8 +46,8 @@
    
 <div class="container">
     <div class="row">
-        <form method="post" action="BonBoard_update">
-            <input type="hidden" name="seq" value="${param.seq}">
+        <form method="post" action="/moneybug/bonBoard/BonBoard_update">
+            <input name="seq" value="${param.seq}">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -84,6 +67,8 @@
             </table>
             <input type="submit" class="btn btn-primary pull-right" value="글 수정">
         </form>
+         <a href="javascript:history.back()">뒤로 가기</a>
+        
     </div>
 </div>
 

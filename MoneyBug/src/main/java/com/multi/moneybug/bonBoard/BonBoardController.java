@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,7 +42,7 @@ public class BonBoardController {
         model.addAttribute("seq", bonBoardDTO.getSeq());
         System.out.println("작성된 글 번호 : " +bonBoardDTO.getSeq());
 
-		return "/bonBoard/BonBoard_one";  
+		return "redirect:/bonBoard/BonBoard_list?page=1";  
 	}
 	
 
@@ -108,6 +109,10 @@ public class BonBoardController {
 	
 	}
 	
+	@GetMapping("/bonBoard/bonBoard_main")
+	public String main() {
+		return "redirect:/bonBoard/BonBoard_list?page=1";
+	}
 	
 	
 	

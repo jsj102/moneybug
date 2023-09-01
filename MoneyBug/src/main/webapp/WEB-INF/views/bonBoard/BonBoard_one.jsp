@@ -3,20 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page import="java.util.Date"%>
+<%@ include file="/layout/header.jsp"%>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>게시글 상세보기</title>
-<!-- Bootstrap CSS -->
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<!-- Custom Styles -->
-
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <style>
 .comment-section {
 	background-color: #eff4e1;
@@ -25,15 +13,9 @@
 	margin-top: 20px;
 }
 
-.btn-container {
+.btn-container1 {
 	display: flex;
 	justify-content: flex-end;
-}
-
-body {
-	background-color: white; /* 배경 색상 변경 */
-	font-family: Arial, sans-serif;
-	font-size: 24px;
 }
 
 .post-section {
@@ -43,7 +25,7 @@ body {
 	margin-top: 20px;
 }
 
-.container {
+.container1 {
 	background-color: #A1C59E; /* 배경 색상 변경 */
 	padding: 20px;
 	border-radius: 10px;
@@ -316,56 +298,6 @@ $(document).ready(function() {
 
 </script>
 
-
-
-
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        // 이전 버튼 클릭 시
-        $("#previous-button").click(function() {
-            var currentPage = getCurrentPage(); // 현재 페이지 번호 가져오기
-            if (currentPage > 1) {
-                var previousPage = currentPage - 1; // 이전 페이지 번호 계산
-                var previousPageLink = "BonBoard_one?seq=" + previousPage; // 이전 페이지 링크 생성
-                window.location.href = previousPageLink; // 페이지 이동
-            }
-        });
-
-        // 현재 페이지 번호를 가져오는 함수 (URL에서 추출)
-        function getCurrentPage() {
-            // 현재 URL에서 seq 파라미터를 추출하여 페이지 번호 반환
-            var urlParams = new URLSearchParams(window.location.search);
-            return parseInt(urlParams.get("seq")) || 1;
-        }
-        
-        $("#next-button").click(function() {
-            var currentPage = getCurrentPage(); // 현재 페이지 번호 가져오기
-            // 페이지 수 (예를 들어, 전체 페이지 수가 10이라면 이 숫자를 조정하세요)
-            var totalPages = 10;
-
-            if (currentPage < totalPages) {
-                var nextPage = currentPage + 1; // 다음 페이지 번호 계산
-                var nextPageLink = "BonBoard_one?seq=" + nextPage; // 다음 페이지 링크 생성
-                window.location.href = nextPageLink; // 페이지 이동
-            }
-        });
-    });
-    
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script type="text/javascript">
     $(document).ready(function() {
         // 댓글 수정 버튼 클릭 시
@@ -420,14 +352,14 @@ $(document).ready(function() {
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
-<body>
-	<div class="container">
+<body	>
+	<div class="container1" >
 		<div class="text-center">
 			<h1>살까? 말까?</h1>
 
 
 		</div>
-		<div class="post-section">
+		<div class="post-section"  style="font-family: Arial, sans-serif; font-size: 24px;">
 			<p>
 				<strong>작성자:</strong> ${bonBoardDTO.userNickname}
 			</p>
@@ -444,7 +376,7 @@ $(document).ready(function() {
 			</p>
 			<div class="post-content">
 				<p>
-					<strong>구매링크:</strong> ${bonBoardDTO.itemLink}
+					<strong>구매링크:</strong> <a href="${bonBoardDTO.itemLink}">상품 보기</a>
 				</p>
 				<p>
 					<strong>내용:</strong>
@@ -480,16 +412,16 @@ $(document).ready(function() {
 				<fmt:formatDate pattern="yyyy-MM-dd"
 					value="${bonBoardDTO.voteEndAt}" />
 			</div>
-			<div class="btn-container">
+			<div class="btn-container1">
 				<!-- 목록 버튼 -->
-				<a href="BonBoard_list.jsp" class="go">목록</a>
+				<a href="/moneybug/bonBoard/bonBoard_main" class="go">목록</a>
 
 				<c:choose>
 					<c:when
 						test="${sessionScope.userNickname eq bonBoardDTO.userNickname}">
 						<!-- 수정 버튼 -->
 						<a
-							href="BonBoard_update.jsp?seq=${bonBoardDTO.seq}&title=${bonBoardDTO.title}&content=${bonBoardDTO.content}"
+							href="/moneybug/bonBoard/BonBoard_update2.jsp?seq=${bonBoardDTO.seq}&title=${bonBoardDTO.title}&content=${bonBoardDTO.content}"
 							class="go">수정</a>
 						<!-- 삭제 버튼 -->
 						<button id="deleteButton" class="go">삭제</button>
@@ -497,33 +429,15 @@ $(document).ready(function() {
 				</c:choose>
 
 			</div>
-			<div class="container">
-				<!-- 이전글, 다음글 버튼 위치 추가 -->
-				<div class="row">
-					<div class="col-md-6 text-left">
-						<!-- 이전글 버튼 -->
-						<a href="#" id="previous-button" class="go"> <i
-							class="fas fa-arrow-left"></i> 이전글
-						</a>
-					</div>
-					<div class="col-md-6 text-right">
-						<!-- 다음글 버튼 -->
-						<a href="#" id="next-button" class="go"> 다음글 <i
-							class="fas fa-arrow-right"></i>
-						</a>
-					</div>
-				</div>
-			</div>
-
-			<div class="container">
+			<div class="container1">
 				<div class="text-center">
 					<h3 style="color: white;">벌레들의 의견</h3>
 				</div>
 				<div class="comment-section">
 					<!-- 댓글 작성 폼 -->
 					<form id="replyForm" action="BonReply_insert" method="post">
-						<input name="boardSeq" value="${bonBoardDTO.seq}"> <input
-							type="hidden" name="userNickname"
+						<input type="hidden" name="boardSeq" value="${bonBoardDTO.seq}">
+						<input type="hidden" name="userNickname"
 							value="<%=session.getAttribute("userNickname")%>">
 						<div class="form-group"></div>
 						<div class="form-group">
@@ -549,38 +463,29 @@ $(document).ready(function() {
 										<fmt:formatDate pattern="yyyy/MM/dd HH:mm"
 											value="${bonReplyDTO.createAt}" />
 									</p>
-									<p>
+								</div> <c:choose>
+									<c:when
+										test="${sessionScope.userNickname eq bonReplyDTO.userNickname}">
 
 
-										<c:choose>
-											<c:when
-												test="${sessionScope.userNickname eq bonReplyDTO.userNickname}">
-								</div>
+										<div class="btn-container1">
+											<form method="get" action="BonReply_delete">
+												<input type="hidden" name="seq" value="${bonReplyDTO.seq}">
+												<input type="hidden" name="boardSeq"
+													value="${bonBoardDTO.seq}">
+												<button type="submit" class="go">댓글 삭제</button>
+											</form>
 
-								<div class="btn-container">
-
-									<button id="replyEdit" class="go">댓글 수정</button>
-
-									<form method="get" action="BonReply_delete">
-										<input type="hidden" name="seq" value="${bonReplyDTO.seq}">
-										<input type="hidden" name="boardSeq"
-											value="${bonBoardDTO.seq}">
-										<button type="submit" class="go">댓글 삭제</button>
-									</form>
-
-								</div> </c:when> </c:choose>
+										</div>
+									</c:when>
+								</c:choose>
 
 							</li>
 						</c:forEach>
 					</ul>
 				</div>
 
-
-
-
-
-
-
 			</div>
-</body>
-</html>
+		</div>
+	</div>
+	<%@ include file="/layout/footer.jsp"%>
