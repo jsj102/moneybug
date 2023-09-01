@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<script></script>
-
 <%@ include file="/layout/header.jsp"%>
 
 <style>
@@ -12,17 +10,19 @@
     min-height: 100vh;
   }
 
-#section {
+.popup {
   background-color: #C4D7B2;
   padding: 20px;
   border-radius: 30px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   margin: 20px auto;
   max-width: 500px;
-  margin-left: 50px; /* 왼쪽 여백 값 */
+  display: flex;
+  justify-content: center; /* 수평 가운데 정렬 */
+  width: 100%; /* 가로 너비 100%로 설정 */
 }
 
- #section table {
+.popup table {
 		border-radius: 30px;
 		border: 1px transparent solid;
 		border-spacing: 0px;
@@ -55,15 +55,10 @@
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
     }
   
-  #section {
-    display: flex;
-    justify-content: center; /* 수평 가운데 정렬 */
-    width: 100%; /* 가로 너비 100%로 설정 */
-    height: 100vh; /* 화면 전체 높이를 차지하도록 설정 */
-}
+ 
   
 </style>
-<div id="section" >
+<div class="popup" >
 
 <form id="ocr_form" enctype="multipart/form-data">
 		<div class="inputoutput">
@@ -77,10 +72,10 @@
 			</tr>
 			<tr>
 				<td>
-				 		<input type="button" value="자동" id="ocr_button" disabled>
-						<input type="button" value="수동" id="processButton" onclick="performImageProcessingAndSend()" disabled>
+				 		<input class="btn btn-info" type="button" value="자동" id="ocr_button" disabled>
+						<input class="btn btn-info" type="button" value="수동" id="processButton" onclick="performImageProcessingAndSend()" disabled>
 				 		결과: <input name="price" type="text" id="price_input" value="">
-						<button onclick="closePopup()">확인</button>
+						<button class="btn btn-danger" onclick="closePopup()">확인</button>
 				</td>
 			</tr>
 			<tr>
