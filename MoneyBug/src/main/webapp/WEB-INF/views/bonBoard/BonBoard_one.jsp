@@ -1,256 +1,586 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ page import="java.util.Date"%>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글 상세보기</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Custom Styles -->
-    <style>
-         body {
-        background-color: #E2EDC9; /* 배경 색상 변경 */
-        font-family: Arial, sans-serif;
-        font-size : 24px;
-    }
-    .container {
-        background-color: #ffffff; /* 배경 색상 변경 */
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
-        margin-top: 20px;
-    }
-    h1 {
-        color: #A1C59E; /* 제목 색상 변경 */
-    }
-    
-       h3 {
-        color: #A1C59E; /* 제목 색상 변경 */
-    }
-    .btn-primary {
-     font-size : 24px
-        background-color: #BCD6BA; /* 버튼 배경 색상 변경 */
-        border-color: #BCD6BA; /* 버튼 테두리 색상 변경 */
-    }
-    .btn-primary:hover {
-        background-color: #C4D7B2; /* 버튼 마우스 호버 시 배경 색상 변경 */
-        border-color: #C4D7B2;
-    }
-    /* Style for the reply list */
-    #replyList {
-        margin-top: 20px;
-        list-style-type: none;
-        padding: 0;
-    }
-    #replyList li {
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        background-color: #f9f9f9;
-        border-radius: 5px;
-    }
-    
-    
-     .vote-button {
-     
-            font-size: 30px;
-            padding: 20px 30px;
-            margin: 10px;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>게시글 상세보기</title>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- Custom Styles -->
 
-        .vote-button[data-vote="1"] {
-            background-color: #61c8ff;
-            color: white;
-        }
-        .vote-button[data-vote="0"] {
-            background-color: #ff4589;
-            color: white;
-        }
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<style>
+.comment-section {
+	background-color: #eff4e1;
+	padding: 20px;
+	border-radius: 20px;
+	margin-top: 20px;
+}
 
-        .vote-button:hover {
-            background-color: #555;
-            color: white;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- 게시글 내용 -->
-        <h1>게시글 상세보기</h1>
-        <p><strong>작성자:</strong> ${bonBoardDTO.writerId}</p>
-        <p><strong>제목:</strong> ${bonBoardDTO.title}</p>
-        <p><strong>조회수:</strong>${bonBoardDTO.views}</p>
-        <p><strong>작성날짜:</strong><fmt:formatDate pattern="yyyy-MM-dd " value="${bonBoardDTO.createAt}" /></p>
-        <p><strong>내용:</strong></p>
-        <p>
-        ${bonBoardDTO.content}
-        </p>
-        
-        <br>
-        <br>
-        <br>
-        
-        
-        <!-- 목록 버튼 -->
-        <a href="BonBoard_list.jsp" class="btn btn-primary">목록</a>
-        
-        <!-- 수정 버튼 -->
-        <a href="BonBoard_update.jsp?seq=${bonBoardDTO.seq}&title=${bonBoardDTO.title}&content=${bonBoardDTO.content}" class="btn btn-primary">수정</a>
-        
-        <!-- 삭제 버튼 -->
-        
+.btn-container {
+	display: flex;
+	justify-content: flex-end;
+}
+
+body {
+	background-color: white; /* 배경 색상 변경 */
+	font-family: Arial, sans-serif;
+	font-size: 24px;
+}
+
+.post-section {
+	background-color: #E2EDC9;
+	padding: 20px;
+	border-radius: 20px;
+	margin-top: 20px;
+}
+
+.container {
+	background-color: #A1C59E; /* 배경 색상 변경 */
+	padding: 20px;
+	border-radius: 10px;
+	margin-top: 20px;
+}
+
+h1 {
+	color: rgb(252, 255, 249);
+}
+
+h2 {
+	color: #b5c59e;
+}
+
+h3 {
+	color: #b5c59e;
+}
+
+/* Style for the reply list */
+#replyList {
+	margin-top: 20px;
+	list-style-type: none;
+	padding: 0;
+}
+
+#replyList li {
+	margin-bottom: 10px;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.go:hover {
+	background-color: #799c58; /* 버튼 마우스 호버 시 배경 색상 변경 */
+	border-color: #C4D7B2;
+}
+
+.go {
+	font-size: 20px;
+	padding: 10px 8px;
+	margin: 10px;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background-color 0.3s, color 0.3s;
+	background-color: #C4D7B2;
+	color: white;
+	width: 120px;
+	height: 50px;
+	text-align: center;
+}
+
+.ss {
+	display: flex;
+	align-items: center;
+	/* 원하는 다른 스타일을 추가하세요 */
+}
+
+.vote {
+	font-size: 30px;
+	padding: 0px 30px;
+	padding-top: 20px;
+	margin: 10px;
+	border: none;
+	border-radius: 15px;
+	cursor: pointer;
+	transition: background-color 0.3s, color 0.3s;
+	margin-right: 10px;
+}
+
+.vote[data-vote="1"] {
+	background-color: #61c8ff;
+	color: white;
+}
+
+.vote[data-vote="0"] {
+	background-color: #ff4589;
+	color: white;
+}
+
+.vote:hover {
+	background-color: #A1C59E; /* 호버 시 밝은 색상으로 변경 */
+	color: white;
+}
+
+.text-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+#voteResult {
+	/* 'voteResult' 태그에 스타일 추가 */
+	margin-right: 10px; /* '산다' 버튼과 'voteResult' 태그 사이의 간격 조정 */
+}
+</style>
+
+
+<script type="text/javascript">
+       
+       
+       $(document).ready(function() {
            
-            <button id="deleteButton" class="btn btn-danger">게시글 삭제</button>
-        
-    </div>
-    
-    <div class="container">
-    
-    <%-- <form id="voteForm" action="BonVote_insert">
-    
-    <h3>내 의견을 투표해보자!</h3>
-    <h6>내가 글쓴벌레라면?</h6>
-    <input type="hidden" name="boardSeq" value="${bonBoardDTO.seq}" />
-        <input type="hidden" name="userId" value="3126498" />
-    
-    
-      <button type="button"  data-vote="1">찬성</button>
-        <button type="button" data-vote="0">반대</button>
-        <button type="submit"  > 투표완료 </button>
-        <input type="hidden" name="vote" value="${vote}" />
-    
-      <div id="voteResults"></div>  
-    </form> --%>
-    
-    
-    <h1>투표</h1>
-    <h3>내가 고민을 올린 벌레라면? </h3>
-    <button id="upButton" class="vote-button" data-vote="1">살까</button>
-    <button id="downButton" class="vote-button" data-vote="0">말까</button>
-      <p><strong>투표마감일:</strong> <fmt:formatDate pattern="yyyy-MM-dd " value="${bonBoardDTO.voteEndAt}" /></p>
-    </div>
-
-    
-    
-    
-    <div class="container">
-        <h1>의견 달기</h1>
-        
-        <!-- 댓글 작성 폼 -->
-        <form id="replyForm" action="BonReply_insert" method="post">
-            <input type="hidden" name="boardSeq" value="${bonBoardDTO.seq}">
-            <div class="form-group">
-                <label for="writerId">닉네임</label>
-                 <input type="text" name="writerId" minlength="1" maxlength="8" class="form-control" required> 
-            </div>
-            <div class="form-group">
-                <label for="content">댓글내용</label>
-                <textarea name="content"  class="form-control" rows="3" required></textarea>
-            </div>
-            <button type="submit" id="btn" class="btn btn-primary">댓글 등록</button>
-        </form>
-        
-        
-        
-        <!-- 댓글 목록 -->
-        <ul id="replyList">
-            <c:forEach var="bonReplyDTO" items="${list}">
-                <li>
-                     <div>
-                <strong>${bonReplyDTO.writerId}</strong><br>
-                ${bonReplyDTO.content}
-            </div>
-            <div>
-               <p>
-                ${bonReplyDTO.createAt}
-               <p>  
-                 </div>
-                   <button type="submit" id="btnEdit" class="btn btn-primary">댓글 수정</button>
+           var boardSeq = ${bonBoardDTO.seq};
+			
+           // AJAX 요청을 보냅니다.
+           $.ajax({
+               url: "BonVote_upList", // 데이터를 가져올 URL
+               data: {
+                   boardSeq: boardSeq
+               },
+               success: function(data) {
+                   // 성공 시 서버에서 받은 데이터를 표시합니다.
+                   	
+                   console.log(data)
                  
-        <form method="get" action="BonReply_delete">
-            <input type="hidden" name="seq" value="${bonReplyDTO.seq}">
-            <button type="submit" class="btn btn-danger">댓글 삭제</button>
-        </form>
+                   $('#voteResult').text( data+"표");
+               },
+               error: function(xhr, status, error) {
+                   // 오류 처리
+                   alert("투표수 확인")
+                   console.error('오류 발생: ' + error);
+                   console.error('오류 발생2: ' + xhr);
+               }
+           });
+     
+           // AJAX 요청을 보냅니다.
+           $.ajax({
+               url: "BonVote_downList", // 데이터를 가져올 URL
+               data: {
+                   boardSeq: boardSeq
+               },
+               success: function(data) {
+                   // 성공 시 서버에서 받은 데이터를 표시합니다.
+                   	
+                   console.log(data)
+                 
+                   $('#voteResult2').text( data+"표");
+               },
+               error: function(xhr, status, error) {
+                   // 오류 처리
+                   alert("투표수 확인")
+                   console.error('오류 발생: ' + error);
+                   console.error('오류 발생2: ' + xhr);
+               }
+           });
            
-                </li>
-            </c:forEach>
-        </ul>
-    </div>
+           
+           
+           
+   	    $('.vote').click(function() {
+            let vote = $(this).attr('data-vote')
+			let userNickname = "<%=session.getAttribute("userNickname")%>"
+     	        
+     	        $.ajax({
+     	            type: 'GET',
+     	            url: 'BonVote_insert',
+     	            data: {
+     	                boardSeq: ${bonBoardDTO.seq}, 
+     	                vote: vote,
+     	                userNickname : userNickname
+     	     
+     	            },
+     	            success: function(response) {
+     	                if (response ==1 && vote ==1) {
+     	                   location.reload();
+     	                    alert('찬성투표가 완료되었습니다.');
+     	                } else if (response == 1 && vote ==0){
+     	                	location.reload();
+     	                	alert('반대투표가 완료되었습니다.');
+     	                }
+     	                else {
+             		
+     	                    alert('이미 투표한 게시글입니다.');
+     	          
+     	                }
+     	            },
+     	            error: function() {
+     	                alert('오류 발생');
+     	            }
+     	        })
+     	        
+   	    })
+     	        
+     	        
+     
     
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        		$('#deleteButton').click(function() {
+        			$.ajax({
+        				url : "BonBoard_delete",
+        				data : {
+        					seq : "${param.seq}"
+        				},
+        				success : function(result) {
+        					if(result == 1){
+        						alert("삭제완료");
+        						location.href = "BonBoard_list?page=1";
+        					}else{
+        						alert("실패");
+        					}
+        				},
+        				error : function() {
+        					alert("실패");
+        				} //error
+        			}); //에이작스 
+        		});
+        	
+       })
+        		
+        		
+   </script>
 
-    <script>
-        // Delete button click handler using AJAX
-        $('#deleteButton').click(function() {
-            var seq = "${bonBoardDTO.seq}";
-            
+
+
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+    // bonBoardDTO.createAt 값을 가져와서 JavaScript 변수에 저장
+
+<%Date date = new Date();%>
+/* 	const year = date.getFullYear();
+	const month = ('0' + (date.getMonth() + 1)).slice(-2);
+	const day = ('0' + date.getDate()).slice(-2);
+	const dateStr = year + '-' + month + '-' + day; */
+    var dateString = "<%=date%>";
+
+ // 문자열을 공백으로 분리하여 배열로 만듭니다.
+ var parts = dateString.split(' ');
+
+ // 월, 일, 연도 부분을 추출합니다.
+ var dayOfWeek = parts[0]; // "Fri"
+ var month = parts[1];     // "Sep"
+ var day = parts[2];       // "01"
+ var time = parts[3];      // "00:00:00"
+ var timeZone = parts[4];  // "KST"
+ var year = parts[5];      // "2023"
+ var date1 = new Date(year+ "-" + month + "-" + day);
+	var dateString2 = "${bonBoardDTO.voteEndAt}";
+	
+	 var parts2 = dateString2.split(' ');
+
+	 // 월, 일, 연도 부분을 추출합니다.
+	 var dayOfWeek2 = parts2[0]; // "Fri"
+	 var month2 = parts2[1];     // "Sep"
+	 var day2 = parts2[2];       // "01"
+	 var time2 = parts2[3];      // "00:00:00"
+	 var timeZone2 = parts2[4];  // "KST"
+	 var year2 = parts2[5];      // "2023"
+	 var date2 = new Date(year2+ "-" + month2 + "-" + day2);
+	
+   /*  alert("date1 = "+date1)
+    alert("date2 = "+date2) */
+
+    if (date1 < date2) {
+    	/* alert("마감날짜를 지나지 않았습니다"); */
+    	  console.log('date1 is earlier than date2');
+    	} else if (date1 > date2) {
+    /* 	alert("마감날짜를 지났습니다"); */
+    	 $('#upButton').hide();
+         $('#downButton').hide();
+         $('#voteResult').text("투표가 마감되었습니다");
+    	  console.log('date1 is later than date2');
+    	} else {
+    /* 	alert("오늘이 마감일입니다"); */
+    	  console.log('date1 is equal to date2');
+    	}
+  
+});
+
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // 이전 버튼 클릭 시
+        $("#previous-button").click(function() {
+            var currentPage = getCurrentPage(); // 현재 페이지 번호 가져오기
+            if (currentPage > 1) {
+                var previousPage = currentPage - 1; // 이전 페이지 번호 계산
+                var previousPageLink = "BonBoard_one?seq=" + previousPage; // 이전 페이지 링크 생성
+                window.location.href = previousPageLink; // 페이지 이동
+            }
+        });
+
+        // 현재 페이지 번호를 가져오는 함수 (URL에서 추출)
+        function getCurrentPage() {
+            // 현재 URL에서 seq 파라미터를 추출하여 페이지 번호 반환
+            var urlParams = new URLSearchParams(window.location.search);
+            return parseInt(urlParams.get("seq")) || 1;
+        }
+        
+        $("#next-button").click(function() {
+            var currentPage = getCurrentPage(); // 현재 페이지 번호 가져오기
+            // 페이지 수 (예를 들어, 전체 페이지 수가 10이라면 이 숫자를 조정하세요)
+            var totalPages = 10;
+
+            if (currentPage < totalPages) {
+                var nextPage = currentPage + 1; // 다음 페이지 번호 계산
+                var nextPageLink = "BonBoard_one?seq=" + nextPage; // 다음 페이지 링크 생성
+                window.location.href = nextPageLink; // 페이지 이동
+            }
+        });
+    });
+    
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // 댓글 수정 버튼 클릭 시
+        $(document).on('click', '#replyEdit', function() {
+            // 현재 클릭한 수정 버튼에 대한 댓글 내용을 가져오기
+            var replyContent = $(this).closest('li').find('div:first p:first').text().trim();
+
+            // 댓글 수정을 위한 폼 생성 및 팝업
+            var editForm = '<form id="editReplyForm">';
+            editForm += '<input type="hidden" name="seq" value="' + $(this).data('seq') + '">';
+            editForm += '<textarea name="content" class="form-control" rows="3" required>' + replyContent + '</textarea>';
+            editForm += '<button type="button" id="btnEdit" class="btn btn-primary">댓글 수정</button>';
+            editForm += '</form>';
+
+            // 팝업으로 댓글 수정 폼 띄우기
+            $(this).closest('li').append(editForm);
+
+            // 댓글 수정 버튼 비활성화 및 댓글 삭제 버튼 숨기기
+            $(this).prop('disabled', true);
+            $(this).closest('div.text-right').find('form').hide();
+        });
+
+        // 댓글 수정 폼에서 수정 버튼 클릭 시
+        $(document).on('click', '#btnEdit', function() {
+            // 수정된 내용 가져오기
+            var editedContent = $(this).prev('textarea').val();
+            var seq = $(this).closest('form').find('input[name="seq"]').val();
+
             $.ajax({
-                type: 'GET',
-                url: 'BonBoard_delete',
+                type: 'POST', 
+                url: 'BonReply_update', // 수정 요청을 처리할 서버의 URL
                 data: {
-                	seq : seq
+                    seq: seq,
+                    content: editedContent
                 },
                 success: function(response) {
-                    if (response === '1') {
-                        alert('게시글이 삭제되었습니다.');
-                        // You can refresh the page or perform other actions here
-                        window.location.href= 'BonBoard_one?seq='+seq
-                    } else {
-                        alert('게시글 삭제에 실패했습니다.');
-                    }
+                    // 수정 성공 시 댓글 내용 갱신 및 폼 제거
+                    var listItem = $('#replyList li').find('input[name="seq"][value="' + seq + '"]').closest('li');
+                    listItem.find('div:first p:first').text(editedContent);
+                    listItem.find('#btnEdit').prop('disabled', false);
+                    listItem.find('form').remove();
                 },
-                error: function(xhr, status, error) {
-                    alert('오류 발생: ' + error);
+                error: function() {
+                    alert('오류 발생');
                 }
             });
-        
         });
-
-     
-        
-        $(document).ready(function() {
-            // "사자" 버튼 클릭 시 AJAX 요청
-            $("#voteLion").click(function() {
-                castVote(1); // 사자 투표는 1을 전달
-            });
-
-            // "말자" 버튼 클릭 시 AJAX 요청
-            $("#voteHorse").click(function() {
-                castVote(0); // 말자 투표는 0을 전달
-            });
-        });
+    });
+</script>
 
 
-        
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+	<div class="container">
+		<div class="text-center">
+			<h1>살까? 말까?</h1>
 
-        
-        
-        
-        
-        $('.edit-comment').click(function () {
-            var listItem = $(this).closest('li');
-            var commentContent = listItem.find('.comment-content').text();
-            var boardSeq = listItem.find('input[name="boardSeq"]').val();
-            var seq = listItem.find('input[name="seq"]').val();
-            var writerId = listItem.find('strong').text();
 
-            $('#editBoardSeq').val(boardSeq);
-            $('#editSeq').val(seq);
-            $('#editWriterId').val(writerId);
-            $('#editContent').val(commentContent);
+		</div>
+		<div class="post-section">
+			<p>
+				<strong>작성자:</strong> ${bonBoardDTO.userNickname}
+			</p>
+			<p>
+				<strong>제목:</strong> ${bonBoardDTO.title}
+			</p>
+			<p>
+				<strong>조회수:</strong> ${bonBoardDTO.views}
+			</p>
+			<p>
+				<strong>작성날짜:</strong>
+				<fmt:formatDate pattern="yyyy/MM/dd HH:mm"
+					value="${bonBoardDTO.createAt}" />
+			</p>
+			<div class="post-content">
+				<p>
+					<strong>구매링크:</strong> ${bonBoardDTO.itemLink}
+				</p>
+				<p>
+					<strong>내용:</strong>
+				</p>
+				<p>${bonBoardDTO.content}</p>
+			</div>
 
-            $('#replyForm').hide();
-            $('#editForm').show();
-        });
+			<br> <br> <br>
 
-       
-    </script>
+
+
+			<div class="text-center ss">
+				<h2>내가 고민을 올린 벌레라면?</h2>
+			</div>
+
+			<div class="text-center">
+
+				<!-- 현재 날짜가 투표 마감일보다 이른 경우에만 버튼을 표시 -->
+				<button id="upButton" class="vote" data-vote="1">
+					산다
+					<p id="voteResult"></p>
+				</button>
+				<button id="downButton" class="vote" data-vote="0">
+					만다
+					<p id="voteResult2"></p>
+				</button>
+
+			</div>
+
+
+			<div class="text-center">
+				<strong>투표마감일:</strong>
+				<fmt:formatDate pattern="yyyy-MM-dd"
+					value="${bonBoardDTO.voteEndAt}" />
+			</div>
+			<div class="btn-container">
+				<!-- 목록 버튼 -->
+				<a href="BonBoard_list.jsp" class="go">목록</a>
+
+				<c:choose>
+					<c:when
+						test="${sessionScope.userNickname eq bonBoardDTO.userNickname}">
+						<!-- 수정 버튼 -->
+						<a
+							href="BonBoard_update.jsp?seq=${bonBoardDTO.seq}&title=${bonBoardDTO.title}&content=${bonBoardDTO.content}"
+							class="go">수정</a>
+						<!-- 삭제 버튼 -->
+						<button id="deleteButton" class="go">삭제</button>
+					</c:when>
+				</c:choose>
+
+			</div>
+			<div class="container">
+				<!-- 이전글, 다음글 버튼 위치 추가 -->
+				<div class="row">
+					<div class="col-md-6 text-left">
+						<!-- 이전글 버튼 -->
+						<a href="#" id="previous-button" class="go"> <i
+							class="fas fa-arrow-left"></i> 이전글
+						</a>
+					</div>
+					<div class="col-md-6 text-right">
+						<!-- 다음글 버튼 -->
+						<a href="#" id="next-button" class="go"> 다음글 <i
+							class="fas fa-arrow-right"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="text-center">
+					<h3 style="color: white;">벌레들의 의견</h3>
+				</div>
+				<div class="comment-section">
+					<!-- 댓글 작성 폼 -->
+					<form id="replyForm" action="BonReply_insert" method="post">
+						<input name="boardSeq" value="${bonBoardDTO.seq}"> <input
+							type="hidden" name="userNickname"
+							value="<%=session.getAttribute("userNickname")%>">
+						<div class="form-group"></div>
+						<div class="form-group">
+							<label for="content">댓글내용</label>
+							<textarea name="content" class="form-control" rows="3" required></textarea>
+						</div>
+						<button type="submit" id="btn" class="go">댓글 등록</button>
+					</form>
+
+				</div>
+
+				<!-- 댓글 목록 -->
+				<div class="comment-section">
+					<ul id="replyList">
+						<c:forEach var="bonReplyDTO" items="${list}">
+							<li>
+								<div>
+									<strong>${bonReplyDTO.userNickname}</strong><br>
+									${bonReplyDTO.content}
+								</div>
+								<div>
+									<p>
+										<fmt:formatDate pattern="yyyy/MM/dd HH:mm"
+											value="${bonReplyDTO.createAt}" />
+									</p>
+									<p>
+
+
+										<c:choose>
+											<c:when
+												test="${sessionScope.userNickname eq bonReplyDTO.userNickname}">
+								</div>
+
+								<div class="btn-container">
+
+									<button id="replyEdit" class="go">댓글 수정</button>
+
+									<form method="get" action="BonReply_delete">
+										<input type="hidden" name="seq" value="${bonReplyDTO.seq}">
+										<input type="hidden" name="boardSeq"
+											value="${bonBoardDTO.seq}">
+										<button type="submit" class="go">댓글 삭제</button>
+									</form>
+
+								</div> </c:when> </c:choose>
+
+							</li>
+						</c:forEach>
+					</ul>
+				</div>
+
+
+
+
+
+
+
+			</div>
 </body>
 </html>

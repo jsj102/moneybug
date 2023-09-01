@@ -3,43 +3,52 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="bonvote">
 
-	<!-- 사용자의 투표 결과를 DB에 넣음  -->
-	<insert id="insert" parameterType="map">
-		INSERT INTO bon_vote (seq, user_id, board_seq, vote)
-		VALUES (#{seq}, #{userId}, #{boardSeq}, #{vote})
+	
+	<!-- 특정 사용자가 특정 게시물에 대해 이미 투표했는지 확인하는 용도-->
+	<!-- 중복투표를 막기 위하여 투표 기능 전에 넣어야 할 듯  -->
+	<!-- <select id="checkUserVote" resultType="int">
+		SELECT COUNT(*) FROM bon_vote   특정 사용자의 투표 횟수를 누적하여 보여줌
+		WHERE userNickname = #{userNickname}
+		AND BOARD_SEQ = #{boardSeq}    결과가 0일 경우에만 투표 가능해야 함  
+	</select>
+	 -->
+	<select id="voteCheck" parameterType="bonVoteDTO" resultType="int">
+	
+	 SELECT COUNT(*) FROM bon_vote
+    WHERE board_seq = #{boardSeq}
+    AND userNickname = #{userNickname}
+	
+	</select>
+	
+
+	<insert id="insert" parameterType="bonVoteDTO">
+		INSERT INTO bon_vote 
+		(userNickname, BOARD_SEQ, VOTE)
+		VALUES ( #{userNickname}, #{boardSeq}, #{vote})
 	</insert>
+	
 	<!-- 투표 업데이트 -->
 	<update id="update" parameterType="map">
-		UPDATE bon_votes
-		SET vote = #{newVoteValue}
-		WHERE id = #{voteId}
+		UPDATE bon_vote
+		SET vote = #{VOTE}
+		WHERE id = #{SEQ}
 	</update>
 
 
 	<!-- 특정 게시물에 대한 찬성 투표 수 조회 -->
-	<select id="listUp" resultType="int">
-		SELECT COUNT(*) FROM bon_vote   <!-- bon_vote테이블의 값들의 개수를 누적(count)하여 알려줌 -->    
-		WHERE SEQ = #{seq}      <!-- 조건1 : seq(투표의) 가  #{seq}인 곳    -->
-		AND board_seq = #{boardSeq}  <!-- 조건2  -->
-		AND vote = 1    <!-- 조건 3 :  vote의 값이 1인 경우 -->
+	<select id="upList" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM bon_vote   
+		WHERE BOARD_SEQ = #{boardSeq}  
+		AND VOTE = 1    
 	</select>
 
 	<!-- 특정 게시물에 대한 반대 투표 수 조회 -->
-	<select id="listDown" resultType="int">
-		SELECT COUNT(*) FROM bon_vote   <!-- 개수를 누적하여 보여줌 -->
-		WHERE SEQ= #{seq}     <!-- 조건1 : seq(컬럼)가 seq(들어온 값)인 곳 -->
-		AND board_seq = #{boardSeq}    <!-- 조건2 : board_seq(게시판과의 FK)  -->
-		AND vote = 0      <!-- 조건 3: vote의 값이 0인 경우 --> 
+	<select id="downList"  parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM bon_vote 
+		WHERE board_seq = #{boardSeq}   
+		AND vote = 0  
 	</select>
 
-	<!-- 특정 사용자가 특정 게시물에 대해 이미 투표했는지 확인하는 용도-->
-	<!-- 중복투표를 막기 위하여 투표 기능 전에 넣어야 할 듯  -->
-	<select id="checkUserVote" resultType="int">
-		SELECT COUNT(*) FROM bon_vote   <!-- 특정 사용자의 투표 횟수를 누적하여 보여줌 -->
-		WHERE user_id = #{userId}
-		AND BOARD_SEQ = #{boardSeq}    <!-- 결과가 0일 경우에만 투표 가능해야 함   -->
-	</select>
-	
 	
   <select id="calculateTotalVotes" resultType="int">
     SELECT SUM(vote)

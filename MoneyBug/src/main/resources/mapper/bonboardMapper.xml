@@ -7,10 +7,10 @@
 
 
 	<!-- 살까말까 게시물 작성 -->
-	<insert id="insert" parameterType="bonboardDTO"
-		useGeneratedKeys="true" keyProperty="SEQ">
-		INSERT INTO bon_board(writerId, title, content, views, itemLink, createAt, voteEndAt) VALUES
-		(#{writerId}, #{title}, #{content}, #{views}, #{itemLink},
+	<insert id="insert" parameterType="bonboardDTO">
+		
+		INSERT INTO bon_board(userNickname, title, content, views, itemLink, createAt, voteEndAt) 
+		VALUES (#{userNickname}, #{title}, #{content}, #{views}, #{itemLink},
 		 now(), #{voteEndAt})
 	</insert>
 
@@ -60,5 +60,17 @@
 	
 	
 	
+	<!-- 살까말까 게시글 조회수  -->
+	
+	<select id="view" parameterType="int" resultType="int">
+	select views from bon_board
+	where seq = #{seq}
+	</select>
+	
+	<update id="viewplus" parameterType="bonBoardDTO" >
+	update bon_board
+	set views=#{views}
+	where seq=#{seq}
+	</update>
 
 </mapper>

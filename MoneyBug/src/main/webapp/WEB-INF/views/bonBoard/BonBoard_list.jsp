@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,6 +42,10 @@
         background-color: #f9f9f9;
         border-radius: 5px;
     }
+    .table th, .table td {
+    text-align: center;
+
+}
 </style>
 
 <script type="text/javascript" src="../resources/js/jquery-3.6.1.js"></script>
@@ -110,6 +116,7 @@
         }
         .table-bordered th, .table-bordered td {
             border: 0px solid #FFFFFF;
+         
         }
         .btn-custom {
             border-radius: 15px;
@@ -128,11 +135,11 @@
         <table class="table table-hover table-bordered">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col" style="background-color:#C4D7B2; width: 7%;">글번호</th>
-                    <th scope="col" style="background-color:#C4D7B2; width: 10%;">신청자</th>
+                    <th scope="col" style="background-color:#C4D7B2; width: 7%;"></th>
+                    <th scope="col" style="background-color:#C4D7B2; width: 10%;">닉네임</th>
                     <th scope="col" style="background-color:#C4D7B2; width: 50%;">제목</th>
                     <th scope="col" style="background-color:#C4D7B2; width: 10%;">투표참여수</th>
-                    <th scope="col" style="background-color:#C4D7B2; width: 10%;">작성일</th>
+                    <th scope="col" style="background-color:#C4D7B2; width: 15%;">작성일</th>
                     <th scope="col" style="background-color:#C4D7B2; width: 10%;">조회수</th>
                 </tr>
             </thead>
@@ -141,14 +148,14 @@
                   
                         <tr>
                             <td>${bonBoardDTO.rowNo}</td>
-                            <td>${bonBoardDTO.writerId}</td>
+                            <td>${bonBoardDTO.userNickname}</td>
                             <td>
                             	<a href="BonBoard_one?seq=${bonBoardDTO.seq}">
                            			 ${bonBoardDTO.title}
                            		</a>
                            	</td>
                             <td>${bonBoardDTO.voteCount}</td>
-                            <td>${bonBoardDTO.createAt}</td>
+                            <td><fmt:formatDate pattern="yy/MM/dd HH:mm" value="${bonBoardDTO.createAt}" /></p></td>
                             <td>${bonBoardDTO.views}</td>
                         </tr>
                   
@@ -187,6 +194,14 @@
                 $(".page-row").eq(pageToShow - 1).show();
             });
         });
+        
+        
+        
+        
+        
+        
+        
+     
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>

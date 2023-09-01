@@ -44,4 +44,16 @@ public class BonBoardService {
 	 public int count() {
 	        return bonBoardDAO.count(); // BonBoardDAO�쓽 count 硫붿냼�뱶 �샇異�
 	    }
+	 
+	 public int viewPlus(BonBoardDTO bonBoardDTO) {
+		 return bonBoardDAO.viewPlus(bonBoardDTO);
+		  
+	 }
+	 
+	 public int view(int seq) {
+		 return bonBoardDAO.view(seq);
+	 }
+	 
+	 
+	 
 }

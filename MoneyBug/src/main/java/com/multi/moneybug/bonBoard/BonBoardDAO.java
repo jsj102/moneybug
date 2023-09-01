@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository 
 public class BonBoardDAO {
+	
 	@Autowired
 	SqlSessionTemplate my;
 	
@@ -35,5 +36,19 @@ public class BonBoardDAO {
 	public int delete(int seq) {
 		return my.delete("bonboard.delete", seq);
 	}
+	
+	
+	
+	
+	
+	 public int viewPlus(BonBoardDTO bonBoardDTO) {
+		 return my.update("bonboard.viewplus", bonBoardDTO);
+		  
+	 }
+	 
+	 public int view(int seq) {
+		 return my.selectOne("bonboard.view", seq);
+	 }
+	
 
 }

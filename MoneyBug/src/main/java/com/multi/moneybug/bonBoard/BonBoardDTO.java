@@ -1,15 +1,18 @@
 package com.multi.moneybug.bonBoard;
 
-import java.sql.Date;
-import java.util.ArrayList;
+import java.time.*;
+
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 
-@Data
+
 public class BonBoardDTO {
 	private int seq;
 	private int rowNo;
-	private String writerId;
+	private String userNickname;
 	private String title;
 	private String content;
 	private int views;
@@ -17,7 +20,11 @@ public class BonBoardDTO {
 	
 	private int voteCount; 
 	private Date createAt;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date voteEndAt;
+	
+	
+
 	
 	public int getRowNo() {
 		return rowNo;
@@ -34,11 +41,12 @@ public class BonBoardDTO {
 	public void setSeq(int seq) {
 		this.seq = seq;
 	}
-	public String getWriterId() {
-		return writerId;
+	
+	public String getUserNickname() {
+		return userNickname;
 	}
-	public void setWriterId(String writerId) {
-		this.writerId = writerId;
+	public void setUserNickname(String userNickname) {
+		this.userNickname = userNickname;
 	}
 	public String getTitle() {
 		return title;
@@ -129,7 +137,7 @@ public class BonBoardDTO {
 	
 	@Override
 	public String toString() {
-		return " BonBoardDTO [seq = "+ seq + ", writerId = "  +writerId+  ", title = " +title + ", content = "  +content
+		return " BonBoardDTO [seq = "+ seq + ", userNickname = "  +userNickname+  ", title = " +title + ", content = "  +content
 				+ ", views = " + views +  ", createAt=" + createAt + ", itemLink = "+ itemLink + " ] ";
 	}
 
