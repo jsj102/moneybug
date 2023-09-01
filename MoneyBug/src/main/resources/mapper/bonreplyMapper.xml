@@ -5,8 +5,8 @@
 	<insert id="insert" parameterType="bonreplyDTO">  <!-- 살말 댓글 작성 -->
 		
 		insert into bon_reply
-		(board_seq, writer_id, content, create_at)
-		values (#{boardSeq}, #{writerId}, #{content}, now())
+		(board_seq, userNickname , content, create_at)
+		values (#{boardSeq}, #{userNickname}, #{content}, now())
 	</insert>
 
 
