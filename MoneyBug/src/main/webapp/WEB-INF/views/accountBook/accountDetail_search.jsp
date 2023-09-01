@@ -64,11 +64,17 @@
         });
     });
 </script>
+<style>
+table {
+	width: 500px;
+	table-layout: fixed;
+}
+</style>
 </head>
 <body>
 	<div class="section" id="accountDetail">
-		<h1>Account Details</h1>
-		<table>
+		<h3>검색결과</h3>
+		<table class="table table-striped">
 			<tr>
 				<th>순서</th>
 				<th>계정</th>
@@ -89,8 +95,8 @@
 			</c:forEach>
 		</table>
 		<div id="pagination">
-			<button id="prevBtn">이전</button>
-			<button id="nextBtn">다음</button>
+			<button id="prevBtn" class="btn btn-success">이전</button>
+			<button id="nextBtn" class="btn btn-success">다음</button>
 		</div>
 	</div>
 

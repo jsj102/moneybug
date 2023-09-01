@@ -5,6 +5,8 @@
 <%@ include file="/layout/header.jsp" %>
 <style>
 
+
+
 /* 글 쓰기 페이지 스타일 추가 */
 #form {
 	height: 100%;
@@ -71,6 +73,8 @@
 	margin-top: 35px;
 	margin-bottom: 40px;
 }
+
+
 </style>
 
 <div class="banner-container" align="center">
@@ -111,7 +115,7 @@
 			placeholder="내용을 입력하세요. . ." style="font-size: 23px;"></textarea>
 	</div>
 	<br>
-	
+
 	<br>
 	<div>
 
@@ -129,31 +133,72 @@
 
 
 <script type="text/javascript">
-	$('#insert').click(function() {
-		var selectedValue1 = document.getElementById("boardType").value;
-		var selectedValue2 = document.getElementById("title").value;
-		var selectedValue3 = document.getElementById("content").value;
-		if (selectedValue1 === "") {
-			alert("말머리를 선택하세요.");
-			return false; // 폼 제출 막기
-		}
-		if (selectedValue2 === "") {
-			alert("제목을 입력하세요.");
-			return false; // 폼 제출 막기
-		}
-		if (selectedValue3 === "") {
-			alert("내용을 입력하세요.");
-			return false; // 폼 제출 막기
-		}
-		return true; // 폼 제출 허용
-	});
+
+
+$('#insert').click(function() {
+    var selectedValue1 = document.getElementById("boardType").value;
+    var selectedValue2 = document.getElementById("title").value;
+    var selectedValue3 = document.getElementById("content").value;
+    var maxLength = 20; // 최대 길이를 20으로 변경 (원하는 길이로 설정)
+    
+    if (selectedValue1 === "") {
+        alert("말머리를 선택하세요.");
+        return false; // 폼 제출 막기
+    }
+    
+    if (selectedValue2 === "") {
+        alert("제목을 입력하세요.");
+        return false; // 폼 제출 막기
+    }
+    
+    if (selectedValue3 === "") {
+        alert("내용을 입력하세요.");
+        return false; // 폼 제출 막기
+    }
+    
+    if (selectedValue2.length > maxLength) {
+        alert("제목은 " + maxLength + "자까지 입력 가능합니다!");
+        return false; // 폼 제출 막기
+    }
+    
+    return true; // 폼 제출 허용
+});
+
 
 	$('#cancel').click(function() {
 		location.href = "TagBoard_list?page=1";
 		return false;
 	});
 
-	
+		
+	  $(document).ready(function() {
+          // 서버로부터 로그인 상태 값을 확인하여 처리
+          $.ajax({
+              url : "../checkLogin",
+              method : "GET",
+              success : function(response) {
+                  let loginStatus = parseInt(response);
+                  if (loginStatus !== 1) {
+                      // 로그인 상태가 아니라면 로그인 페이지로 리다이렉션
+                      location.href = "/moneybug/login.jsp"; // 실제 로그인 페이지 URL로 변경
+                  } else {
+                      $(document).ready(function() {
+                          // 서버로부터 로그인 상태 값을 확인하여 처리
+                          $.ajax({
+                              url : "TagBoard_insert.jsp",
+                              method : "GET",
+                              success : function(response) {
+                              },
+                              error : function(error) {
+                                  location.href = "/moneybug/login.jsp";
+                              }
+                          });
+                      });
+                  }
+              }
+          });
+      });
+	  
 	
 	
 </script>

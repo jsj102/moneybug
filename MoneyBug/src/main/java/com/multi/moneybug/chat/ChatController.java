@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Controller
+@Slf4j
 public class ChatController {
     @Autowired
     private ChatService chatService;
@@ -20,7 +22,6 @@ public class ChatController {
     @ResponseBody
     public List<ChatMessage> showChatPage(@RequestParam(required = false) String channel) throws InterruptedException, ExecutionException {
         List<ChatMessage> messages = chatService.getAllMessages(channel);
-
         return messages;
     }
 

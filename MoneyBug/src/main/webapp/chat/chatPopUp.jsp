@@ -40,7 +40,7 @@ body {
 	min-height: 100vh;
 }
 
-#section {
+.popup {
 	display: flex;
 	justify-content: center; /* 수평 가운데 정렬 */
 	align-items: center; /* 수직 가운데 정렬 */
@@ -52,7 +52,7 @@ body {
 	margin: 20px auto;
 }
 
-#section table {
+.popup table {
 	border-radius: 30px;
 	border: 1px transparent solid;
 	border-spacing: 0px;
@@ -69,7 +69,7 @@ body {
 }
 </style>
 
-<div id="section" align="center">
+<div class="popup" align="center">
 
 	<div class="inputoutput">
 		<table>
@@ -99,7 +99,7 @@ body {
 							<option value="chatbot@${sessionScope.socialId}">챗봇</option>
 				       </select>	
 							
-						<button type="submit">Send</button>
+						<button class="btn btn-info" type="submit">Send</button>
 					</form>
 				</td>
 			</tr>
@@ -121,9 +121,9 @@ function setInputValueAndSubmit(value) {
 $(document).ready(function() {
   $("#chat-form").submit(function(e) {
     e.preventDefault();
-    var name = $("#name-input").val();
-    var text = $("#message-input").val();
-    var channel = $("#channel-input").val();
+    let name = $("#name-input").val();
+    let text = $("#message-input").val();
+    let channel = $("#channel-input").val();
 
     $.ajax({
       url: "<c:url value="/send" />",
@@ -147,18 +147,18 @@ $(document).ready(function() {
   loadChatMessages();
 
   function loadChatMessages() {
-      var selectedChannel = $("#channel-input").val();
+      let selectedChannel = $("#channel-input").val();
       $.ajax({
         url: "<c:url value='/chat' />?channel=" + selectedChannel,
         method: "GET",
         dataType: "json",
         success: function(messages) {
-          var chatMessages = $("#chat-messages");
+          let chatMessages = $("#chat-messages");
           chatMessages.empty();
 
           messages.forEach(function(message) {
-            var messageDiv = $("<div>").text(message.name + ": ");
-            var textWithLinks = convertLinksToAnchors(message.text);
+            let messageDiv = $("<div>").text(message.name + ": ");
+            let textWithLinks = convertLinksToAnchors(message.text);
             messageDiv.append(textWithLinks);
             messageDiv.append(" (" + message.timestamp + ")");
             chatMessages.append(messageDiv);
@@ -171,7 +171,7 @@ $(document).ready(function() {
     }
 
   function convertLinksToAnchors(text) {
-    var urlPattern = /(http:\/\/|https:\/\/\S+)/g;
+    let urlPattern = /(http:\/\/|https:\/\/\S+)/g;
     return text.replace(urlPattern, function(url) {
       return "<a href='" + url + "' target='_blank' style='color: blue;''>" + url + "</a>";
     });
