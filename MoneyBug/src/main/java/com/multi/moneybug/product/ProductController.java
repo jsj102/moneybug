@@ -172,13 +172,16 @@ public class ProductController {
 	//결제 후 이동
 	@PostMapping("product/paySuccess.do") 
 	@ResponseBody
-	public String payOrder(OrderListDTO orderListDTO, MemberDTO memberDTO, Model model, BasketDTO basketDTO, HttpSession session, String userId, int productId, int seq){ 
+	public String payOrder(OrderListDTO orderListDTO, MemberDTO memberDTO, Model model, BasketDTO basketDTO, HttpSession session, String userId, int productId, @RequestParam("seqList") String seqList){ 
 		int result = productService.payOrder(orderListDTO);
+		String[] seqStr = seqList.split(",");
+		for(String s : seqStr) {
+			int seq = Integer.parseInt(s);
+			basketService.deleteProductFromBasket(userId,productId,seq);
+		}
 		String userNickname = (String) session.getAttribute("userNickname");
 		memberDTO.setUserNickname(userNickname);
 		memberService.usePoint(orderListDTO, memberDTO);
-		System.out.println(basketDTO);
-		basketService.deleteProductFromBasket(userId,productId,seq);
 		return result + ""; 
 	}
 	

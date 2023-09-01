@@ -60,7 +60,8 @@ body {
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <script>
-
+	let seqListSize =0;
+	let seqList="";
 	function execDaumPostcode() {
 		new daum.Postcode({
 			oncomplete : function(data) {
@@ -95,6 +96,13 @@ body {
 	   
 	   $(function() {
 		    $('#payOrder').click(function() {
+				seqListSize = $('#hiddenSeqCount').val();
+        		console.log(seqListSize);
+        		seqList = $('#basketSeq1').val();
+        		for(let i = 2; i<=seqListSize ; i ++){
+        		    seqList = $('#basketSeq'+i).val() + "," + seqList;
+        		}
+        		console.log(seqList);
 		        var IMP = window.IMP; // 생략 가능
 		        IMP.init('iamport'); // 'iamport' 대신 제공된 "제휴사 식별코드" 사용
 		        IMP.request_pay({
@@ -102,25 +110,24 @@ body {
 		            pay_method: 'card',
 		            merchant_uid: 'merchant_' + new Date().getTime(),
 		            name: '멀개미:결제테스트 1원',
-		            amount: 1,
-		            buyer_email: 'jiyun3664@gmail.com',
+		            amount: 100,
+		            buyer_email: 'wspces@gmail.com',
 		            buyer_name: $('#userName').val(),
 		            buyer_tel: $('#tel').val(),
 		            buyer_addr: $('#address').val(),
 		            buyer_postcode: $('#zip-code').val(),
 		        }, function(rsp) {
 		            if (rsp.success) {
+		        		
 		                //[1] imp_uid를 서버 측에서 결제정보를 조회하기 위해 jQuery ajax로 전달
 		                alert("OK....------");
-		                var seq_value = $(this).attr("selected_id");
-		                console.log(seq_value);
 		                jQuery.ajax({
 		                    url: "paySuccess.do",
 		                    type: 'POST',
 		                    dataType: 'text',
 		                    data: {
 		                        imp_uid: rsp.imp_uid,
-		                        "seq": seq_value,
+		                        seqList: seqList,
 		                        "userId": $('#userId').val(),
 		                        "userName": $('#userName').val(),
 		                        "address": $('#address-1').val() +" "+ $('#address-2').val(),
@@ -227,9 +234,13 @@ body {
 					<label for="basketSeq" class="col-sm-8 col-form-label"> 장바구니 번호</label>
 					<div class="col-sm-4">
 						<div class="input-group">
+								<c:set var="stepnumber" value="1" />
+								<c:set var="countnumber" value="0" />
 						<c:forEach items="${orderlist}" var="order">
-							<input type="number" class="form-control" selected_id="basketSeq" name="basketSeq" value="${order.seq}" readonly>
+								<c:set var="countnumber" value="${countnumber+stepnumber}" />
+							<input type="number" class="form-control" id="basketSeq<c:out value="${countnumber}"/>" name="basketSeq" value="${order.seq}" readonly>
 							</c:forEach>
+							<input type="hidden" id="hiddenSeqCount" value="<c:out value="${countnumber}"/>">
 						</div>
 					</div>
 				</div>

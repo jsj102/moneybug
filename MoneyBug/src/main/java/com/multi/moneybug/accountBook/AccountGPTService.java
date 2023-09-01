@@ -87,7 +87,6 @@ public class AccountGPTService {
 		}
 		result.put("income", income);
 		result.put("consumption", consumption);
-		System.out.println("8웗데이터 가져오기" + result.toString());
 		return result;
 	}
 
