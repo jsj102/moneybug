@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.multi.moneybug.member.MemberDTO;
 import com.multi.moneybug.member.MemberService;
 
+import com.multi.moneybug.member.MemberDTO;
+import com.multi.moneybug.member.MemberService;
+
 
 @Controller
 public class ProductController {
@@ -95,7 +98,9 @@ public class ProductController {
 			@RequestParam("totalAmount") String totalAmount,
 			@RequestParam("selectedId") List<String> selectedIdsStr,
 			@RequestParam("seletedSeq") List<String> selectedSeqsStr,// 변경된 변수명
+
 			ProductDTO productDTO, MemberDTO memberDTO, BasketDTO basketDTO, Model model, HttpSession session
+
 			) {
 
 		//int형으로 형변환
@@ -177,7 +182,4 @@ public class ProductController {
 		return result + ""; 
 	}
 	
-	
-
-
 }

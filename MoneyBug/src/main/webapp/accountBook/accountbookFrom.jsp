@@ -40,12 +40,12 @@ body {
 	<br>
 	<table>
 		<tr>
-			<td>
+			<td><a href="/moneybug/accountBook/accountDetail_List.jsp">
 				<button class="btn btn-success" >작성</button>
-			</td>
-			<td>
+			</a></td>
+			<td><a href="/moneybug/accountBook/monthlyReport.jsp">
 				<button class="btn btn-success" >내역</button>
-			</td>
+			</a></td>
 		</tr>
 	</table>
 </div>

@@ -6,6 +6,7 @@
 <%@ include file="/layout/accountNav.jsp"%>
 <%@ include file="/layout/accountDetail_Search.jsp"%>
 
+
 <style>
 html, body{
 	height: 100%;

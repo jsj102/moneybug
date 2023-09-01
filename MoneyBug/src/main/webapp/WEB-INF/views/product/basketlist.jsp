@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <jsp:include page="/layout/header.jsp" />
+
 <style>
 html, body {
 	height: 100%;
@@ -254,4 +255,6 @@ function deleteProduct(userNickname, productId, seq) {
 		</div>
 	</div>
 
-	<jsp:include page="/layout/footer.jsp" />
+
+<jsp:include page="/layout/footer.jsp"/>
+

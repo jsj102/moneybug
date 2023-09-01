@@ -18,9 +18,9 @@
         }
     }
 </script>
-<%@ include file="../resources/layout/header.jsp"%>
+<%@ include file="/layout/header.jsp"%>
 <!-- header -->
-<%@ include file="../resources/layout/accountNav.jsp"%>
+<%@ include file="/layout/accountNav.jsp"%>
 <!-- Nav -->
 
 <!-- 입력 테이블 스타일 -->
@@ -28,7 +28,7 @@
 #section table {
 	width: 500px;
 	height: 500px;
-	background-color: rgba(255, 255, 255, 0.295);
+	background-color: #C4D7B2;
 	border-radius: 30px;
 	border: 1px transparent solid;
 	border-spacing: 0px;
@@ -42,10 +42,9 @@
 </style>
 
 <div id="section" align="center">
-	<!--  section -->
+	
 	<form action="/moneybug/insert.accountDetail" id="writeForm">
-		<!-- ../insert.accountDetail -->
-
+	
 		<br> <br>
 		<table style="width: 500px; height: 500px">
 			<tr>
@@ -67,7 +66,7 @@
 				</select></td>
 			</tr>
 			<tr>
-				<td>금액<input type="button" value="영수증 OCR"
+				<td>금액&nbsp;<input type="button" value="영수증 OCR"
 					onclick="showOCRPopup();" /></td>
 			</tr>
 			<tr>
@@ -114,8 +113,8 @@
 	</form>
 </div>
 
-<%@ include file="../resources/layout/accountAside.jsp"%>
-<%@ include file="../resources/layout/footer.jsp"%>
+<%@ include file="/layout/accountAside.jsp"%>
+<%@ include file="/layout/footer.jsp"%>
 
 
 <script type="text/javascript">

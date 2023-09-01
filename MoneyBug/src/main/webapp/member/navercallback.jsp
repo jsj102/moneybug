@@ -42,7 +42,8 @@
 				data: {
 					'socialId': id,
 					'email': email,
-					'userName': name
+					'userName': name,
+					'userNickname' : "네이버"+ name
 					},
 					success : function(member) {	
 						if(member === 'old') {
@@ -50,7 +51,7 @@
 							sendPostRequest('../main.do');
 						} else if (member == 'new') {
 							console.log('new');
-							sendPostRequest('${pageContext.request.contextPath}/member/myPage.do');
+							sendPostRequest('${pageContext.request.contextPath}/member/signUp.do');
 						} else {
 							console.log('ajax return error');
 						}				

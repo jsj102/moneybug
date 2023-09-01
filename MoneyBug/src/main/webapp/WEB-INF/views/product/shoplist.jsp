@@ -4,17 +4,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <jsp:include page="/layout/header.jsp"/>
 
-<%-- <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<title>돈벌레 Shop</title>
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<link rel="stylesheet" type="text/css" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
-<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet"> --%>
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
 body {
@@ -225,7 +214,7 @@ body {
                     </div>
                 </td>
                 <c:if test="${status.index % 3 == 2 || status.last}">
-                    </tr>
+             		<tr>
                 </c:if>
             </c:forEach>
         </table>

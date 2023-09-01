@@ -6,7 +6,7 @@
 		useGeneratedKeys="true" keyProperty="SEQ">
 		insert into tag_board
 		values (null,
-		#{writerId}, #{title}, #{content}, #{views}, #{image}, now(),
+		#{writerId}, #{title}, #{content}, #{views}, null, now(),
 		#{boardType})
 	</insert>
 

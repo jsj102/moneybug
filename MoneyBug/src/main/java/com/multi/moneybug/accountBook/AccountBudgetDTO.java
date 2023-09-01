@@ -2,6 +2,7 @@ package com.multi.moneybug.accountBook;
 
 import java.sql.Date;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 

@@ -1,10 +1,6 @@
 package com.multi.moneybug.tagBoard;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.multi.moneybug.tagReply.TagReplyDTO;
 import com.multi.moneybug.tagReply.TagReplyService;
@@ -30,21 +25,8 @@ public class TagBoardController {
 	TagReplyService tagReplyService;
 
 	@RequestMapping("tagBoard/TagBoard_insert")
-	public String insert(TagBoardDTO tagBoardDTO, HttpServletRequest request, MultipartFile file, Model model)
-	        throws Exception {
-	    String savedName = null; // 초기화
-
-	    if (file != null && !file.isEmpty()) {
-	        savedName = file.getOriginalFilename();
-	        String uploadPath = request.getSession().getServletContext().getRealPath("resources/upload");
-	        File target = new File(uploadPath + "/" + savedName);
-	        file.transferTo(target);
-
-	        model.addAttribute("savedName", savedName);
-	        tagBoardDTO.setImage(savedName);
-	    }
-
-	    tagBoardService.insert(tagBoardDTO); // 파일이 null이든 아니든 데이터 삽입 시도
+	public String insert(TagBoardDTO tagBoardDTO, Model model){
+	    tagBoardService.insert(tagBoardDTO); 
 
 	    return "redirect:/tagBoard/TagBoard_list?page=1";
 	}
@@ -71,8 +53,8 @@ public class TagBoardController {
 	}
 	
 	@RequestMapping("tagBoard/TagBoard_taglist")
-	public void taglist(TagBoardPageDTO tagBoardPageDTO, Model model) {
-		int count = tagBoardService.tagcount();
+	public void taglist(String boardType, TagBoardPageDTO tagBoardPageDTO, Model model) {
+		int count = tagBoardService.tagcount(boardType);
 		int pages = 0;
 		if(count % 10 == 0) {
 			pages = count / 10;
@@ -89,7 +71,7 @@ public class TagBoardController {
 	
 	@RequestMapping("tagBoard/TagBoard_searchlist")
 	public void searchlist(TagBoardPageDTO tagBoardPageDTO, Model model) {
-		int count = tagBoardService.searchcount();
+		int count = tagBoardService.searchcount(tagBoardPageDTO);
 		int pages = 0;
 		if(count % 10 == 0) {
 			pages = count / 10;
@@ -120,19 +102,9 @@ public class TagBoardController {
 
 	
 	@RequestMapping("tagBoard/TagBoard_update")
-	public String update(TagBoardDTO tagBoardDTO, HttpServletRequest request, MultipartFile file, Model model)
+	public String update(TagBoardDTO tagBoardDTO, Model model)
 	        throws Exception {
 	    
-
-	    if (!file.isEmpty()) {
-	        String savedName = file.getOriginalFilename();
-	        String uploadPath = request.getSession().getServletContext().getRealPath("resources/upload");
-	        File target = new File(uploadPath + "/" + savedName);
-	        file.transferTo(target);
-
-	        tagBoardDTO.setImage(savedName);
-	    }
-
 	    model.addAttribute("tagBoardDTO", tagBoardDTO);
 	    tagBoardService.update(tagBoardDTO);
 	    

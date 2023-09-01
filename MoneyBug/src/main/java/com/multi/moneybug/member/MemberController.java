@@ -75,6 +75,7 @@ public class MemberController {
 	}
 
 	// 마이페이지로 이동 (신규, 기존회원 모두)
+
 		@RequestMapping("/member/myPage.do")
 		public String myPage(MemberDTO memberDTO, Model model, HttpSession session) {
 			String socialId = (String) session.getAttribute("socialId");
@@ -88,6 +89,7 @@ public class MemberController {
 				model.addAttribute("userName", selectedMember.getUserName());
 				model.addAttribute("socialId", selectedMember.getSocialId());
 				model.addAttribute("point", selectedMember.getPoint());
+
 				userId = selectedMember.getUserId();
 			}
 
@@ -152,7 +154,6 @@ public class MemberController {
     public int checkLoginStatus(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String userNickname = (String) session.getAttribute("userNickname");
-        System.out.println(userNickname);
         
         if (userNickname != null) {
             return 1; // 로그인 상태면 1 반환
@@ -160,4 +161,11 @@ public class MemberController {
             return 0; // 로그인되지 않은 상태면 0 반환
         }
     }
+	
+	@PostMapping("accountBook/getEmail")
+	@ResponseBody
+	public String getEmail(HttpSession session) {
+		String userNickname = (String) session.getAttribute("userNickname");
+		return memberService.getEmailByUserNickname(userNickname);
+	}
 }

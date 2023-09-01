@@ -44,6 +44,9 @@
 			alias="bonreplyDTO"></typeAlias>
 		<typeAlias type="com.multi.moneybug.bonBoard.BonVoteDTO"
 			alias="bonvoteDTO"></typeAlias>
+		<typeAlias
+			type="com.multi.moneybug.bonBoard.BonBoardPageDTO"
+			alias="bonboardpageDTO"></typeAlias>
 
 		<!--맴버 mybatis -->
 		<typeAlias type="com.multi.moneybug.member.MemberDTO"
@@ -60,7 +63,8 @@
 		<!--openApi mybatis -->
 		<typeAlias type="com.multi.moneybug.openApi.OpenApiDTO"
 			alias="openApiDTO"></typeAlias>
-
+		<typeAlias type="com.multi.moneybug.openApi.OpenApiTokenDTO"
+			alias="openApiTokenDTO"></typeAlias>
 		<!--log mybatis -->
 		<typeAlias type="com.multi.moneybug.log.LogDTO"
 			alias="LogDTO"></typeAlias>
@@ -74,6 +78,10 @@
 
 		<mapper resource="mapper/tagboardMapper.xml" />
 		<mapper resource="mapper/tagreplyMapper.xml" />
+
+		<mapper resource="mapper/bonvoteMapper.xml" />
+		<mapper resource="mapper/bonboardMapper.xml" />
+		<mapper resource="mapper/bonreplyMapper.xml" />
 
 		<mapper resource="mapper/bonboardMapper.xml" />
 

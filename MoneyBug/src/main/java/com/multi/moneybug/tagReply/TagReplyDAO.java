@@ -31,6 +31,9 @@ public class TagReplyDAO {
 	public int update(TagReplyDTO tagReplyDTO) {
 		return my.update("tagreply.update", tagReplyDTO);
 	}
+	public int delupdate(TagReplyDTO tagReplyDTO) {
+		return my.update("tagreply.delupdate", tagReplyDTO);
+	}
 	
 	
 	public int delete(int seq) {

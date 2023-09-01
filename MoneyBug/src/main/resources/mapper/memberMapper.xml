@@ -3,9 +3,9 @@
 <mapper namespace="member">
 
 	<insert id="insert" parameterType="MemberDTO">
-		insert into user_member (SOCIAL_ID, EMAIL, USER_NAME)
+		insert into user_member (SOCIAL_ID, EMAIL, USER_NAME, USER_NICKNAME)
 		values
-		(#{socialId}, #{email}, #{userName})
+		(#{socialId}, #{email}, #{userName}, #{userNickname})
 	</insert>
 
 	<select id="find" parameterType="MemberDTO" resultType="int">
@@ -50,5 +50,11 @@
 		POINT = #{point}
 		WHERE user_nickname = #{userNickname}
 	</update>
+
+    	<select id="getEmailByUserNickname" parameterType="String" resultType="String">
+        SELECT EMAIL
+        FROM user_member
+        WHERE user_nickname = #{userNickname}
+    </select>
 
 </mapper>

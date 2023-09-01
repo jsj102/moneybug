@@ -31,7 +31,7 @@ public class AccountAverageController {
 		HashMap<String,Integer> accountDetailMap = accountDetailService.sumCategory(accountDetailList);
 		int users = accountDetailService.countListMonthUseUser(accountDetailDTO);
 		accountDetailMap = accountAverageService.divideUserAvg(accountDetailMap,users); //평균값
-		//accountAverageService.insertAvgList(accountDetailMap);
+		accountAverageService.insertAvgList(accountDetailMap);
 	}
 	
 	@RequestMapping("/accountBook/getAvginfo")

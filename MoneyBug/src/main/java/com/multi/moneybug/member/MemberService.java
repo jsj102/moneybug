@@ -53,5 +53,10 @@ public class MemberService {
 	    memberDTO.setPoint(newPoint);  
 	    return memberDAO.usePoint(memberDTO);
 	}
+	
+	public String getEmailByUserNickname(String userNickname) {
+		String email = memberDAO.getEmailByUserNickname(userNickname);
+		return email;
+	}
 
 }

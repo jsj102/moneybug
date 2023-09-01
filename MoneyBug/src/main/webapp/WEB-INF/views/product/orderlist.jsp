@@ -55,6 +55,7 @@ body {
 }
 </style>
 
+
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
@@ -161,7 +162,6 @@ body {
 		    });
 		});
 
-
 </script>
 
 </head>
@@ -188,6 +188,7 @@ body {
 			%>
 		</div>
 		<div class="pay-container">
+
 				<table
 					class="table table-light table-hover table-striped text-center">
 					<thead>
@@ -323,8 +324,8 @@ body {
 						placeholder="우편번호">
 				</div>
 				<div class="mb-3">
-					<input type="text" class="form-control" id="address-1"
-						placeholder="도로명주소" name="address-1">
+					<input type="text" class="form-control" id="address-1" placeholder="도로명주소" name="address-1">
+
 				</div>
 				<div class="mb-3">
 					<input type="text" class="form-control" id="address-2"
