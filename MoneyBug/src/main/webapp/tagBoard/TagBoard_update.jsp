@@ -7,6 +7,35 @@
 
 <style>
 
+body {
+	background: #F9F5E7;
+}
+
+.banner-text {
+margin-top: 35px;
+margin-bottom: 40px;
+}
+
+.banner-container {
+	height: 250px;
+	background-color: #6cc3d5;
+	background-position: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.banner-text h1 {
+	color: white;
+	font-size: 60px;
+}
+
+.banner-text {
+	color: white;
+	font-size: 22px;
+	text-align: center;
+}
 
 /* 글 쓰기 페이지 스타일 추가 */
 #form {
@@ -19,6 +48,7 @@
 	justify-content: center;
 	align-items: center;
 	text-align: center; /* 텍스트 가운데 정렬 */
+	background-color: white;
 }
 
 #boardType {
@@ -159,7 +189,7 @@
 		var selectedValue1 = document.getElementById("boardType").value;
 	    var selectedValue2 = document.getElementById("title").value;
 	    var selectedValue3 = document.getElementById("content").value;
-	    var maxLength = 20; // 최대 길이를 20으로 변경 (원하는 길이로 설정)
+	    var maxLength = 20; // 최대 길이를 100으로 변경 (원하는 길이로 설정)
 	    
 	    if (selectedValue1 === "") {
 	        alert("말머리를 선택하세요.");
