@@ -12,19 +12,26 @@ html, body{
 }
 
 body {
-	background: #F9F5E7; //본인이 원하는 색깔로 페이지
+	background: #F9F5E7;
 	display:flex;
 	flex-direction:column;
 	height:100%;
 	flex:1;
 	margin: 0;
 }
+
+
+.report {
+padding-left: 250px;
+margin: 100px 0 50px 0px;
+}
+
 .MonthlyDiv{display: flex; width:1200px; height:755px; background-color: #ffffff;  text-align: center; border: 1px solid #E1ECC8;}
 .MonthlyDiv2{display: flex; width:1200px; height:340px; background-color: #ffffff;  text-align: center; border: 1px solid #E1ECC8;}
-.MonthlyDiv3{display: flex; width:1200px; height:340px; background-color: #ffffff;  text-align: left; border: 1px solid #993300; position: relative; 	color: black;
+.MonthlyDiv3{display: flex; width:1200px; height:340px; background-color: #ffffff;  text-align: left; position: relative; 	color: black;
 	font-weight: bold; padding: 5px;  }
 .RecentTable {
-    width: 500px;
+    width: 600px;
     height: 340px;
     background-color: rgba(255, 255, 255, 0.472);
     text-align: center;
@@ -74,26 +81,26 @@ body {
 		<button id="reportDownloadExcel" class="btn btn-success">다운로드(excel)</button>
 		<button id="snedToEmailReport" class="btn btn-success">이메일로 보내기</button>
 	</div>
-<div id="report">
-	<h3>월간 지출(카테고리별)</h3>
+<div class="report">
+	<h1>월간 지출(카테고리별)</h1><br>
 	<div id="monthlyDivPart1" class="MonthlyDiv">
 		<div style="flex: 1;" id="chartdiv">
 			<div id="myChartPart1"
-				style="width: 700px; height: 755px;">
-				<canvas id="myChart" style="width: 700px; height: 755px;"></canvas>
+				style="width: 600px; height: 655px; ">
+				<canvas id="myChart" style="width: 600px; height: 655px;"></canvas>
 			</div>
 		</div>
-		<div style="flex: 1;" id="MonthlyTable"></div>
+		<div id="MonthlyTable"></div>
 	</div>
 	<br>
 	<h3>최근 사용 내역(5회)</h3>
 	<div id="monthlyDivPart2" class="MonthlyDiv2">
 		<div id="myChartPart2" style="flex: 1;">
 			<canvas id="myChart2"
-				style="width: 700px; height: 340px; "></canvas>
+				style="width: 600px; height: 340px;"></canvas>
 		</div>
 		<div style="flex: 1;">
-			<div style=" height: 340px;"
+			<div style="width: 600px; height: 340px;"
 				id="RecentTable"></div>
 		</div>
 	</div>
