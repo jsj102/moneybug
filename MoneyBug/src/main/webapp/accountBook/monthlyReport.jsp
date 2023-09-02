@@ -511,7 +511,7 @@ margin: 100px 0 50px 0px;
 	});//$
 	function listTableFunc(list, detailSomeDataPlusList,
 		detailSomeDataMinusList, detailSomeLabelList) {
-	    let listTable = '<table border="1" class="RecentTable"><tr><th>분류</th><th>사용내역</th><th>타입</th><th>금액</th></tr>';
+	    let listTable = '<table border="1" class="RecentTable"><tr><th>분류</th><th>타입</th><th>사용내역</th><th>금액</th></tr>';
 	    for (var i = 0; i < list.length; i++) {
 		let formattedPrice = list[i].price.toLocaleString('ko-KR', {
 		    style : 'currency',
