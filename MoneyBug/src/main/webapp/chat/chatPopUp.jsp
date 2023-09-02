@@ -125,6 +125,11 @@ $(document).ready(function() {
     let text = $("#message-input").val();
     let channel = $("#channel-input").val();
 
+    if (text.trim() === "") {
+        //alert("메시지를 입력하세요.");
+        return;
+      }
+    
     $.ajax({
       url: "<c:url value="/send" />",
       method: "POST",
