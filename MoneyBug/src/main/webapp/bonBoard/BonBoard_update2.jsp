@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ include file="/layout/header.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -47,7 +47,7 @@
 <div class="container">
     <div class="row">
         <form method="post" action="/moneybug/bonBoard/BonBoard_update">
-            <input name="seq" value="${param.seq}">
+            <input type="hidden" name="seq" value="${param.seq}">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -76,3 +76,4 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+<%@ include file="/layout/footer.jsp" %>

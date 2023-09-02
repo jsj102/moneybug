@@ -102,7 +102,6 @@ public class AccountBudgetService {
 			accountBudgetDTO.getUsedAt();
 			return false;
 		} catch (NullPointerException e) {
-			System.out.println("budget null에러");
 			return true;
 		}
 		

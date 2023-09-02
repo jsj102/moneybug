@@ -25,28 +25,22 @@ public class BonVoteService {
 	}
 
 
-	  public void insert(int seq, boolean isUpVote) {
-	        try {
-	            int voteValue = isUpVote ? 1 : 0;
-	            BonVoteDTO bonVoteDTO = new BonVoteDTO();
-	            bonVoteDTO.setBoardSeq(seq);
-	            bonVoteDTO.setVote(voteValue);
-	            bonVoteDAO.insert(bonVoteDTO);
-
-	            // �닾�몴 �궫�엯 �썑 �빐�떦 寃뚯떆臾쇱쓽 珥� �닾�몴�닔瑜� 怨꾩궛
-	            int totalVotes = bonVoteDAO.calculateTotalVotes(seq);
-
-	            // 珥� �닾�몴�옄 �닔瑜� BonBoardService瑜� �넻�빐 �뾽�뜲�씠�듃
-	            bonBoardService.updateVoteCount(seq, totalVotes);
-
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	    }
-	  public void updateVoteCount(int boardSeq, int newVoteCount) {
-	        bonBoardService.updateVoteCount(boardSeq, newVoteCount);
+	 public void insert(BonVoteDTO bonVoteDTO) {
+	    	
+	    	bonVoteDAO.insert(bonVoteDTO);
 	    }
 	
+	 public int voteCheck(BonVoteDTO bonVoteDTO) {
+		 
+		 return bonVoteDAO.voteCheck(bonVoteDTO);
+	 }
 	
+	 public int upList(int boardSeq) {
+		 return bonVoteDAO.upList(boardSeq);
+	 }
+	 
+	 public int downList(int boardSeq) {
+		 return bonVoteDAO.downList(boardSeq);
+	 }
 
 }

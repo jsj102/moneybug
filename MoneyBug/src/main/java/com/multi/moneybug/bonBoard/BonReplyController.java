@@ -17,6 +17,7 @@ public class BonReplyController {
 	@RequestMapping("bonBoard/BonReply_insert")
 	public String insert(BonReplyDTO bonReplyDTO) {
 		bonReplyService.insert(bonReplyDTO);
+		System.out.println("댓글 입력 seq >>>" + bonReplyDTO.getBoardSeq());
 		return "redirect:/bonBoard/BonBoard_one?seq="+ bonReplyDTO.getBoardSeq();
 	}
 	
@@ -43,9 +44,9 @@ public class BonReplyController {
 	
 	@RequestMapping("/bonBoard/BonReply_delete")
 
-	public int delete(int seq) {
+	public String delete(int seq, int boardSeq) {
 		int result = bonReplyService.delete(seq);
-		return result;   //由ы꽩媛�:  �궘�젣 �꽦怨�-1   �궘�젣�떎�뙣 -0 (int���엯 )  <-�씠�뿉 ���븳 泥섎━�뒗 酉� �럹�씠吏��뿉�꽌 
+		return "redirect:/bonBoard/BonBoard_one?seq="+ boardSeq;  
 	}
 	
 	@RequestMapping("/bonBoard/BonReply_count")
