@@ -168,7 +168,7 @@ background: white;
 
 		</div>
 		<br>
-		<button id="addLine" class="addline btn btn-info">+한줄추가</button>
+		<button id="addLine" class="addline btn btn-dark">+한줄추가</button>
 
 
 		<br> <br>
