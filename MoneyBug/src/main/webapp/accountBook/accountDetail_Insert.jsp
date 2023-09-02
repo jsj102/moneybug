@@ -3,39 +3,38 @@
 
 <script type="text/javascript">
     //입력란 예외처리
-    function checkWrite() {
-        const priceInput = document.getElementById("price_input");
-        const descriptionInput = document.getElementById("description");
+function checkWrite() {
+    const priceInput = document.getElementById("price_input");
+    const descriptionInput = document.getElementById("description");
 
-        if (priceInput.value === "") {
-            alert("금액을 입력하십시오!");
-        } else if (isNaN(priceInput.value)) {
-            alert("금액에는 숫자만 입력하십시오!");
-        } else if (descriptionInput.value === "") {
-            alert("내용을 입력하십시오!");
-        } else {
-            document.getElementById("writeForm").submit();
-        }
+    if (priceInput.value === "") {
+        alert("금액을 입력하십시오!");
+    } else if (isNaN(priceInput.value) || parseFloat(priceInput.value) <= 0) {
+        alert("금액에는 양수 숫자만 입력하십시오!");
+    } else if (descriptionInput.value === "") {
+        alert("내용을 입력하십시오!");
+    } else {
+        document.getElementById("writeForm").submit();
     }
+}
+
 </script>
 <%@ include file="/layout/header.jsp"%>
 <%@ include file="/layout/accountNav.jsp"%>
 
 <style>
-html, body{
+html, body {
 	height: 100%;
-	
 }
 
 body {
 	background: #F9F5E7;
-	display:flex;
-	flex-direction:column;
-	height:100%;
-	flex:1;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	flex: 1;
 	margin: 0;
 }
-
 
 .account_section table {
 	width: 500px;
@@ -63,25 +62,21 @@ body {
 				<td colspan="2" style="text-align: center">입력</td>
 			</tr>
 			<tr>
-				<td>
-					<input name="accountBookId" type="hidden" id="accountBookId" value="">
-				</td>
+				<td><input name="accountBookId" type="hidden"
+					id="accountBookId" value=""></td>
 			</tr>
 			<tr>
-				<td>
-					<input type='date' name="usedAt" id="usedAt" />
-				</td>
+				<td><input type='date' name="usedAt" id="usedAt" /></td>
 			</tr>
 			<tr>
-				<td>
-					<select id="expenses" name="accountType">
+				<td><select id="expenses" name="accountType">
 						<option value="수입">수입</option>
 						<option value="지출">지출</option>
-					</select>
-				</td>
+				</select></td>
 			</tr>
 			<tr>
-				<td>금액&nbsp;<input class="btn btn-info" type="button" value="영수증 OCR" onclick="showOCRPopup();" /></td>
+				<td>금액&nbsp;<input class="btn btn-info" type="button"
+					value="영수증 OCR" onclick="showOCRPopup();" /></td>
 			</tr>
 			<tr>
 				<td><input type="text" name="price" id="price_input" value="" />원</td>
@@ -90,8 +85,7 @@ body {
 				<td>분류</td>
 			</tr>
 			<tr>
-				<td>
-					<select id="expenses" name="accountCategory">
+				<td><select id="expenses" name="accountCategory">
 						<option value="주거/통신">주거/통신</option>
 						<option value="식비">식비</option>
 						<option value="교통/차량">교통/차량</option>
@@ -107,21 +101,19 @@ body {
 						<option value="마트/편의점/쇼핑">마트/편의점/쇼핑</option>
 						<option value="반려동물">반려동물</option>
 						<option value="기타">기타</option>
-					</select>
-				</td>
+				</select></td>
 			</tr>
 			<tr>
 				<td>내용</td>
 			</tr>
 			<tr>
-				<td>
-					<textarea name="description" cols="30" rows="3" placeholder="내용을 작성해주세요..." id="description" value=""></textarea>
+				<td><textarea name="description" cols="30" rows="3"
+						placeholder="내용을 작성해주세요..." id="description" value=""></textarea>
 				</td>
 			</tr>
 			<tr>
-				<td>
-					<input class="btn btn-info" type="button" value="저장" onclick="javascript:checkWrite()">
-				</td>
+				<td><input class="btn btn-info" type="button" value="저장"
+					onclick="javascript:checkWrite()"></td>
 			</tr>
 		</table>
 	</form>
