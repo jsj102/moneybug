@@ -6,10 +6,13 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
-	
-	<util:properties id="key" location="classpath:key.properties"/>
-	
-	<context:property-placeholder location="classpath:db.properties"/>
+
+
+	<util:properties id="key"
+		location="classpath:key.properties" />
+
+	<context:property-placeholder
+		location="classpath:db.properties" />
 	<bean id="my" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="config"></constructor-arg>
 	</bean>
@@ -25,10 +28,18 @@
 		<property name="username" value="${jdbc.username}"></property>
 		<property name="password" value="${jdbc.password}"></property>
 	</bean>
-    
-    <!-- 이미지 첨부파일  -->
-        <!-- MultipartResolver 설정 -->
-        <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-            
-        </bean>
+<!-- 
+	<beans profile="profile1">
+		<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+			<property name="maxUploadSize" value="10485760"/>
+			
+			<property name="defaultEncoding" value="utf-8"/>
+		</bean>
+	</beans>
+	<beans profile="multiPartBuilder">
+		<bean id="multipartEntityBuilder" class="org.apache.http.entity.mime.MultipartEntityBuilder">
+
+		</bean>
+	</beans>
+ -->
 </beans>

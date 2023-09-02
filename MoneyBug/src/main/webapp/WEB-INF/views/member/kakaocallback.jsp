@@ -15,7 +15,8 @@
             data: {
                 'socialId': "${memberDTO.socialId}",
                 'email': "${memberDTO.email}",
-                'userName': "${memberDTO.userName}"
+                'userName': "${memberDTO.userName}",
+                'userNickname' : "카카오"+"${memberDTO.userName}"
             },
             success : function(member) {	
 				if(member === 'old') {
@@ -23,7 +24,7 @@
 					sendPostRequest('../main.do');
 				} else if (member == 'new') {
 					console.log('new');
-					sendPostRequest('${pageContext.request.contextPath}/member/myPage.do');
+					sendPostRequest('${pageContext.request.contextPath}/member/signUp.do');
 				} else {
 					console.log('ajax return error');
 				}				

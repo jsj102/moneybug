@@ -10,4 +10,5 @@ public class OpenApiDTO {
 	private String secretKey;
 	private Date expireDate;
 	private int AccountBookId;
+
 }

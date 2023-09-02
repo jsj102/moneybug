@@ -2,30 +2,25 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ include file="../../../resources/layout/header.jsp"%>
+<jsp:include page="/layout/header.jsp"/>
 
-<%--<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<title>돈벌레 상세페이지</title>
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<link rel="stylesheet" type="text/css" media="all"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
-<link href="${pageContext.request.contextPath}/resources/css/main.css"
-	rel="stylesheet"> --%>
 <style>
+html, body {
+	height: 100%;
+}
+
 body {
 	background: #F9F5E7;
+	display:flex;
+	flex-direction:column;
+	height:100%;
+	flex:1;
+	margin: 0;
 }
 
 .banner-container {
 	height: 250px;
-	background-color: #F3969A;
+	background-color: #6cc3d5;
 	background-position: center;
 	display: flex;
 	flex-direction: column;
@@ -186,7 +181,7 @@ function addToCart(productId, userNickname, count) {
 				<div class="input-group-prepend">
 					<button class="btn btn-outline-secondary" id="decrease">-</button>
 				</div>
-				<input type="text" class="form-control text-center quantity"	
+				<input type="text" class="form-control text-center quantity"
 					value="1" readonly>
 				<div class="input-group-append">
 					<button class="btn btn-outline-secondary" id="increase">+</button>
@@ -195,13 +190,10 @@ function addToCart(productId, userNickname, count) {
 
 			<hr>
 			<div class="buttons">
-				<button class="btn btn-success cart-button">장바구니</button>
-				<button class="btn btn-info buy-button" onclick="location.href='#'">바로
-					주문하기</button>
+				<button class="btn btn-success cart-button">장바구니에 넣기</button>
+				
 			</div>
 		</div>
 	</div>
 
-	<%@ include file="../../../resources/layout/footer.jsp"%>
-</body>
-</html>
+<jsp:include page="/layout/footer.jsp"/>

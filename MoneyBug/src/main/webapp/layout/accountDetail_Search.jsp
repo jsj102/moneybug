@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <title>검색</title>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-
 <script type="text/javascript">
     $(document).ready(function() {
         $("#searchButton").click(function() { // 수정된 부분: click 이벤트 핸들러 추가
@@ -18,7 +17,7 @@
                     accountCategory : $("#accountCategory").val()
                 },
                 success : function(data) {
-                    $("#accountDetail").html(data);
+                    $("#accountList").html(data);
                 },
                 error : function(xhr, status, error) {
                     var errorMessage = "오류 상태 코드: " + xhr.status + "\n" + "오류 메시지: " + error + "\n" + "오류 타입: " + status;
@@ -28,12 +27,18 @@
         });
     });
 </script>
+<style>
+.account_search {
+	padding: 30px 0 0 280px;
+}
+</style>
 </head>
 <body>
-	<div class="accountDetail"></div>
-	<select id="searchYear" name="searchYear">
+	
+	<div class="account_search">
+	<select id="searchYear" name="searchYear" >
 		<option value="2024">2024년</option>
-		<option value="2023">2023년</option>
+		<option value="2023" selected="selected">2023년</option>
 		<option value="2022">2022년</option>
 		<option value="2021">2021년</option>
 		<option value="2020">2020년</option>
@@ -70,5 +75,6 @@
 		<option value="기타">기타</option>
 	</select>
 	<button class="btn btn-secondary" type="submit" id="searchButton">검색</button>
+	</div>
 </body>
 </html>

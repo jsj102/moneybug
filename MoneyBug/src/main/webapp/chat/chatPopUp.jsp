@@ -2,11 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- JSTL 라이브러리 추가 -->
-<%@ include file="../resources/layout/header.jsp"%>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<%@ include file="/layout/header.jsp"%>
+
 <style>
-#header, #footer {
+.navbar, .footer {
 	display: none;
 }
 
@@ -34,12 +33,14 @@
 	width: 150px; /* 원하는 너비로 조절하세요 */
 }
 
+
+
 body {
 	background: #E1ECC8;
 	min-height: 100vh;
 }
 
-#section {
+.popup {
 	display: flex;
 	justify-content: center; /* 수평 가운데 정렬 */
 	align-items: center; /* 수직 가운데 정렬 */
@@ -51,7 +52,7 @@ body {
 	margin: 20px auto;
 }
 
-#section table {
+.popup table {
 	border-radius: 30px;
 	border: 1px transparent solid;
 	border-spacing: 0px;
@@ -68,7 +69,7 @@ body {
 }
 </style>
 
-<div id="section" align="center">
+<div class="popup" align="center">
 
 	<div class="inputoutput">
 		<table>
@@ -85,10 +86,20 @@ body {
 			<tr>
 				<td>
 					<form id="chat-form" action="<c:url value="/send" />" method="post">
-						<input type="text" id="name-input" name="name" placeholder="작성자"
+						<input type="hidden" id="name-input" name="name" placeholder="작성자"
 							value="${sessionScope.userNickname}"> <input type="text"
 							id="message-input" name="text" placeholder="메세지를 입력...">
-						<button type="submit">Send</button>
+						<select id="channel-input" name="channel">
+							<option value="chat1">채널1</option>
+							<option value="chat2">채널2</option>
+							<option value="chat3">채널3</option>
+							<option value="chat4">채널4</option>
+							<option value="chat5">채널5</option>
+							<option value="${sessionScope.socialId}">나에게</option>
+							<option value="chatbot@${sessionScope.socialId}">챗봇</option>
+				       </select>	
+							
+						<button class="btn btn-info" type="submit">Send</button>
 					</form>
 				</td>
 			</tr>
@@ -96,21 +107,31 @@ body {
 	</div>
 
 </div>
-<%@ include file="../resources/layout/footer.jsp"%>
-<!-- 
+<%@ include file="/layout/footer.jsp"%>
+
+
+
 <script>
+function setInputValueAndSubmit(value) {
+    $("#message-input").val(value);
+    $("#chat-form").submit();
+}
+
+
 $(document).ready(function() {
   $("#chat-form").submit(function(e) {
     e.preventDefault();
-    var name = $("#name-input").val();
-    var text = $("#message-input").val();
+    let name = $("#name-input").val();
+    let text = $("#message-input").val();
+    let channel = $("#channel-input").val();
 
     $.ajax({
       url: "<c:url value="/send" />",
       method: "POST",
       data: {
         name: name,
-        text: text
+        text: text,
+        channel: channel
       },
       success: function(response) {
 
@@ -126,35 +147,33 @@ $(document).ready(function() {
   loadChatMessages();
 
   function loadChatMessages() {
-    $.ajax({
-      url: "<c:url value="/chat" />",
-      method: "GET",
-      dataType: "json",
-      success: function(messages) {
-        var chatMessages = $("#chat-messages");
-        chatMessages.empty();
+      let selectedChannel = $("#channel-input").val();
+      $.ajax({
+        url: "<c:url value='/chat' />?channel=" + selectedChannel,
+        method: "GET",
+        dataType: "json",
+        success: function(messages) {
+          let chatMessages = $("#chat-messages");
+          chatMessages.empty();
 
-        messages.forEach(function(message) {
-          var messageDiv = $("<div>").text(message.name + ": ");
-          
-          // message.text 내의 링크를 실제 하이퍼링크로 변환하기
-          var textWithLinks = convertLinksToAnchors(message.text);
-          messageDiv.append(textWithLinks);
-
-          messageDiv.append(" (" + message.timestamp + ")");
-          chatMessages.append(messageDiv);
-        });
-      },
-      error: function(xhr, status, error) {
-        console.error("로딩 에러", error);
-      }
-    });
-  }
+          messages.forEach(function(message) {
+            let messageDiv = $("<div>").text(message.name + ": ");
+            let textWithLinks = convertLinksToAnchors(message.text);
+            messageDiv.append(textWithLinks);
+            messageDiv.append(" (" + message.timestamp + ")");
+            chatMessages.append(messageDiv);
+          });
+        },
+        error: function(xhr, status, error) {
+          console.error("로딩 에러", error);
+        }
+      });
+    }
 
   function convertLinksToAnchors(text) {
-    var urlPattern = /(http:\/\/|https:\/\/\S+)/g;
+    let urlPattern = /(http:\/\/|https:\/\/\S+)/g;
     return text.replace(urlPattern, function(url) {
-      return "<a href='" + url + "' target='_blank'>" + url + "</a>";
+      return "<a href='" + url + "' target='_blank' style='color: blue;''>" + url + "</a>";
     });
   }
 
@@ -162,7 +181,5 @@ $(document).ready(function() {
   setInterval(loadChatMessages, 500);
 });
 </script>
-
- -->
 
 

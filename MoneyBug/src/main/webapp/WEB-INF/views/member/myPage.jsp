@@ -1,40 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<link rel="stylesheet" type="text/css" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+<jsp:include page="/layout/header.jsp"/>
 <style>
 body {
 	background: #F9F5E7;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }
 
 .page-container {
-	margin-top: 100px;
-	margin-bottom: 100px;
-	width: 50%;
-	align-items: center;
+	margin: 100px;
+	display: flex;
 	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	display: flex;
 }
 
 .info-container {
 	padding: 40px;
 	justify-content: center;
-	box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
 	background-color: white;
 	border-radius: 20px;
 }
 
 .card-body {
-
 	padding-left: 50px;
 	padding-right: 50px;
 }
@@ -44,7 +34,6 @@ form {
 	flex-direction: column;
 }
 
-
 .nick-container {
 	padding: 50px;
 	display: flex;
@@ -53,8 +42,8 @@ form {
 }
 
 .btn-custom {
-	margin-top: 30px;
-	width: 70%;
+	margin-top: 20px;
+	width: 50%;
 	align-self: center;
 }
 </style>
@@ -85,9 +74,8 @@ form {
 							value="${userLevel}" />
 					</div>
 					<div class="form-group">
-						<label for="xpPoint">총 경험치:</label> <input type="text"
-							id="xpPoint" name="xpPoint" readonly class="form-control"
-							value="${xpPoint}" />
+						<label for="point">나의 포인트:</label> <input type="text" id="point"
+							name="point" readonly class="form-control" value="${point}" />
 					</div>
 
 					<form action="myInfoUpdate.do" method="post">
@@ -102,6 +90,37 @@ form {
 						<button type="submit" id="updateButton"
 							class="btn btn-custom btn-outline-secondary btn-lg">등록하기</button>
 					</form>
+					<hr>
+					<div class="form-group">
+						<label for="orderlist">나의 주문이력</label>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>주문번호</th>
+									<th>주문일자</th>
+									<th>주문자 이름</th>
+									<th>주소</th>
+									<th>주문금액</th>
+									<th>결제방법</th>
+									<th>주문상태</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:forEach items="${orderlist}" var="order">
+									<tr>
+										<td>${order.orderNumber}</td>
+										<td>${order.orderAt}</td>
+										<td>${order.userName}</td>
+										<td>${order.address}</td>
+										<td>${order.totalPrice}</td>
+										<td>${order.payTool}</td>
+										<td>${order.orderStatus}</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+
 				</div>
 			</div>
 		</div>
@@ -110,6 +129,7 @@ form {
 	<script>
 						$(document).ready(function() {
 							$("#updateButton").prop("disabled", true);
+							
 						    $("#checkIdButton").click(function() {
 						        var newNickname = $("#newNickname").val();
 						        var idExist = false; 
@@ -131,5 +151,4 @@ form {
 						    });
 						});
 </script>
-</body>
-</html>
+<jsp:include page="/layout/footer.jsp"/>

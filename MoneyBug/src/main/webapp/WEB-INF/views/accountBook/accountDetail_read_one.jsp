@@ -5,11 +5,12 @@
 <head>
 <title>계정 조회</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 </head>
 <body>
 	<div class="section" id="editFormArea">
-		<h1>Account Details</h1>
-		<table>
+		<h4>가계부 상세내역</h4>
+		<table class="table table-striped">
 			<tr>
 				<th>계정</th>
 				<th>설명</th>
@@ -35,8 +36,8 @@
 			</c:choose>
 		</table>
 		<div>
-			<button type="submit" id="editForm">수정</button>
-			<button type="submit" id="deleteForm">삭제</button>
+			<button type="submit" id="editForm" class="btn btn-success">수정</button>
+			<button type="submit" id="deleteForm" class="btn btn-success">삭제</button>
 		</div>
 	</div>
 	<script type="text/javascript">
@@ -53,9 +54,10 @@
                     usedAt : "${account.usedAt}"
                 },
                 success : function(response) {
-                    $("#editFormArea").html(response);
+                	$("#editFormArea").html(response);
                 },
                 error : function(xhr, status, error) {
+                	
                     console.error("AJAX 요청 실패:", status, error);
                 }
             });
@@ -70,7 +72,7 @@
                 },
                 success : function(res) {
                     alert("삭제 성공")
-                    location.href = "readSeq.accountDetail?seq=" + res.seq;
+                    location.href = "/moneybug/accountBook/accountDetail_List.jsp";
                 },
                 error : function(xhr, status, error) {
                     console.error("AJAX 요청 실패:", status, error);

@@ -22,11 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Controller
 @EnableScheduling
-@Slf4j
 public class AccountGPTController {
 
 	private AccountGPTService gptService;
@@ -39,23 +36,36 @@ public class AccountGPTController {
 	}
 
 	// try catch
-	@Scheduled(cron = "0 0 0 * 1 * ") //초 분 시 
+	@Scheduled(cron = "0 0 0 1 * *") // 초 분 시
 	public void montlyGptInsert() {
 		List<Integer> idList = accountBookService.readList();
 		AccountDetailDTO account = new AccountDetailDTO();
 		AccountGPTDTO accountGPTDTO = new AccountGPTDTO();
 		LocalDate today = LocalDate.now();
+		int year = today.getYear();
+		int month = today.getMonthValue()-1;
+		if(month==0) {
+			month=12;
+			year -=1;
+		}
 		// 데이터 삽입
 		for (Integer accountBookId : idList) {
 			account.setAccountBookId(accountBookId);
+			account.setCurrentMonth(month);
+			account.setCurrentYear(year);
 			HashMap<String, List<AccountDetailDTO>> data = gptService.accountSort(account);
 			HashMap<String, Integer> sendData = gptService.cosumptionSort(data.get("consumption"));
-			String request = gptService.prompt(sendData);
-			String gptResponse = gptService.sendRequest(request);
-			String finalData = gptService.jsonParsing(gptResponse);
-			accountGPTDTO.setAccountBookId(accountBookId);
-			accountGPTDTO.setContent(finalData);
-			gptService.insert(accountGPTDTO);
+			System.out.println(sendData.toString());
+			if (!sendData.isEmpty() && !(sendData == null)) {
+				String request = gptService.prompt(sendData);
+				String gptResponse = gptService.sendRequest(request);
+				String finalData = gptService.jsonParsing(gptResponse);
+				accountGPTDTO.setAccountBookId(accountBookId);
+				accountGPTDTO.setContent(finalData);
+				gptService.insert(accountGPTDTO);
+			} else {
+				System.out.println("데이터가 없어서 작성 실패");
+			}
 		}
 	}
 
@@ -95,9 +105,15 @@ public class AccountGPTController {
 	@RequestMapping(value = "accountBook/monthlyGPT", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 
-	public String monthlyGPT(@RequestParam("accountBookId") int accountBookId,@RequestParam("year") int year, @RequestParam("month") int month) {
+	public String monthlyGPT(@RequestParam("accountBookId") int accountBookId, @RequestParam("year") int year,
+			@RequestParam("month") int month) {
 		AccountGPTDTO accountGPTDTO = new AccountGPTDTO();
 		accountGPTDTO.setAccountBookId(accountBookId);
+		month+=1;
+		if(month==13) {
+			month=1;
+			year+=1;
+		}
 		accountGPTDTO.setCurrentYear(year);
 		accountGPTDTO.setCurrentMonth(month);
 		accountGPTDTO = gptService.readOne(accountGPTDTO);

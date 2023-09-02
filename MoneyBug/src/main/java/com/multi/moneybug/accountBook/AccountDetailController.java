@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 public class AccountDetailController {
 
@@ -48,7 +50,7 @@ public class AccountDetailController {
 	
 	@RequestMapping("updateForm.accountDetail")
 	public String updateForm(@ModelAttribute AccountDetailDTO account,Model model) {
-		model.addAttribute("account",account);	
+		model.addAttribute("account", account);
 		return "accountBook/accountDetail_update";
 	}
 	
@@ -82,7 +84,6 @@ public class AccountDetailController {
 		
 		map.put("list", accountDetailList = accountDetailList.subList(0, (accountDetailList.size()<5) ? accountDetailList.size() : 5)); //0~4번까지 5개 리스트 입력
 		map.put("map", accountDetailMap);
-		
 		return map;
 	}
 	

@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.multi.moneybug.product.OrderListDTO;
+import com.multi.moneybug.product.ProductService;
+
 import lombok.extern.java.Log;
 
 @Log
@@ -24,6 +27,9 @@ public class MemberController {
 
 	@Autowired
 	MemberService memberService;
+	
+	@Autowired
+	ProductService productService;
 
 	// 중복회원 검사
 	@PostMapping("/member/findMember.do")
@@ -69,21 +75,48 @@ public class MemberController {
 	}
 
 	// 마이페이지로 이동 (신규, 기존회원 모두)
-	@PostMapping("/member/myPage.do")
-	public String myPage(MemberDTO memberDTO, Model model, HttpSession session) {
-		String socialId = (String) session.getAttribute("socialId");
-		memberDTO.setSocialId(socialId);
 
-		List<MemberDTO> selectedMembers = memberService.select(memberDTO); // select 메서드 실행 후 반환된 리스트
+		@RequestMapping("/member/myPage.do")
+		public String myPage(MemberDTO memberDTO, Model model, HttpSession session) {
+			String socialId = (String) session.getAttribute("socialId");
+			memberDTO.setSocialId(socialId);
+			String userId = null;
 
-		if (!selectedMembers.isEmpty()) {
-			MemberDTO selectedMember = selectedMembers.get(0); // 첫 번째 멤버 선택
-			model.addAttribute("email", selectedMember.getEmail());
-			model.addAttribute("userName", selectedMember.getUserName());
-			model.addAttribute("socialId", selectedMember.getSocialId());
+			List<MemberDTO> selectedMembers = memberService.select(memberDTO); // select 메서드 실행 후 반환된 리스트
+			if (!selectedMembers.isEmpty()) {
+				MemberDTO selectedMember = selectedMembers.get(0); // 첫 번째 멤버 선택
+				model.addAttribute("email", selectedMember.getEmail());
+				model.addAttribute("userName", selectedMember.getUserName());
+				model.addAttribute("socialId", selectedMember.getSocialId());
+				model.addAttribute("point", selectedMember.getPoint());
+
+				userId = selectedMember.getUserId();
+			}
+
+			List<OrderListDTO> orderlist = productService.myOrderList(userId);
+			model.addAttribute("orderlist", orderlist);
+
+			return "member/myPage";
 		}
-		return "member/myPage";
-	}
+
+
+		
+		// 마이페이지로 이동 (신규, 기존회원 모두)
+				@PostMapping("/member/signUp.do")
+				public String signUp(MemberDTO memberDTO, Model model, HttpSession session) {
+					String socialId = (String) session.getAttribute("socialId");
+					memberDTO.setSocialId(socialId);
+
+					List<MemberDTO> selectedMembers = memberService.select(memberDTO); // select 메서드 실행 후 반환된 리스트
+					if (!selectedMembers.isEmpty()) {
+						MemberDTO selectedMember = selectedMembers.get(0); // 첫 번째 멤버 선택
+						model.addAttribute("email", selectedMember.getEmail());
+						model.addAttribute("userName", selectedMember.getUserName());
+						model.addAttribute("socialId", selectedMember.getSocialId());
+						model.addAttribute("point", selectedMember.getPoint());
+					}
+					return "member/signUp";
+				}
 
 
 
@@ -121,7 +154,6 @@ public class MemberController {
     public int checkLoginStatus(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String userNickname = (String) session.getAttribute("userNickname");
-        System.out.println(userNickname);
         
         if (userNickname != null) {
             return 1; // 로그인 상태면 1 반환
@@ -129,4 +161,11 @@ public class MemberController {
             return 0; // 로그인되지 않은 상태면 0 반환
         }
     }
+	
+	@PostMapping("accountBook/getEmail")
+	@ResponseBody
+	public String getEmail(HttpSession session) {
+		String userNickname = (String) session.getAttribute("userNickname");
+		return memberService.getEmailByUserNickname(userNickname);
+	}
 }

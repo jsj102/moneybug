@@ -1,20 +1,17 @@
 package com.multi.moneybug.tagBoard;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.multi.moneybug.tagReply.TagReplyDTO;
 import com.multi.moneybug.tagReply.TagReplyService;
@@ -30,21 +27,14 @@ public class TagBoardController {
 	TagReplyService tagReplyService;
 
 	@RequestMapping("tagBoard/TagBoard_insert")
-	public String insert(TagBoardDTO tagBoardDTO, HttpServletRequest request, MultipartFile file, Model model)
-	        throws Exception {
-	    String savedName = null; // 초기화
+	public String insert(TagBoardDTO tagBoardDTO, Model model){
 
-	    if (file != null && !file.isEmpty()) {
-	        savedName = file.getOriginalFilename();
-	        String uploadPath = request.getSession().getServletContext().getRealPath("resources/upload");
-	        File target = new File(uploadPath + "/" + savedName);
-	        file.transferTo(target);
-
-	        model.addAttribute("savedName", savedName);
-	        tagBoardDTO.setImage(savedName);
+	    if (tagBoardDTO.getTitle() != null && tagBoardDTO.getContent() != null) {
+	        tagBoardService.insert(tagBoardDTO); // 데이터가 null이 아닐 때만 데이터 삽입 시도
+	    } else {
+	        // 데이터 중 하나라도 null인 경우 리다이렉션
+	        return "redirect:/tagBoard/TagBoard_list?page=1";
 	    }
-
-	    tagBoardService.insert(tagBoardDTO); // 파일이 null이든 아니든 데이터 삽입 시도
 
 	    return "redirect:/tagBoard/TagBoard_list?page=1";
 	}
@@ -71,8 +61,8 @@ public class TagBoardController {
 	}
 	
 	@RequestMapping("tagBoard/TagBoard_taglist")
-	public void taglist(TagBoardPageDTO tagBoardPageDTO, Model model) {
-		int count = tagBoardService.tagcount();
+	public void taglist(String boardType, TagBoardPageDTO tagBoardPageDTO, Model model) {
+		int count = tagBoardService.tagcount(boardType);
 		int pages = 0;
 		if(count % 10 == 0) {
 			pages = count / 10;
@@ -89,7 +79,7 @@ public class TagBoardController {
 	
 	@RequestMapping("tagBoard/TagBoard_searchlist")
 	public void searchlist(TagBoardPageDTO tagBoardPageDTO, Model model) {
-		int count = tagBoardService.searchcount();
+		int count = tagBoardService.searchcount(tagBoardPageDTO);
 		int pages = 0;
 		if(count % 10 == 0) {
 			pages = count / 10;
@@ -118,23 +108,18 @@ public class TagBoardController {
 
 	}
 
-	
-	@RequestMapping("tagBoard/TagBoard_update")
-	public String update(TagBoardDTO tagBoardDTO, HttpServletRequest request, MultipartFile file, Model model)
-	        throws Exception {
-	    
 
-	    if (!file.isEmpty()) {
-	        String savedName = file.getOriginalFilename();
-	        String uploadPath = request.getSession().getServletContext().getRealPath("resources/upload");
-	        File target = new File(uploadPath + "/" + savedName);
-	        file.transferTo(target);
+	@RequestMapping(value = "tagBoard/TagBoard_update", method = {RequestMethod.GET, RequestMethod.POST})
+	public String update(TagBoardDTO tagBoardDTO, Model model){
 
-	        tagBoardDTO.setImage(savedName);
+		model.addAttribute("tagBoardDTO", tagBoardDTO);
+	    if (tagBoardDTO.getTitle() != null && tagBoardDTO.getContent() != null) {
+	        tagBoardService.update(tagBoardDTO); // 데이터가 null이 아닐 때만 데이터 삽입 시도
+	    } else {
+	        // 데이터 중 하나라도 null인 경우 리다이렉션
+	        return "redirect:/tagBoard/TagBoard_list?page=1";
 	    }
 
-	    model.addAttribute("tagBoardDTO", tagBoardDTO);
-	    tagBoardService.update(tagBoardDTO);
 	    
 	    return "redirect:TagBoard_one?seq=" + tagBoardDTO.getSeq();
 	}

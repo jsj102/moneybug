@@ -13,7 +13,7 @@ function closePopup() { // 자식창(팝업창) 닫기
 
  $(document).ready(function() {
             $("#ocr_button").click(function() {
-                var formData = new FormData($("#ocr_form")[0]);
+                let formData = new FormData($("#ocr_form")[0]);
                 $.ajax({
                     url: "/moneybug/ocr",
                     type: "POST",

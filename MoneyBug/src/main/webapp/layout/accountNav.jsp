@@ -11,10 +11,9 @@
   position: fixed;
   left: 250px;
   width: 250px;
-  height: 100%;
+  margin-top: 50px;
   margin-left: -250px;
   overflow-y: auto;
-  background: #F9F5E7;
   transition: all 0.5s ease;
 }
 
@@ -65,4 +64,3 @@
 		</ul>
 	</div>
 </div>
-

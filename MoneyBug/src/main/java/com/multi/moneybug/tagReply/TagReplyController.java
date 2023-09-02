@@ -42,6 +42,12 @@ public class TagReplyController {
 		tagReplyService.update(tagReplyDTO);
 	}
 	
+	@RequestMapping("tagReply/TagReply_delupdate")
+	public void delupdate(TagReplyDTO tagReplyDTO, Model model) {
+		model.addAttribute("tagReplyDTO", tagReplyDTO);
+		tagReplyService.delupdate(tagReplyDTO);
+	}
+	
 	
 	
 	

@@ -6,6 +6,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.multi.moneybug.product.OrderListDTO;
+
 
 	@Repository
 	public class MemberDAO {
@@ -37,5 +39,17 @@ import org.springframework.stereotype.Repository;
 			 return my.selectOne("member.getUserIdByUserNickname", userNickname);
 		}
 
-	
+		public MemberDTO selectByNickname(String userNickname) {
+			return my.selectOne("member.selectByNickname", userNickname);
+		}
+
+		public int usePoint(MemberDTO memberDTO) {
+			return my.update("member.usePoint", memberDTO);
+		}
+
+
+		public String getEmailByUserNickname(String userNickname) {
+			return my.selectOne("member.getEmailByUserNickname", userNickname);
+		}
+
 }

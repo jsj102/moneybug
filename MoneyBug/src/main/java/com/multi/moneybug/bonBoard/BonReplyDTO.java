@@ -1,6 +1,6 @@
 package com.multi.moneybug.bonBoard;
 
-import java.sql.Date;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -11,8 +11,16 @@ public class BonReplyDTO {
 	private int seq;
 	private int boardSeq;
 	private String content;
-	private String writerId;
+	private String userNickname;
 	private Date createAt;
+	
+	
+	public String getUserNickname() {
+		return userNickname;
+	}
+	public void setUserNickname(String userNickname) {
+		this.userNickname = userNickname;
+	}
 	public int getSeq() {
 		return seq;
 	}
@@ -31,12 +39,7 @@ public class BonReplyDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getWriterId() {
-		return writerId;
-	}
-	public void setWriterId(String writerId) {
-		this.writerId = writerId;
-	}
+
 	public Date getCreateAt() {
 		return createAt;
 	}
@@ -45,7 +48,7 @@ public class BonReplyDTO {
 	}
 	@Override
 	public String toString() {
-		return "BonReplyDTO [seq=" + seq + ", boardSeq="+ boardSeq +", content="+ content + "writerId="+writerId + "createAt="+createAt;
+		return "BonReplyDTO [seq=" + seq + ", boardSeq="+ boardSeq +", content="+ content + "userNickname="+userNickname + "createAt="+createAt;
 				
 	}
 
