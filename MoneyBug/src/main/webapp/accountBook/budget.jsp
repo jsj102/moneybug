@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<script></script>
 <%@ include file="/layout/header.jsp"%>
 <%@ include file="/layout/accountNav.jsp"%>
 
@@ -19,8 +18,17 @@ body {
 	margin: 0;
 }
 
+.container {
+padding-left: 250px;
+}
+
+.addcontainer {
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+padding: 50px;
+background: white;
+}
+
 .addline {
-	background-color: rgba(255, 255, 255, 0.472);
 	width: 350px;
 }
 
@@ -129,10 +137,9 @@ body {
 	}) //입력 전송
     })
 </script>
-<div align="center">
+<div class="container" align="center">
 	<br> <br>
-	<div
-		style="border-radius: 30px; width: 700px;" class="alert alert-success">
+	<div style="border-radius: 30px; width: 1000px;" class="addcontainer">
 
 		<h1>월간 예산(List)</h1>
 
@@ -161,7 +168,7 @@ body {
 
 		</div>
 		<br>
-		<button id="addLine" class="addline">+한줄추가</button>
+		<button id="addLine" class="addline btn btn-dark">+한줄추가</button>
 
 
 		<br> <br>

@@ -13,14 +13,16 @@
   width: 250px;
   margin-top: 50px;
   margin-left: -250px;
-  overflow-y: auto;
-  transition: all 0.5s ease;
 }
 
-.account-side {
-	height: 50px;
+.sidebutton {
+height: 65px;
+text-decoration: none; 
+color: white; 
+display: flex; 
+justify-content: center; 
+align-items: center; 
 }
-
 
 </style>
 <script>
@@ -55,12 +57,20 @@
 
 
 <div id="viewport">
-	<div id="sidebar">
-		<ul class="nav nav-pills flex-column">
-			<li class="nav-item account-side"><a class="nav-link active" href="/moneybug/accountBook/accountDetail_List.jsp">가계부 작성</a></li>
-			<li class="nav-item account-side"><a class="nav-link active" href="/moneybug/accountBook/monthlyReport.jsp">월간 가계부</a></li>
-			<li class="nav-item account-side"><a class="nav-link active" href="/moneybug/accountBook/budget.jsp">예산 설정</a></li>
-			<li class="nav-item account-side"><a class="nav-link active" href="/moneybug/accountBook/fixedexpenditure.jsp">고정지출</a></li>
-		</ul>
-	</div>
+  <div id="sidebar" class="d-grid gap-2">
+    <a href="/moneybug/accountBook/accountDetail_List.jsp" class="sidebutton btn btn-lg btn-info" style="text-decoration: none; color: white;">
+      가계부 작성
+    </a>
+    <a href="/moneybug/accountBook/monthlyReport.jsp" class="sidebutton btn btn-lg btn-info" style="text-decoration: none; color: white;">
+      월간 가계부
+    </a>
+    <a href="/moneybug/accountBook/budget.jsp" class="sidebutton btn btn-lg btn-info" style="text-decoration: none; color: white;">
+      예산 설정
+    </a>
+    <a href="/moneybug/accountBook/fixedexpenditure.jsp" class="sidebutton btn btn-lg btn-info" style="text-decoration: none; color: white;">
+      고정 지출
+    </a>
+  </div>
 </div>
+
+
