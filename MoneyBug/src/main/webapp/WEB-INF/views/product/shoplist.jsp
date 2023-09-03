@@ -238,5 +238,5 @@ body {
     </li>
   </ul>
 </div>
-
+<%@ include file="/layout/accountAside.jsp"%>
 <jsp:include page="/layout/footer.jsp"/>

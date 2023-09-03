@@ -94,7 +94,7 @@
 
 </div>
 <%@ include file="/layout/footer.jsp"%>
-
+<script src="/moneybug/resources/js/checkLogin/checkLogin.js"></script>
 
 <script> //파일 업로드가 없을 때  자동,수동 버튼을 누를 수 없음. 파일업로드 되었을 때 이미지 파일인 경우에만 자동, 수동 버튼을 누를 수 있음.
 function checkFileSelection() {
