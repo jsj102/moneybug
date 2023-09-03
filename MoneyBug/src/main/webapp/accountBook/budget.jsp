@@ -175,4 +175,5 @@ background: white;
 		<div id="resultbudget">총 예산 : ₩0원</div>
 	</div>
 </div>
+<%@ include file="/layout/accountAside.jsp"%>
 <%@ include file="/layout/footer.jsp"%>

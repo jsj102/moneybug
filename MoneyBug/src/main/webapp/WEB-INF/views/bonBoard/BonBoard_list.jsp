@@ -3,9 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ include file="/layout/header.jsp"%>
-<!DOCTYPE html>
-<html>
-<head>
+
 <style>
 body {
 	background-color: #E2EDC9; /* 배경 색상 변경 */
@@ -56,8 +54,8 @@ h1 {
 <script type="text/javascript" src="../resources/js/jquery-3.6.1.js"></script>
 <script type="text/javascript">
 	$(function() {
-		$('button').click(function() {
-			alert($(this).text())
+		$('#writeForm').click(function() {
+			
 			$.ajax({
 				url : "BonBoard_list2", //views/bbsList2.jsp가 결과!
 				data : {
@@ -67,7 +65,7 @@ h1 {
 					$('#d1').html(result)
 				},
 				error : function() {
-					alert('실패.@@@')
+				
 				}
 			}) //ajax
 		})
@@ -176,7 +174,7 @@ body {
 		</table>
 
 		<div class="text-right mt-3">
-			<a href="BonBoard_insert2.jsp" class="btn btn-custom"
+			<a href="BonBoard_insert2.jsp" class="btn btn-custom" id="writeForm"
 				style="margin-right: 10%;">작성하기</a>
 		</div>
 
@@ -209,11 +207,6 @@ body {
 			});
 		});
 	</script>
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+
+<%@ include file="/layout/accountAside.jsp"%>
 <%@ include file="/layout/footer.jsp"%>

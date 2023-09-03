@@ -118,7 +118,6 @@ body {
 		</table>
 	</form>
 </div>
-
 <%@ include file="/layout/accountAside.jsp"%>
 <%@ include file="/layout/footer.jsp"%>
 
