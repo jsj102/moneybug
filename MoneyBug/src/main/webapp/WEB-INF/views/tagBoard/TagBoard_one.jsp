@@ -5,6 +5,9 @@
 <%@ include file="/layout/TagBoardNav.jsp"%>
 <style>
 
+body {
+	background: #F9F5E7;
+}
 
 a {
 	text-decoration: none;
@@ -15,7 +18,8 @@ a {
 	height: 100%;
 	border: 2px solid #56CC9D; /* 테두리 색상과 두께 설정 */
 	border-radius: 20px; /* 모서리 둥글게 만듦 */
- 	margin : 10px 70px 55px 70px;   
+ 	margin : 10px 70px 55px 70px;  
+ 	background-color: white; 
 }
 .plmi {
     height: 100px;
@@ -28,6 +32,8 @@ a {
     align-items: center;
     text-align: center; /* 텍스트 가운데 정렬 */
     overflow: hidden; 
+    background-color: white; 
+    font-size: 18px;
 }
 
 .plmi table {
@@ -68,7 +74,6 @@ a {
     height: 600px; 
     overflow: auto;
     padding-top: 10px;
-    overflow: hidden; 
     }
 .replyinsert {
 	display: flex; /* 텍스트를 수직 및 수평으로 가운데 정렬하기 위해 flexbox 사용 */
@@ -135,7 +140,7 @@ br + #searchButton {
 	<c:choose>
 		<c:when test="${sessionScope.userNickname eq tagBoardDTO.writerId }">
 		<div class="btn-group" role="group">
-        <div class="col-md-0.5"style="margin:0 10px 0 120px;">
+        <div class="col-md-0.5" style="margin:0 10px 0 120px;">
         <form action="TagBoard_update.jsp" method="post">
             <input type="hidden" name="seq" value="${tagBoardDTO.seq}">
             <input type="hidden" name="title" value="${tagBoardDTO.title}">
@@ -145,7 +150,7 @@ br + #searchButton {
             <button type="submit" id="tagboardupdate" class="btn btn-warning btn-block">수정</button>
         </form>
         </div>
-        <div class="col-md-0.5" style="margin-right: 870px;">
+        <div class="col-md-0.5" style="margin-right: 10px;" >
         <button id="tagboarddelete" class="btn btn-danger btn-block">삭제</button>
         </div>
 		<div class="col-md-0.5">
@@ -157,7 +162,7 @@ br + #searchButton {
 			<br>
 		</c:when>
 		<c:otherwise>
-		<div class="col-md-0.5" style="margin-left: 1105px;">
+		<div class="col-md-0.5" style="margin:0 10px 0 120px;">
 			<a href="TagBoard_list?Page=1"><button
 					class="btn btn-secondary">목록</button></a>
 					</div>
@@ -300,10 +305,10 @@ br + #searchButton {
 	</div>
 
 	<div class="plmi" style="text-align: center;">
-    <table class="table table-sm mx-auto" >
+    <table >
 			<tbody>
 				<c:forEach items="${plmilist}" var="tagBoardDTO">
-					<tr>
+					<tr style="border-bottom: 3px solid white;">
 						<td style="width: 100px;"><c:if test="${tagBoardDTO.seq > param.seq}">
 					ᐱ 
 					</c:if> <c:if test="${tagBoardDTO.seq < param.seq}">
