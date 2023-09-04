@@ -5,21 +5,92 @@
 <%@ include file="/layout/header.jsp"%>
 
 <style>
+
 body {
-	background-color: #E2EDC9; /* 배경 색상 변경 */
-	font-family: Arial, sans-serif;
+	background: #F9F5E7; /* 배경 색상 변경 */
 }
 
-.container1 {
-	background-color: #ffffff; /* 배경 색상 변경 */
+.banner-text {
+margin-top: 35px;
+margin-bottom: 40px;
+}
+
+.banner-container {
+	height: 250px;
+	background-color: #6cc3d5;
+	background-position: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.banner-text h1 {
+	color: white;
+	font-size: 60px;
+}
+
+.banner-text {
+	color: white;
+	font-size: 22px;
+	text-align: center;
+}
+
+
+.container {
+	width:90%;
 	padding: 20px;
 	border-radius: 10px;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
 	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
-h1 {
-	color: #A1C59E; /* 제목 색상 변경 */
+
+.gradient-text {
+	background: white;
+	-webkit-background-clip: text;
+	font-size: 30px;
+}
+
+.mainlist {
+	width:100%;
+	border: 2px solid #C4D7B2; /* 테두리 색상과 두께 설정 */
+	border-radius: 20px; /* 모서리 둥글게 만듦 */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center; /* 텍스트 가운데 정렬 */
+	background-color: #fffdf5;
+
+}
+
+.table {
+	background-color: #BCD6BA;
+	color: rgb(255, 255, 255);
+	width:95%;
+}
+
+.table td {
+	background-color: #E2EDC9;
+	color: #2E4B00;
+}
+
+.pagination {
+	justify-content: center;
+}
+
+.table-bordered th, .table-bordered td {
+	border: 0px solid #FFFFFF;
+}
+
+.btn-custom {
+	border-radius: 15px;
+	padding: 10px;
+	background-color: #c5d7af;
 }
 
 .btn-primary {
@@ -30,24 +101,6 @@ h1 {
 .btn-primary:hover {
 	background-color: #C4D7B2; /* 버튼 마우스 호버 시 배경 색상 변경 */
 	border-color: #C4D7B2;
-}
-/* Style for the reply list */
-#replyList {
-	margin-top: 20px;
-	list-style-type: none;
-	padding: 0;
-}
-
-#replyList li {
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	padding: 10px;
-	background-color: #f9f9f9;
-	border-radius: 5px;
-}
-
-.table th, .table td {
-	text-align: center;
 }
 </style>
 
@@ -74,81 +127,27 @@ h1 {
 
 <title>BonBoard_list</title>
 
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<style>
-@font-face {
-	font-family: 'HakgyoansimWoojuR';
-	src:
-		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-2@1.0/HakgyoansimWoojuR.woff2')
-		format('woff2');
-	font-weight: normal;
-	font-style: normal;
-}
-
-.purple-border {
-	border: 2px solid purple;
-	padding: 10px;
-	text-align: center;
-	color: white;
-	background-color: black;
-}
-
-body {
-	background: white;
-	font-family: 'HakgyoansimWoojuR';
-}
-
-.gradient-text {
-	background: white;
-	-webkit-background-clip: text;
-	color: transparent;
-	font-weight: bold;
-	font-size: 30px;
-}
-
-.container1 {
-	background-color: #A1C59E;
-	border-radius: 15px;
-	padding: 20px;
-	box-shadow: 0px 0px 5px rgba(100, 103, 83, 0.507);
-}
-
-.table {
-	background-color: #BCD6BA;
-	color: rgb(255, 255, 255);
-}
-
-.table td {
-	background-color: #E2EDC9;
-	color: #2E4B00;
-}
-
-.pagination {
-	justify-content: center;
-}
-
-.table-bordered th, .table-bordered td {
-	border: 0px solid #FFFFFF;
-}
-
-.btn-custom {
-	border-radius: 15px;
-	padding: 10px;
-	background-color: #c5d7af;
-}
-</style>
-
 </head>
 <body>
+<div class="banner-container" align="center">
+	<div class="banner-text">
+		<br> <a class="nav-link"
+			href="/moneybug/bonBoard/BonBoard_list?page=1"><h1>MoneyBug
+				Buy or Not</h1></a>
+		<p>살까? 말까? 돈벌레 친구들과 같이 고민해요!</p>
+	</div>
+</div>
+<br><br>
 
-
-	<div class="container1 mt-5">
-		<h1 class="text-center mb-4 mb-4 gradient-text"
-			style="font-weight: bold; font-size: 30px;">살까말까 게시판</h1>
-		<table class="table table-hover table-bordered">
-			<thead class="thead-dark">
-				<tr>
+	<div class="container">
+	<div class="mainlist">
+	<br>
+		<h1 class="text-center gradient-text"
+			style="font-size: 30px;">살까? 말까!</h1>
+			<br>
+		<table class="table table-hover ">
+			<thead >
+				<tr >
 					<th scope="col" style="background-color: #C4D7B2; width: 7%;"></th>
 					<th scope="col" style="background-color: #C4D7B2; width: 10%;">닉네임</th>
 					<th scope="col" style="background-color: #C4D7B2; width: 50%;">제목</th>
@@ -172,16 +171,18 @@ body {
 				</c:forEach>
 			</tbody>
 		</table>
+		<br><br>
 
-		<div class="text-right mt-3">
+		<div class="text-right">
 			<a href="BonBoard_insert2.jsp" class="btn btn-custom" id="writeForm"
-				style="margin-right: 10%;">작성하기</a>
+				>작성하기</a>
 		</div>
+		<br><br>
 
 		<nav aria-label="Page navigation">
 			<ul class="pagination">
 				<%
-				int pages = (int) request.getAttribute("pages");
+				int pages = Integer.parseInt(request.getAttribute("pages").toString());
 				for (int i = 1; i <= pages; i++) {
 				%>
 
@@ -195,7 +196,8 @@ body {
 		</nav>
 
 	</div>
-
+	</div>
+<br><br>
 
 	<script>
 		$(document).ready(function() {
@@ -207,6 +209,5 @@ body {
 			});
 		});
 	</script>
-
 <%@ include file="/layout/accountAside.jsp"%>
 <%@ include file="/layout/footer.jsp"%>
