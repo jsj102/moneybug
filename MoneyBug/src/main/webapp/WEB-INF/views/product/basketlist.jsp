@@ -243,14 +243,14 @@ function deleteProduct(userNickname, productId, seq) {
 					</c:otherwise>
 				</c:choose>
 
-	<div class="d-flex justify-content-center mt-3">
+<%-- 	<div class="d-flex justify-content-center mt-3">
 					<input type="hidden" id="totalAmount2" name="totalAmount"
 						value="${totalAmount}"> <input type="hidden"
 						id="selectedId_" name="selectedId" value="${productId}" /> <input
 						type="hidden" id="seletedSeq_" name="seletedSeq"
 						value="${basket.seq}" />
 					<button type="submit" class="btn btn-lg btn-secondary" id="order">주문하기</button>
-				</div>
+				</div> --%>
 			</form>
 		</div>
 	</div>
