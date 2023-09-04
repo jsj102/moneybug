@@ -1,19 +1,38 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/layout/header.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="/layout/header.jsp"%>
+<style>
+   .banner-text {
+	margin-top: 35px;
+	margin-bottom: 40px;
+}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BonBoard Update</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #E2EDC9;
-            font-family: Arial, sans-serif;
-        }
-        .container {
+.banner-container {
+	height: 250px;
+	background-color: #6cc3d5;
+	background-position: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.banner-text h1 {
+	color: white;
+	font-size: 60px;
+}
+
+.banner-text {
+	color: white;
+	font-size: 22px;
+	text-align: center;
+}
+body{
+background: #F9F5E7;
+}
+        .main-container {
             background-color: #ffffff;
             padding: 20px;
             border-radius: 10px;
@@ -43,17 +62,19 @@
     </style>
 </head>
 <body>
-   
-<div class="container">
+   <div class="banner-container" align="center">
+		<div class="banner-text">
+			<br> <a class="nav-link"
+				href="/moneybug/bonBoard/BonBoard_list?page=1"><h1>MoneyBug
+					Buy or Not</h1></a>
+			<p>살까? 말까? 지금 투표를 수정하고 있어요!</p>
+		</div>
+	</div>
+<div class="main-container">
     <div class="row">
         <form method="post" action="/moneybug/bonBoard/BonBoard_update">
             <input type="hidden" name="seq" value="${param.seq}">
             <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th colspan="2" class="text-center">게시판 글 수정 양식</th>
-                    </tr>
-                </thead>
                 <tbody>
                     <tr>
                         <td><input type="text" class="form-control" placeholder="글 제목" name="title" maxlength="50" value="${param.title}"></td>
@@ -71,7 +92,7 @@
         
     </div>
 </div>
-
+<br>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
