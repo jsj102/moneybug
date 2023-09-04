@@ -18,7 +18,7 @@
 	}
 	
 	.manageInsert {
-		background-color: #E4D5FF;
+		background-color: #F9F5E7;
 		padding: 100px;
 		width: 50%;
 		margin: 0;

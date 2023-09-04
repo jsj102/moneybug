@@ -181,6 +181,31 @@ public class ProductController {
 		memberService.usePoint(orderListDTO, memberDTO);
 		return result + ""; 
 	}
+	
+	@RequestMapping("product/manageDelete")
+	public String goManageDelete(int productId) {
+		productService.goManageDelete(productId);
+		return "redirect:../product/shopmanager.jsp";
+	}
+	
+	// 쇼핑 관리자 페이지 (상품 수정폼으로 이동)
+	@RequestMapping("product/manageUpdate")
+	public String goManageUpdate(int productId, Model model) {
+	    // productId를 이용하여 수정할 상품 정보를 가져오는 로직을 추가
+	    ProductDTO product = productService.getProductById(productId);
+	    System.out.println("실행");
+	    // 가져온 상품 정보를 모델에 추가
+	    model.addAttribute("product", product);
+
+	    // 상품 수정폼으로 이동
+	    return "product/manageUpdate";
+	}
+	
+	@RequestMapping("product/updateProducts")
+	public String updateById(ProductDTO productDTO) {
+		productService.updateProduct(productDTO);
+		return "redirect:../product/shopmanager.jsp";
+	}
 
 	
 }

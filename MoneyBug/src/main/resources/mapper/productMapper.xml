@@ -96,4 +96,19 @@
 		"inicis","배송준비")
 	</insert>
 	
+	<delete id="delete" parameterType="int">
+		delete from product
+		where PRODUCT_ID = #{productId}
+	</delete>
+	
+	<update id="update" parameterType="productDTO">
+	  update product
+	  set PRODUCT_NAME = #{productName},
+	  PRODUCT_IMG = #{productImg},
+	  PRODUCT_ORIPRICE = #{productOriprice},
+	  PRODUCT_PRICE = #{productPrice},
+	  PRODUCT_INFO = #{productInfo}
+	  where PRODUCT_ID = #{productId}
+	</update>
+	
 </mapper>

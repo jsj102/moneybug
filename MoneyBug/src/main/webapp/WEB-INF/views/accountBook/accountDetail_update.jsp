@@ -119,6 +119,14 @@ button.update{
 			})
 		})
 	})
+	$(document).ready(function() {
+		var selectedAccountType = "${account.accountCategory}";
+		$("#accountUpdate option").each(function() {
+			if ($(this).val() === selectedAccountType) {
+				$(this).prop("selected", true);
+			}
+		});
+	});
 </script>
 </body>
 </html>

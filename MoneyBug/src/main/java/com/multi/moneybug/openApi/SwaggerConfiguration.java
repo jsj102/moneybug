@@ -25,23 +25,24 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
+
 public class SwaggerConfiguration {
 	@Bean
 	public Docket api() {
 		List<ResponseMessage> responseMessages = new ArrayList<ResponseMessage>();
-        responseMessages.add(new ResponseMessageBuilder().code(500).message("서버 문제 발생 !!!").build());
-        responseMessages.add(new ResponseMessageBuilder().code(200).message("전송완료").build());
-        responseMessages.add(new ResponseMessageBuilder().code(404).message("페이지를 찾을 수 없습니다 !!!").build());
-        responseMessages.add(new ResponseMessageBuilder().code(429).message("너무 많은 요청").build());
-		return new Docket(DocumentationType.SWAGGER_2).useDefaultResponseMessages(false) // Swagger 에서 제공해주는 기본 응답 코드를 표시할 것이면 true
-				.apiInfo(apiInfo()).groupName("가계부 OpenAPI")
-				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.multi.moneybug.openApi")) // Controller가 들어있는 패키지. 이 경로의// 하위에 있는 api만 표시됨.
+		responseMessages.add(new ResponseMessageBuilder().code(500).message("서버 문제 발생 !!!").build());
+		responseMessages.add(new ResponseMessageBuilder().code(200).message("전송완료").build());
+		responseMessages.add(new ResponseMessageBuilder().code(404).message("페이지를 찾을 수 없습니다 !!!").build());
+		responseMessages.add(new ResponseMessageBuilder().code(429).message("너무 많은 요청").build());
+		return new Docket(DocumentationType.SWAGGER_2).useDefaultResponseMessages(false) // Swagger 에서 제공해주는 기본 응답 코드를
+				.host("moneybug.site")// 표시할 것이면 true
+				.apiInfo(apiInfo()).groupName("가계부 OpenAPI").select()
+				.apis(RequestHandlerSelectors.basePackage("com.multi.moneybug.openApi")) // Controller가 들어있는 패키지. 이
+																							// 경로의// 하위에 있는 api만 표시됨.
 				.paths(PathSelectors.ant("/api/v1/**")) // 위 패키지 안의 api 중 지정된 path만 보여줌. (any()로 설정 시 모든 api가 보여짐)
-				.build()
-				.globalOperationParameters(globalParameters())
+				.build().globalOperationParameters(globalParameters())
 				.globalResponseMessage(RequestMethod.GET, responseMessages)
-		        .globalResponseMessage(RequestMethod.POST, responseMessages);
+				.globalResponseMessage(RequestMethod.POST, responseMessages);
 	}
 
 	public List<Parameter> globalParameters() {
@@ -53,16 +54,14 @@ public class SwaggerConfiguration {
 				.modelRef(new ModelRef("string")) // 데이터 타입
 				.parameterType("header") // 파라미터 타입 (header)
 				.required(true) // 필수 여부
-				.description("기존의 발급받은 키를 입력")
-				.build());
+				.description("기존의 발급받은 키를 입력").build());
 		parameters.add(new ParameterBuilder().name("secretKey") // 헤더 이름
 				.description("API 접근을 위한 secretKey") // 헤더 설명
 				.modelRef(new ModelRef("string")) // 데이터 타입
 				.parameterType("header") // 파라미터 타입 (header)
 				.required(true) // 필수 여부
-				.description("기존의 발급받은 키를 입력")
-				.build());
-		return parameters;	
+				.description("기존의 발급받은 키를 입력").build());
+		return parameters;
 	}
 
 	public ApiInfo apiInfo() {
