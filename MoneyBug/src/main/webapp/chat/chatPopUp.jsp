@@ -108,8 +108,7 @@ body {
 
 </div>
 <%@ include file="/layout/footer.jsp"%>
-
-
+<script src="/moneybug/resources/js/checkLogin/checkLogin.js"></script>
 
 <script>
 function setInputValueAndSubmit(value) {

@@ -5,12 +5,32 @@
 <%@ include file="/layout/TagBoardNav.jsp"%>
 
 <style>
+.mainlist {
+	height: 100%;
+	border: 2px solid #F3969A; /* 테두리 색상과 두께 설정 */
+	border-radius: 10px; /* 모서리 둥글게 만듦 */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+    overflow: hidden;
+    background-color: #fffdf5;  
+    padding: 18px 0 18px 0; 
+
+}
 
 html, body{
 	height: 100%;
-	
+	background: #F9F5E7;
 }
 
+th, td {
+	padding: 3px;
+    }
+    
+ tr {
+ border-bottom: 1px solid white;
+ }
 
 #searchInput {
     border: none; /* 기본 테두리 제거 */
@@ -20,6 +40,8 @@ html, body{
     width: 600px;
     align: center;
     overflow: hidden; 
+     background-color: #F9F5E7;
+     font-size: 18px;
 }
 
 #searchButton {
@@ -53,11 +75,9 @@ br + #searchButton {
   overflow: hidden; 
 }
 
-#newinsert{
- margin :0 0 20px 1180px;
- padding: 5px 15px;
-	cursor: pointer;
-	overflow: hidden; 
+#newinsert {
+    float: right; /* 오른쪽으로 이동 */
+    margin-right: 40px; /* 오른쪽 여백 추가 */
 }
 
 
@@ -80,20 +100,21 @@ a {
 	</div>
 	<button id='newinsert' class="btn btn-info">글 쓰기</button>
 	<br>
-
-	<table class="table table-sm mx-auto">
+	<br>
+<div class="mainlist">
+	<table>
 		<thead>
-			<tr>
+			<tr style=" font-size: 18px;">
 				<th style="width: 90px;">No.</th>
-				<th style="width: 770px;">제목</th>
+				<th style="width: 700px;">제목</th>
 				<th style="width: 150px;">작성자</th>
-				<th>조회수</th>
+				<th style="width: 90px;">조회수</th>
 				<th>작성일</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${list}" var="tagBoardDTO">
-				<tr>
+				<tr style=" font-size: 20px;">
 					<td>${tagBoardDTO.rowNo}</td>
 					<td>[${tagBoardDTO.boardType}]&nbsp <a href="TagBoard_one?seq=${tagBoardDTO.seq}">${tagBoardDTO.title}</a></td>
 					<td>${tagBoardDTO.writerId}</td>
@@ -104,6 +125,7 @@ a {
 			</c:forEach>
 		</tbody>
 	</table>
+	</div>
 	<br>
 	
 	<c:set var="currentPage" value="${param.page}" />
@@ -202,5 +224,5 @@ a {
 
 </script>
 
-	
+    <%@ include file="/layout/accountAside.jsp"%>
 	<%@ include file="/layout/footer.jsp"%>

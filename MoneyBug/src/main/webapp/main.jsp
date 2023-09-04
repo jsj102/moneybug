@@ -143,4 +143,5 @@ body {
 
 		
 <!-- footer.jsp를 포함시킴 -->
+<%@ include file="/layout/accountAside.jsp"%>
 <%@ include file="layout/footer.jsp" %>

@@ -175,4 +175,5 @@ background: white;
 		<div id="resultexpenses">총 고정지출 : 0원</div>
 	</div>
 </div>
+<%@ include file="/layout/accountAside.jsp"%>
 <%@ include file="/layout/footer.jsp"%>

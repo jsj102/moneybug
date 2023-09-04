@@ -195,5 +195,5 @@ function addToCart(productId, userNickname, count) {
 			</div>
 		</div>
 	</div>
-
+<%@ include file="/layout/accountAside.jsp"%>
 <jsp:include page="/layout/footer.jsp"/>
