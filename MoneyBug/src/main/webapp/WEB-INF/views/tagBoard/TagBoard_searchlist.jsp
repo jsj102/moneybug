@@ -224,5 +224,5 @@ a {
 
 </script>
 
-	
+<%@ include file="/layout/accountAside.jsp"%>
 	<%@ include file="/layout/footer.jsp"%>
