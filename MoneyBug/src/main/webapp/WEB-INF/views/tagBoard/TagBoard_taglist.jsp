@@ -76,9 +76,6 @@ th, td {
 	padding: 3px;
     }
     
- tr {
- border-bottom: 1px solid white;
- }
 
 a {
 	text-decoration: none;
