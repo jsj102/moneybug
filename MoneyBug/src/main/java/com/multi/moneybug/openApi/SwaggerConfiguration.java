@@ -30,12 +30,12 @@ public class SwaggerConfiguration {
 	@Bean
 	public Docket api() {
 		List<ResponseMessage> responseMessages = new ArrayList<ResponseMessage>();
-		responseMessages.add(new ResponseMessageBuilder().code(500).message("서버 문제 발생 !!!").build());
-		responseMessages.add(new ResponseMessageBuilder().code(200).message("전송완료").build());
-		responseMessages.add(new ResponseMessageBuilder().code(404).message("페이지를 찾을 수 없습니다 !!!").build());
-		responseMessages.add(new ResponseMessageBuilder().code(429).message("너무 많은 요청").build());
+		responseMessages.add(new ResponseMessageBuilder().code(500).message("{\"error\": \"서버 오류\" ,\"statusCode\": 500}").build());
+		responseMessages.add(new ResponseMessageBuilder().code(404).message("{\"error\": \"키값 오류\" ,\"statusCode\": 404}").build());
+		responseMessages.add(new ResponseMessageBuilder().code(429).message("{\"success\": \"토큰 한도 초과\"	 ,\"statusCode\": 429}").build());
+		responseMessages.add(new ResponseMessageBuilder().code(200).message("{\"success\": \"데이터 작성완료\" ,\"statusCode\": 200}").build());
 		return new Docket(DocumentationType.SWAGGER_2).useDefaultResponseMessages(false) // Swagger 에서 제공해주는 기본 응답 코드를
-				.host("moneybug.site")// 표시할 것이면 true
+				.host("moneybug.site")
 				.apiInfo(apiInfo()).groupName("가계부 OpenAPI").select()
 				.apis(RequestHandlerSelectors.basePackage("com.multi.moneybug.openApi")) // Controller가 들어있는 패키지. 이
 																							// 경로의// 하위에 있는 api만 표시됨.
@@ -44,7 +44,7 @@ public class SwaggerConfiguration {
 				.globalResponseMessage(RequestMethod.GET, responseMessages)
 				.globalResponseMessage(RequestMethod.POST, responseMessages);
 	}
-
+	
 	public List<Parameter> globalParameters() {
 		List<Parameter> parameters = new ArrayList<>();
 
