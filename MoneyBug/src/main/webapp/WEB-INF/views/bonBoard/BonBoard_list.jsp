@@ -7,9 +7,18 @@
 <html>
 <head>
 <style>
+html, body{
+	height: 100%;
+	
+}
 body {
 	background-color: #E2EDC9; /* 배경 색상 변경 */
 	font-family: Arial, sans-serif;
+	display:flex;
+	flex-direction:column;
+	height:100%;
+	flex:1;
+	margin: 0;
 }
 
 .container1 {
