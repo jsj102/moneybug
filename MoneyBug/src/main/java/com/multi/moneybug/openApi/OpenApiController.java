@@ -3,6 +3,7 @@ package com.multi.moneybug.openApi;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +11,6 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
 import com.multi.moneybug.accountBook.AccountBookService;
 import com.multi.moneybug.accountBook.AccountBudgetDTO;
 import com.multi.moneybug.accountBook.AccountDetailDTO;
@@ -220,7 +219,7 @@ public class OpenApiController {
 				JSONObject result = openApiService.detailJsonParsing(openApiDTO.getAccountBookId(), searchMonth,
 						searchYear);
 				log.info("지출 조회 / " + secretKey);
-				return createSuccesResponse(200, result.toString());
+				return createSuccesResponse(200, result.toString());	
 			} else {
 				return createErrorResponse(400, "잘못된 키값");
 			}
@@ -232,7 +231,8 @@ public class OpenApiController {
 
 	@PostMapping(value = "/v1/detail", produces = "application/json;charset=utf-8")
 	@ApiOperation(value = "지출/수입에 대해서 입력이 가능합니다.", notes = "입력할 연월을 입력하고 데이터를 넣으면 입력됩니다.")
-	public ResponseEntity<String> detailInsert(HttpServletRequest request, @RequestBody AccountDetailDTO requestBody) {
+	@ApiResponses({ @ApiResponse(code = 200, message = "success") })
+	public ResponseEntity<String> detailInsert(HttpServletRequest request, @RequestBody List<AccountDetailDTO> requestBody) {
 		// 인증
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
@@ -251,7 +251,7 @@ public class OpenApiController {
 		// 데이터 삽입
 		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
 			log.info("detail accountBookId : {}" + openApiDTO.getAccountBookId());
-			openApiService.detailJsonPaser(requestBody, openApiDTO.getAccountBookId());
+			openApiService.detailJsonParser(requestBody, openApiDTO.getAccountBookId());
 			log.info("지출/수입 삽입 / " + secretKey);
 			return createSuccesResponse(200, "데이터 작성완료");
 		} else {
@@ -262,7 +262,7 @@ public class OpenApiController {
 
 	@PostMapping(value = "/v1/budget", produces = "application/json;charset=utf-8")
 	@ApiOperation(value = "예산 입력", notes = "입력할 연월을 입력하고 데이터를 넣으면 입력됩니다. 대신 카테고리가 반복되지않게 주의해주십시오.")
-	public ResponseEntity<String> budgetInsert(HttpServletRequest request, @RequestBody AccountBudgetDTO requestBody) {
+	public ResponseEntity<String> budgetInsert(HttpServletRequest request, @RequestBody List<AccountBudgetDTO> requestBody) {
 		// 인증
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
@@ -291,7 +291,7 @@ public class OpenApiController {
 	@PostMapping(value = "/v1/expenses", produces = "application/json;charset=utf-8")
 	@ApiOperation(value = "고정 지출 입력", notes = "데이터를 넣으면 입력됩니다. 대신 카테고리가 반복되지않게 주의해주십시오.")
 	public ResponseEntity<String> expensesInsert(HttpServletRequest request,
-			@RequestBody AccountExpensesDTO requestBody) {
+			@RequestBody List<AccountExpensesDTO> requestBody) {
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
 

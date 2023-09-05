@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class OpenApiService {
-	// JSON만들기
-	Gson gson = new Gson();
 	// 선언부
 	private final OpenApiDAO openApiDAO;
 	private final AccountDetailDAO accountDetailDAO;
@@ -64,11 +63,11 @@ public class OpenApiService {
 			JSONObject detailjson = new JSONObject();
 			LocalDate date = data.getUsedAt().toLocalDate();
 			if (date.getYear() == searchYear && date.getMonthValue() == searchMonth) {
-				detailjson.put("category", data.getAccountCategory());
-				detailjson.put("price", data.getPrice() + "원");
-				detailjson.put("dis", data.getDescription());
-				detailjson.put("지출/수입", data.getAccountType());
-				detailjson.put("사용날짜", data.getUsedAt());
+				detailjson.put("accountCategory", data.getAccountCategory());
+				detailjson.put("price", data.getPrice());
+				detailjson.put("description", data.getDescription());
+				detailjson.put("accountType", data.getAccountType());
+				detailjson.put("usedAt", data.getUsedAt());
 				outerjson.append(searchYear + "년 " + searchMonth + "월 지출 내역", detailjson);
 			} else if (detail.isEmpty()) {
 				JSONObject errorMessage = new JSONObject();
@@ -91,8 +90,8 @@ public class OpenApiService {
 				AccountBudgetDTO data = budget.get(i);
 				try {
 					JSONObject detailjson = new JSONObject();
-					detailjson.put("카테고리", data.getFixedCategory());
-					detailjson.put("가격", data.getPrice());
+					detailjson.put("accountCategory", data.getFixedCategory());
+					detailjson.put("price", data.getPrice());
 					outerjson.append(searchYear + "년 " + searchMonth + "월 예산", detailjson);
 				} catch (NullPointerException e) {
 					e.getMessage();
@@ -113,8 +112,8 @@ public class OpenApiService {
 			for (int i = 0; i < expenses.size(); i++) {
 				AccountExpensesDTO data = expenses.get(i);
 				JSONObject detailjson = new JSONObject();
-				detailjson.put("카테고리", data.getFixedCategory());
-				detailjson.put("가격", data.getPrice());
+				detailjson.put("accountCategory", data.getFixedCategory());
+				detailjson.put("price", data.getPrice());
 				outerjson.append("고정 지출", detailjson);
 			}
 		} else {
@@ -125,69 +124,58 @@ public class OpenApiService {
 		return outerjson;
 	}
 
-	public void detailJsonPaser(AccountDetailDTO detailData, int accountBookId) {
-		// 데이터 파싱
-		JSONObject data = new JSONObject(detailData);
-		String category = data.getString("accountCategory");
-		String accountType = data.getString("accountType");
-		String discription = data.getString("description");
-		int price = data.getInt("price");
+	public void detailJsonParser(List<AccountDetailDTO> detailDataList, int accountBookId) {
+	    for (AccountDetailDTO data : detailDataList) {
+	        String category = data.getAccountCategory();
+	        String accountType = data.getAccountType();
+	        String description = data.getDescription();
+	        int price = data.getPrice();
+	        Date usedAt = data.getUsedAt();
 
-		String dateString = data.getString("usedAt");
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		java.util.Date utilDate = null;
-		try {
-			utilDate = dateFormat.parse(dateString);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		Date usedAt = new Date(utilDate.getTime());
-		// 객체에 데이터 넣기
-		AccountDetailDTO accountDetailDTO = new AccountDetailDTO();
-		accountDetailDTO.setAccountBookId(accountBookId);
-		accountDetailDTO.setAccountCategory(category);
-		accountDetailDTO.setAccountType(accountType);
-		accountDetailDTO.setDescription(discription);
-		accountDetailDTO.setUsedAt(usedAt);
-		accountDetailDTO.setPrice(price);
-		// 삽입
-		accountDetailDAO.insert(accountDetailDTO);
+	        // 객체에 데이터 넣기
+	        AccountDetailDTO accountDetailDTO = new AccountDetailDTO();
+	        accountDetailDTO.setAccountBookId(accountBookId);
+	        accountDetailDTO.setAccountCategory(category);
+	        accountDetailDTO.setAccountType(accountType);
+	        accountDetailDTO.setDescription(description);
+	        accountDetailDTO.setUsedAt(usedAt);
+	        accountDetailDTO.setPrice(price);
+
+	        // 삽입
+	        accountDetailDAO.insert(accountDetailDTO);
+	    }
 	}
 
-	public void budgetJsonPaser(AccountBudgetDTO budgetData, int accountBookId) {
-		JSONObject data = new JSONObject(budgetData);
-		String category = data.getString("category");
-		int price = data.getInt("price");
-		String dateString = data.getString("usedAt");
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		java.util.Date utilDate = null;
-		try {
-			utilDate = dateFormat.parse(dateString);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		Date usedAt = new Date(utilDate.getTime());
-		AccountBudgetDTO accountBudgetDTO = new AccountBudgetDTO();
-		accountBudgetDTO.setAccountBookId(accountBookId);
-		accountBudgetDTO.setFixedCategory(category);
-		accountBudgetDTO.setPrice(price);
-		accountBudgetDTO.setUsedAt(usedAt);
-		//
-		accountBudgetDAO.insertDate(accountBudgetDTO);
+
+	public void budgetJsonPaser(List<AccountBudgetDTO> budgetDataList, int accountBookId) {
+	    for (AccountBudgetDTO data : budgetDataList) {
+	        String category = data.getFixedCategory();
+	        int price = data.getPrice();
+	        Date usedAt = data.getUsedAt();
+	        
+	        AccountBudgetDTO accountBudgetDTO = new AccountBudgetDTO();
+	        accountBudgetDTO.setAccountBookId(accountBookId);
+	        accountBudgetDTO.setFixedCategory(category);
+	        accountBudgetDTO.setPrice(price);
+	        accountBudgetDTO.setUsedAt(usedAt);
+	        
+	        accountBudgetDAO.insertDate(accountBudgetDTO);
+	    }
 	}
 
-	public void expensesJsonPaser(AccountExpensesDTO expensesData, int accountBookId) {
-		JSONObject data = new JSONObject(expensesData);
-		String category = data.getString("category");
-		int price = data.getInt("price");
-		AccountExpensesDTO accountExpensesDTO = new AccountExpensesDTO();
-		accountExpensesDTO.setAccountBookId(accountBookId);
-		accountExpensesDTO.setFixedCategory(category);
-		accountExpensesDTO.setPrice(price);
-
-		accountExpensesDAO.insert(accountExpensesDTO);
+	public void expensesJsonPaser(List<AccountExpensesDTO> expensesDataList, int accountBookId) {
+	    for (AccountExpensesDTO data : expensesDataList) {
+	        String category = data.getFixedCategory();
+	        int price = data.getPrice();
+	        
+	        AccountExpensesDTO accountExpensesDTO = new AccountExpensesDTO();
+	        accountExpensesDTO.setAccountBookId(accountBookId);
+	        accountExpensesDTO.setFixedCategory(category);
+	        accountExpensesDTO.setPrice(price);
+	        
+	        accountExpensesDAO.insert(accountExpensesDTO);
+	    }
 	}
-
 	public HashMap<String, String> userApiGenerator() {
 		String apiKey = UUID.randomUUID().toString();
 		String secretKey = UUID.randomUUID().toString();
