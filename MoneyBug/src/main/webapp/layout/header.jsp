@@ -68,13 +68,8 @@ $(document).ready(function() {
 						href="#" role="button"
 						data-toggle="dropdown" aria-expanded="false"> ${sessionScope.userNickname}님 </a>
 						<ul class="dropdown-menu">
-<<<<<<< HEAD
 									<li><a class="dropdown-item" href="/moneybug/member/myPage.do">나의정보수정</a></li>
 									<li><a class="dropdown-item" href="/moneybug/logout.do">로그아웃</a></li>
-=======
-									<li><a class="dropdown-item" href="/moneybug/logout.do">로그아웃</a></li>
-									<li><a class="dropdown-item" href="/moneybug/member/myPage.do">나의정보수정</a></li>
->>>>>>> a3292bb795af1ab935a00ce19a9844f62d0be8a8
 									<li><a class="dropdown-item" href="/moneybug/member/managerlogin.jsp">관리자 로그인</a></li>
 									<li><a class="dropdown-item" href="/moneybug/api/showButton">API키 관리</a></li>
 								</ul>
@@ -95,15 +90,7 @@ $(document).ready(function() {
 			</c:choose>
 
 			</ul>
-<<<<<<< HEAD
 
-=======
-<!-- 			<form class="d-flex align-items-center ms-auto">
-				<input class="form-control me-sm-2" type="search"
-					placeholder="Search">
-				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-			</form> -->
->>>>>>> a3292bb795af1ab935a00ce19a9844f62d0be8a8
 		</div>
 		</div>
 </nav>
