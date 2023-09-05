@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.multi.moneybug.accountBook.AccountBookService;
+import com.multi.moneybug.accountBook.AccountBudgetDTO;
+import com.multi.moneybug.accountBook.AccountDetailDTO;
+import com.multi.moneybug.accountBook.AccountExpensesDTO;
 
 import io.github.bucket4j.Bucket;
 import io.swagger.annotations.Api;
@@ -41,8 +44,6 @@ import lombok.extern.java.Log;
 @EnableScheduling
 @Api(tags = { "OpenAPI" })
 public class OpenApiController {
-
-	Gson gson = new Gson();
 
 	private final OpenApiService openApiService;
 	private final AccountBookService accountBookService;
@@ -102,13 +103,27 @@ public class OpenApiController {
 		}
 	}
 
+	private ResponseEntity<String> createErrorResponse(int statusCode, String Message) {
+		JSONObject result = new JSONObject();
+		result.put("statusCode", statusCode);
+		result.put("error", Message);
+		return ResponseEntity.status(statusCode).body(result.toString());
+	}
+
+	private ResponseEntity<String> createSuccesResponse(int statusCode, String Message) {
+		JSONObject result = new JSONObject();
+		result.put("statusCode", statusCode);
+		result.put("success", Message);
+		return ResponseEntity.status(statusCode).body(result.toString());
+	}
+
 	// GET
 	@GetMapping(value = "/v1/budget", produces = "application/json;charset=utf-8")
 	@ApiOperation(value = "예산 조회", notes = "조회할 연월을 입력하면 조회가 가능합니다.")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "searchMonth", value = "조회할 월", required = true, paramType = "header", dataType = "int"),
 			@ApiImplicitParam(name = "searchYear", value = "조회할 연도", required = true, paramType = "header", dataType = "int") })
-	@ApiResponses({ @ApiResponse(code = 200, message = "성공적인 응답", response = SwaggerBudgetResponse.class) })
+	@ApiResponses({ @ApiResponse(code = 200, message = "success", response = SwaggerBudgetResponse.class) })
 	public ResponseEntity<String> budget(HttpServletRequest request) {
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
@@ -123,7 +138,7 @@ public class OpenApiController {
 				bucketMap.put(secretKey, openApiService.readToken(secretKey));
 			}
 		} catch (NullPointerException e) {
-			return ResponseEntity.badRequest().body("잘못된 키값");
+			return createErrorResponse(400, "잘못된 키값");
 		}
 		// 값을 재할당
 		openApiDTO = openApiService.readOneKey(openApiDTO);
@@ -135,21 +150,18 @@ public class OpenApiController {
 				log.info("예산 조회 / " + secretKey);
 				return ResponseEntity.ok(data);
 			} else {
-				JSONObject errorObject = new JSONObject();
-				errorObject.put("error", "키값이 잘못되었습니다.");
-				String jsonStr = gson.toJson(errorObject);
-				return ResponseEntity.badRequest().body(jsonStr); // JSON 형식의 에러 메시지 반환
+				return createErrorResponse(400, "잘못된 키값");
 			}
 		} else {
 			log.info("토큰 수 한도 초과");
-			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
+			return createErrorResponse(429, "토큰 한도 초과");
 		}
 	}
 
 	// GET
 	@GetMapping(value = "/v1/expenses", produces = "application/json;charset=utf-8")
 	@ApiOperation(value = "고정 지출 조회", notes = "고정 지출은 모든 데이터를 가져옵니다.")
-	@ApiResponses({ @ApiResponse(code = 200, message = "성공적인 응답", response = SwaggerExpensesResponse.class) })
+	@ApiResponses({ @ApiResponse(code = 200, message = "success", response = SwaggerExpensesResponse.class) })
 	public ResponseEntity<String> expenses(HttpServletRequest request) {
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
@@ -164,23 +176,19 @@ public class OpenApiController {
 				bucketMap.put(secretKey, openApiService.readToken(secretKey));
 			}
 		} catch (NullPointerException e) {
-			return ResponseEntity.badRequest().body("잘못된 키값");
+			return createErrorResponse(400, "잘못된 키값");
 		}
 		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
 			if (openApiDTO != null) {
 				JSONObject result = openApiService.expensesJsonParsing(openApiDTO.getAccountBookId());
-				String data = result.toString();
 				log.info("고정 조회 / " + secretKey);
-				return ResponseEntity.ok(data);
+				return createErrorResponse(200, request.toString());
 			} else {
-				JSONObject errorObject = new JSONObject();
-				errorObject.put("error", "키값이 잘못되었습니다.");
-				String jsonStr = gson.toJson(errorObject);
-				return ResponseEntity.badRequest().body(jsonStr); // JSON 형식의 에러 메시지 반환
+				return createErrorResponse(400, "잘못된 키값");
 			}
 		} else {
 			log.info("토큰 수 한도 초과");
-			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
+			return createErrorResponse(429, "토큰 한도 초과");
 		}
 	}
 
@@ -190,7 +198,7 @@ public class OpenApiController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "searchMonth", value = "조회할 월", required = true, paramType = "header", dataType = "int"),
 			@ApiImplicitParam(name = "searchYear", value = "조회할 연도", required = true, paramType = "header", dataType = "int") })
-	@ApiResponses({ @ApiResponse(code = 200, message = "성공적인 응답", response = SwaggerDetailResponse.class) })
+	@ApiResponses({ @ApiResponse(code = 200, message = "success", response = SwaggerDetailResponse.class) })
 	public ResponseEntity<String> detail(HttpServletRequest request) {
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
@@ -211,24 +219,20 @@ public class OpenApiController {
 			if (openApiDTO != null) {
 				JSONObject result = openApiService.detailJsonParsing(openApiDTO.getAccountBookId(), searchMonth,
 						searchYear);
-				String data = result.toString();
 				log.info("지출 조회 / " + secretKey);
-				return ResponseEntity.ok(data);
+				return createSuccesResponse(200, result.toString());
 			} else {
-				JSONObject errorObject = new JSONObject();
-				errorObject.put("error", "키값이 잘못되었습니다.");
-				String jsonStr = gson.toJson(errorObject);
-				return ResponseEntity.badRequest().body(jsonStr); // JSON 형식의 에러 메시지 반환
+				return createErrorResponse(400, "잘못된 키값");
 			}
 		} else {
 			log.info("토큰 수 한도 초과");
-			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
+			return createErrorResponse(429, "토큰 한도 초과");
 		}
 	}
 
 	@PostMapping(value = "/v1/detail", produces = "application/json;charset=utf-8")
 	@ApiOperation(value = "지출/수입에 대해서 입력이 가능합니다.", notes = "입력할 연월을 입력하고 데이터를 넣으면 입력됩니다.")
-	public ResponseEntity<String> detailInsert(HttpServletRequest request, @RequestBody SwaggerDetailDTO requestBody) {
+	public ResponseEntity<String> detailInsert(HttpServletRequest request, @RequestBody AccountDetailDTO requestBody) {
 		// 인증
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
@@ -242,23 +246,23 @@ public class OpenApiController {
 				bucketMap.put(secretKey, openApiService.readToken(secretKey));
 			}
 		} catch (NullPointerException e) {
-			return ResponseEntity.badRequest().body("잘못된 키값");
+			return createErrorResponse(400, "잘못된 키값");
 		}
 		// 데이터 삽입
 		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
 			log.info("detail accountBookId : {}" + openApiDTO.getAccountBookId());
 			openApiService.detailJsonPaser(requestBody, openApiDTO.getAccountBookId());
 			log.info("지출/수입 삽입 / " + secretKey);
-			return ResponseEntity.ok(requestBody.toString());
+			return createSuccesResponse(200, "데이터 작성완료");
 		} else {
 			log.info("토큰 수 한도 초과");
-			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
+			return createErrorResponse(429, "토큰 한도 초과");
 		}
 	}
 
 	@PostMapping(value = "/v1/budget", produces = "application/json;charset=utf-8")
 	@ApiOperation(value = "예산 입력", notes = "입력할 연월을 입력하고 데이터를 넣으면 입력됩니다. 대신 카테고리가 반복되지않게 주의해주십시오.")
-	public ResponseEntity<String> budgetInsert(HttpServletRequest request, @RequestBody SwaggerBudgetDTO requestBody) {
+	public ResponseEntity<String> budgetInsert(HttpServletRequest request, @RequestBody AccountBudgetDTO requestBody) {
 		// 인증
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
@@ -273,23 +277,21 @@ public class OpenApiController {
 				bucketMap.put(secretKey, openApiService.readToken(secretKey));
 			}
 		} catch (NullPointerException e) {
-			return ResponseEntity.badRequest().body("잘못된 키값");
+			return createErrorResponse(400, "잘못된 키값");
 		}
 		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
-			log.info("detail accountBookId : {}" + openApiDTO.getAccountBookId());
 			openApiService.budgetJsonPaser(requestBody, openApiDTO.getAccountBookId());
-			log.info("예산 삽입 / " + secretKey);
-			return ResponseEntity.ok(requestBody.toString());
+			return createSuccesResponse(200, "데이터 작성완료");
 		} else {
 			log.info("토큰 수 한도 초과");
-			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
+			return createErrorResponse(400, "잘못된 키값");
 		}
 	}
 
 	@PostMapping(value = "/v1/expenses", produces = "application/json;charset=utf-8")
 	@ApiOperation(value = "고정 지출 입력", notes = "데이터를 넣으면 입력됩니다. 대신 카테고리가 반복되지않게 주의해주십시오.")
 	public ResponseEntity<String> expensesInsert(HttpServletRequest request,
-			@RequestBody SwaggerExpensesDTO requestBody) {
+			@RequestBody AccountExpensesDTO requestBody) {
 		String apiKey = request.getHeader("apiKey");
 		String secretKey = request.getHeader("secretKey");
 
@@ -303,16 +305,16 @@ public class OpenApiController {
 				bucketMap.put(secretKey, openApiService.readToken(secretKey));
 			}
 		} catch (NullPointerException e) {
-			return ResponseEntity.badRequest().body("잘못된 키값");
+			return createErrorResponse(400, "잘못된 키값");
 		}
 		if (openApiService.ischeckTokenAvailability(bucketMap.get(secretKey))) {
 			log.info("detail accountBookId : {}" + openApiDTO.getAccountBookId());
 			openApiService.expensesJsonPaser(requestBody, openApiDTO.getAccountBookId());
 			log.info("고정 지출 삽입 / " + secretKey);
-			return ResponseEntity.ok(requestBody.toString());
+			return createSuccesResponse(200, "데이터 작성 완료");
 		} else {
 			log.info("토큰 수 한도 초과");
-			return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("토큰 한도 초과");
+			return createErrorResponse(429, "토큰 한도 초과");
 		}
 	}
 

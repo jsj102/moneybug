@@ -64,9 +64,9 @@ public class OpenApiService {
 			JSONObject detailjson = new JSONObject();
 			LocalDate date = data.getUsedAt().toLocalDate();
 			if (date.getYear() == searchYear && date.getMonthValue() == searchMonth) {
-				detailjson.put("카테고리", data.getAccountCategory());
-				detailjson.put("가격", data.getPrice() + "원");
-				detailjson.put("설명", data.getDescription());
+				detailjson.put("category", data.getAccountCategory());
+				detailjson.put("price", data.getPrice() + "원");
+				detailjson.put("dis", data.getDescription());
 				detailjson.put("지출/수입", data.getAccountType());
 				detailjson.put("사용날짜", data.getUsedAt());
 				outerjson.append(searchYear + "년 " + searchMonth + "월 지출 내역", detailjson);
@@ -125,10 +125,10 @@ public class OpenApiService {
 		return outerjson;
 	}
 
-	public void detailJsonPaser(SwaggerDetailDTO detailData, int accountBookId) {
+	public void detailJsonPaser(AccountDetailDTO detailData, int accountBookId) {
 		// 데이터 파싱
 		JSONObject data = new JSONObject(detailData);
-		String category = data.getString("category");
+		String category = data.getString("accountCategory");
 		String accountType = data.getString("accountType");
 		String discription = data.getString("description");
 		int price = data.getInt("price");
@@ -154,7 +154,7 @@ public class OpenApiService {
 		accountDetailDAO.insert(accountDetailDTO);
 	}
 
-	public void budgetJsonPaser(SwaggerBudgetDTO budgetData, int accountBookId) {
+	public void budgetJsonPaser(AccountBudgetDTO budgetData, int accountBookId) {
 		JSONObject data = new JSONObject(budgetData);
 		String category = data.getString("category");
 		int price = data.getInt("price");
@@ -176,7 +176,7 @@ public class OpenApiService {
 		accountBudgetDAO.insertDate(accountBudgetDTO);
 	}
 
-	public void expensesJsonPaser(SwaggerExpensesDTO expensesData, int accountBookId) {
+	public void expensesJsonPaser(AccountExpensesDTO expensesData, int accountBookId) {
 		JSONObject data = new JSONObject(expensesData);
 		String category = data.getString("category");
 		int price = data.getInt("price");
@@ -245,4 +245,5 @@ public class OpenApiService {
 		Bucket bucket = Bucket.builder().addLimit(limit).build();
 		return bucket;
 	}
+	
 }
