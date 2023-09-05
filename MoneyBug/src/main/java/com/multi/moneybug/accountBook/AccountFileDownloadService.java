@@ -231,7 +231,7 @@ public class AccountFileDownloadService {
 		return sheet;
 	}
 	
-	@Async("pdfThreadBean")
+	
 	public void downloadPDF(HttpServletResponse response, List<AccountBudgetDTO> budgetList,
 			List<AccountExpensesDTO> expensesList, LinkedHashMap<String, Integer> budgetAndExpensesMap,
 			List<AccountDetailDTO> detailList, LinkedHashMap<String, Integer> detailMap, int year, int month,
@@ -248,10 +248,12 @@ public class AccountFileDownloadService {
 				accountBookPDF.close();
 				outputStream.flush();
 				outputStream.close();
+				accountBookPDF.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.out.println("PDF다운로드 에러");
 			}
+			
 		
 	}
 
