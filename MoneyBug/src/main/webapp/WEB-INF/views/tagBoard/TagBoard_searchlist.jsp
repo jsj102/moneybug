@@ -28,9 +28,6 @@ th, td {
 	padding: 3px;
     }
     
- tr {
- border-bottom: 1px solid white;
- }
 
 #searchInput {
     border: none; /* 기본 테두리 제거 */
