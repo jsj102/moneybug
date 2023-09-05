@@ -58,5 +58,4 @@ public class BasketService {
         return basketDAO.getSeqList();
     }
 }
-   
 
