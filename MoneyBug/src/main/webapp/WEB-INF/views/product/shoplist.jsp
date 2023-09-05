@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<% application.setAttribute("s3","https://moneybugbucket.s3.ap-northeast-2.amazonaws.com"); %>
 <jsp:include page="/layout/header.jsp"/>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -192,7 +193,7 @@ body {
                         <!-- Product image-->
                         <div class="product-thumbnail">
                             <a href="<c:url value='/product/shopDetail?productId=${product.productId}' />">
-                                <img src="${product.productImg}" alt="Product Image" />
+                                <img src="${s3}/resources/products/${product.productImg}" alt="Product Image" />
                             </a>
                             <h4><span class="badge typebadge bg-light badge-lg">${product.productType}</span></h4>
                             <!-- Shopping cart-->
@@ -238,5 +239,5 @@ body {
     </li>
   </ul>
 </div>
-
+<%@ include file="/layout/accountAside.jsp"%>
 <jsp:include page="/layout/footer.jsp"/>

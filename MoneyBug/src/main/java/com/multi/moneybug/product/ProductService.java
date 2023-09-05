@@ -55,4 +55,12 @@ public class ProductService {
 		
 	}
 
+	public int goManageDelete(int productId) {
+		return productDAO.delete(productId);
+	}
+
+	public int updateProduct(ProductDTO productDTO) {
+		return productDAO.updateProducts(productDTO);
+	}
+
 }

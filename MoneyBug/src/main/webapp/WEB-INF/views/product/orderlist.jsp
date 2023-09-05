@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<% application.setAttribute("s3","https://moneybugbucket.s3.ap-northeast-2.amazonaws.com"); %>
 <jsp:include page="/layout/header.jsp"/>
 
 
@@ -211,7 +212,7 @@ body {
 								<c:if test="${order.productId eq product.productId}">
 									<tr>
 										<td>${product.productType}</td>
-										<td><img src="${product.productImg}" alt="Product Image"
+										<td><img src="${s3}/resources/products/${product.productImg}"" alt="Product Image"
 											width="150px" height="150px" /></td>
 										<td>${product.productName}</td>
 										<td id="productPrice_${product.productId}">${product.productPrice}</td>
@@ -349,5 +350,5 @@ body {
 		<hr>
 	</div>
 
-
+<%@ include file="/layout/accountAside.jsp"%>
 <jsp:include page="/layout/footer.jsp"/>

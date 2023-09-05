@@ -666,4 +666,5 @@ margin: 100px 0 50px 0px;
     </script>
 
 </div>
+<%@ include file="/layout/accountAside.jsp"%>
 <%@ include file="/layout/footer.jsp"%>

@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<% application.setAttribute("s3","https://moneybugbucket.s3.ap-northeast-2.amazonaws.com"); %>
 <jsp:include page="/layout/header.jsp"/>
 
 <style>
@@ -153,7 +154,7 @@ function addToCart(productId, userNickname, count) {
 	<!-- 쇼핑 영역 -->
 	<div class="detail-container">
 		<div class="product-image">
-			<img src="${productDTO.productImg}" alt="Product Image">
+			<img src="${s3}/resources/products/${productDTO.productImg}" alt="Product Image" />
 		</div>
 		<div class="product-details">
 			<div class="product-category badge rounded-pill bg-success">
@@ -195,5 +196,5 @@ function addToCart(productId, userNickname, count) {
 			</div>
 		</div>
 	</div>
-
+<%@ include file="/layout/accountAside.jsp"%>
 <jsp:include page="/layout/footer.jsp"/>
