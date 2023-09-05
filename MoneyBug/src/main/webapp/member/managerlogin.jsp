@@ -49,7 +49,7 @@
 <div class="container">
 <div class="form-signin">
   <form>
-    <img class="mb-2" src="/moneybug/resources/img/nav_icon.png" alt="nav_icon" width="70" height="70">
+    <img class="mb-2" src="${s3}/resources/img/nav_icon.png" alt="nav_icon" width="70" height="70">
     <h1 class="h3 mb-3 fw-normal">Manager Login</h1>
     <p>관리자만 접속이 가능합니다.</p>
 
