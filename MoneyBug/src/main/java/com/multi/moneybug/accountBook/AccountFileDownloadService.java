@@ -32,6 +32,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -229,7 +230,8 @@ public class AccountFileDownloadService {
 		}
 		return sheet;
 	}
-
+	
+	@Async("pdfThreadBean")
 	public void downloadPDF(HttpServletResponse response, List<AccountBudgetDTO> budgetList,
 			List<AccountExpensesDTO> expensesList, LinkedHashMap<String, Integer> budgetAndExpensesMap,
 			List<AccountDetailDTO> detailList, LinkedHashMap<String, Integer> detailMap, int year, int month,
