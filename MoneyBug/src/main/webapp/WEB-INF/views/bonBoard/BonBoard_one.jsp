@@ -6,6 +6,9 @@
 <%@ include file="/layout/header.jsp"%>
 
 <style>
+
+
+	
 .comment-section {
 	background-color: #eff4e1;
 	padding: 20px;
@@ -29,7 +32,7 @@
 	background-color: #A1C59E; /* 배경 색상 변경 */
 	padding: 20px;
 	border-radius: 10px;
-	margin-top: 20px;
+	margin: 20px 60px 0 60px;
 }
 
 h1 {
@@ -42,6 +45,32 @@ h2 {
 
 h3 {
 	color: #b5c59e;
+}
+
+.banner-text {
+margin-top: 35px;
+margin-bottom: 40px;
+}
+
+.banner-container {
+	height: 250px;
+	background-color: #6cc3d5;
+	background-position: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.banner-text h1 {
+	color: white;
+	font-size: 60px;
+}
+
+.banner-text {
+	color: white;
+	font-size: 22px;
+	text-align: center;
 }
 
 /* Style for the reply list */
@@ -352,13 +381,19 @@ $(document).ready(function() {
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
-<body	>
-	<div class="container1" >
-		<div class="text-center">
-			<h1>살까? 말까?</h1>
+<body>
 
-
+		<div class="banner-container" align="center">
+		<div class="banner-text">
+			<br> <a class="nav-link"
+				href="/moneybug/bonBoard/BonBoard_list?page=1"><h1>MoneyBug
+					Buy or Not</h1></a>
+			<p>살까? 말까? 돈벌레 친구에게 투표해 주세요!</p>
 		</div>
+	</div>
+	<br><br>
+	<div class="container1" >
+		
 		<div class="post-section"  style="font-family: Arial, sans-serif; font-size: 24px;">
 			<p>
 				<strong>작성자:</strong> ${bonBoardDTO.userNickname}
@@ -488,4 +523,6 @@ $(document).ready(function() {
 			</div>
 		</div>
 	</div>
+	
+	<br><br>
 	<%@ include file="/layout/footer.jsp"%>

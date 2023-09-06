@@ -28,9 +28,6 @@ th, td {
 	padding: 3px;
     }
     
- tr {
- border-bottom: 1px solid white;
- }
 
 #searchInput {
     border: none; /* 기본 테두리 제거 */
@@ -96,7 +93,7 @@ a {
 	 
 	<br>
 	<div class="searchform"><input type="text" id="searchInput" placeholder="검색어를 입력하세요!">
-	<button id="searchButton" ><img src="../resources/img/tagboard_search.png"></button>
+	<button id="searchButton" ><img src="${s3}/resources/img/tagboard_search.png"></button>
 	</div>
 	<button id='newinsert' class="btn btn-info">글 쓰기</button>
 	<br>

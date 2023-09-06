@@ -40,7 +40,7 @@
                 <tr>
                     <td>
                         <button class="btn chatbotButton" onclick="showChatPopup();">
-                            <img src="/moneybug/resources/img/chatbot.png" alt="Image Button">
+                            <img src="${s3}/resources/img/chatbot.png" alt="Image Button">
                         </button>
                     </td>
                 </tr>
@@ -48,7 +48,7 @@
                     <td>
                         <a href="http://pf.kakao.com/_xnCxfIG" target="_blank">
                             <button class="btn kakaoButton">
-                                <img src="/moneybug/resources/img/KakaoTalk.png" alt="Image Button">
+                                <img src="${s3}/resources/img/KakaoTalk.png" alt="Image Button">
                             </button>
                         </a>
                     </td>

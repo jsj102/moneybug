@@ -41,7 +41,7 @@ $(document).ready(function() {
 	<nav class="navbar navbar-expand-xl navbar-light" 	style="background-color: #F9F5E7;">
 		<div class="container-fluid">
 		<a class="navbar-brand" href="/moneybug/main.jsp">
-			<img src="/moneybug/resources/img/nav_icon.png" width="50" height="50" class="d-inline-block align-center" >
+			<img src="${s3}/resources/img/nav_icon.png" width="50" height="50" class="d-inline-block align-center" >
 			<span>돈벌레친구들</span>
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
