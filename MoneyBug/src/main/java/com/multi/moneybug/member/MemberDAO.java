@@ -47,7 +47,6 @@ import com.multi.moneybug.product.OrderListDTO;
 			return my.update("member.usePoint", memberDTO);
 		}
 
-
 		public String getEmailByUserNickname(String userNickname) {
 			return my.selectOne("member.getEmailByUserNickname", userNickname);
 		}

@@ -76,9 +76,6 @@ th, td {
 	padding: 3px;
     }
     
- tr {
- border-bottom: 1px solid white;
- }
 
 a {
 	text-decoration: none;
@@ -96,7 +93,7 @@ a {
 
 	<br>
 	<div class="searchform"><input type="text" id="searchInput" placeholder="검색어를 입력하세요!">
-	<button id="searchButton" ><img src="../resources/img/tagboard_search.png"></button>
+	<button id="searchButton" ><img src="${s3}/resources/img/tagboard_search.png"></button>
 	</div>
 	<button id='newinsert' class="btn btn-info">글 쓰기</button>
 	<br>
@@ -219,5 +216,5 @@ a {
 		});
 
 	</script>
-
+	<%@ include file="/layout/accountAside.jsp"%>
 	<%@ include file="/layout/footer.jsp"%>

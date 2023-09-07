@@ -58,5 +58,13 @@ public class ProductDAO {
 		return my.insert("product.orderInsert", orderListDTO);
 	}
 
+	public int delete(int productId) {
+		return my.delete("product.delete", productId);
+	}
+
+	public int updateProducts(ProductDTO productDTO) {
+		return my.update("product.update", productDTO);
+	}
+
 
 }

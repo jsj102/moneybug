@@ -114,6 +114,7 @@ public class MemberController {
 						model.addAttribute("userName", selectedMember.getUserName());
 						model.addAttribute("socialId", selectedMember.getSocialId());
 						model.addAttribute("point", selectedMember.getPoint());
+						model.addAttribute("userNickname",selectedMember.getUserNickname());
 					}
 					return "member/signUp";
 				}

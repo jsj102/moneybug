@@ -57,7 +57,6 @@ th, td {
 				<thead>
 					<tr>
 						<th>주문번호</th>
-						<th>장바구니번호</th>
 						<th>주문 날짜</th>
 						<th>주문자 이름</th>
 						<th>주소</th>
@@ -72,7 +71,6 @@ th, td {
 					<c:forEach items="${orderList}" var="order">
 						<tr>
 							<td>${order.orderNumber}</td>
-							<td>${order.basketSeq}</td>
 							<td>${order.orderAt}</td>
 							<td>${order.userName}</td>
 							<td>${order.address}</td>

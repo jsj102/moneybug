@@ -55,8 +55,6 @@
     	<h1 class="bi bi-exclamation-triangle-fill"></h1>
         <h1>Moneybug 쇼핑 관리자페이지</h1><br>
         <button class="btn btn-dark btn-lg btn-long" onclick="location.href='../product/manageInsert'">상품 추가</button>
-        <button class="btn btn-dark btn-lg btn-long" onclick="location.href='../product/manageUpdate'">상품 수정</button>
-        <button class="btn btn-dark btn-lg btn-long" onclick="location.href='../product/manageDelete'">상품 삭제</button>
         <button class="btn btn-dark btn-lg btn-long" onclick="location.href='../product/manageOrder'">주문 관리</button>
     </div>
     <hr>

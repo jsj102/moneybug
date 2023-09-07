@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<% application.setAttribute("s3","https://moneybugbucket.s3.ap-northeast-2.amazonaws.com"); %>
 <jsp:include page="/layout/header.jsp"/>
 
 
@@ -108,7 +109,7 @@ body {
 		            pay_method: 'card',
 		            merchant_uid: 'merchant_' + new Date().getTime(),
 		            name: '멀개미:결제테스트',
-		            amount: 1,
+		            amount: 100,
 		            buyer_email: 'test@naver.com',
 		            buyer_name: $('#userName').val(),
 		            buyer_tel: $('#tel').val(),
@@ -140,7 +141,7 @@ body {
 		                }).done(function(data) {
 		                	alert(data)
 		                    //[2] 결제 정보가 확인되고 서버에서 정상적인 서비스 루틴을 사용하는 경우
-		                    if (data == '1') {
+		                    if (data == 1) {
 		                        var msg = '결제가 완료되었습니다.';
 		                       /*  msg += '\n고유 ID: ' + rsp.imp_uid;
 		                        msg += '\n상점 거래 ID: ' + rsp.merchant_uid;
@@ -211,7 +212,7 @@ body {
 								<c:if test="${order.productId eq product.productId}">
 									<tr>
 										<td>${product.productType}</td>
-										<td><img src="${product.productImg}" alt="Product Image"
+										<td><img src="${s3}/resources/products/${product.productImg}"" alt="Product Image"
 											width="150px" height="150px" /></td>
 										<td>${product.productName}</td>
 										<td id="productPrice_${product.productId}">${product.productPrice}</td>
@@ -349,5 +350,5 @@ body {
 		<hr>
 	</div>
 
-
+<%@ include file="/layout/accountAside.jsp"%>
 <jsp:include page="/layout/footer.jsp"/>

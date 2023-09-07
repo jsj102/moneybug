@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<% application.setAttribute("s3","https://moneybugbucket.s3.ap-northeast-2.amazonaws.com"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -77,7 +78,7 @@ p {
 			<a
 				href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=89d5de7971c30a083e735b6abc250f26&redirect_uri=http://localhost:8181/moneybug/member/kakaocallback">
 				<img width="231.250px" height="55"
-				src="./resources/img/kakao_login_button.png" />
+				src="${s3}/resources/img/kakao_login_button.png" />
 			</a>
 
 			<!-- 구글 로그인 버튼 노출 영역 -->

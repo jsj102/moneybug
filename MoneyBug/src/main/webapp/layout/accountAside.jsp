@@ -40,7 +40,7 @@
                 <tr>
                     <td>
                         <button class="btn chatbotButton" onclick="showChatPopup();">
-                            <img src="/moneybug/resources/img/chatbot.png" alt="Image Button">
+                            <img src="${s3}/resources/img/chatbot.png" alt="Image Button">
                         </button>
                     </td>
                 </tr>
@@ -48,7 +48,7 @@
                     <td>
                         <a href="http://pf.kakao.com/_xnCxfIG" target="_blank">
                             <button class="btn kakaoButton">
-                                <img src="/moneybug/resources/img/KakaoTalk.png" alt="Image Button">
+                                <img src="${s3}/resources/img/KakaoTalk.png" alt="Image Button">
                             </button>
                         </a>
                     </td>
@@ -56,10 +56,40 @@
             </table>
         </div>
     </div>
-    <script>
-    function showChatPopup() {
-        window.open("/moneybug/chat/chatPopUp.jsp", "_blank", "width=500, height=680, left=1000, top=50");
-    }
-    </script>
+<script>
+
+function showChatPopup() {
+    // 첫 번째 URL 시도
+    openChatPopup("checkLogin", function() {
+        
+        openChatPopup("../checkLogin");  // 첫 번째 시도가 실패한 경우 두 번째 URL 시도
+    });
+}
+
+function openChatPopup(url, onError) {
+    $.ajax({
+        url: url,
+        method: "GET",
+        success: function(response) {
+            let loginStatus = parseInt(response);
+            if (loginStatus !== 1) {
+                // ajax 요청이 성공했지만 로그인 상태가 아닌 경우
+                window.location.href = "/moneybug/login.jsp";
+            } else {
+                window.open("/moneybug/chat/chatPopUp.jsp", "_blank", "width=500, height=680, left=1000, top=50");
+            }
+        },
+        error: function(error) {
+            
+            if (onError) {
+                onError();
+            }
+        }
+    });
+}
+
+</script>
+
+
 </body>
 

@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<% application.setAttribute("s3","https://moneybugbucket.s3.ap-northeast-2.amazonaws.com"); %>
 <jsp:include page="/layout/header.jsp" />
 
 <style>
@@ -152,7 +153,7 @@ function deleteProduct(userNickname, productId, seq) {
 	<div class="basket-container">
 		<div class="user-container d-flex flex-column align-items-center">
 			<c:if test="${not empty userNickname}">
-				<h2>${userNickname}님의 장바구니</h2>
+				<h2>${userNickname}님의장바구니</h2>
 				<c:choose>
 					<c:when test="${basketIsEmpty}">
 						<div style="margin-top: 20px;">
@@ -201,8 +202,9 @@ function deleteProduct(userNickname, productId, seq) {
 										<c:if test="${basket.productId eq product.productId}">
 											<tr>
 												<td>${product.productType}</td>
-												<td><img src="${product.productImg}"
-													alt="Product Image" width="150px" height="150px" /></td>
+												<td><img
+													src="${s3}/resources/products/${product.productImg}"
+													" alt="Product Image" width="150px" height="150px" /></td>
 												<td>${product.productName}</td>
 												<td id="productPrice_<c:out value="${countnumber}"/>">${product.productPrice}</td>
 												<td><input type="number"
@@ -224,11 +226,9 @@ function deleteProduct(userNickname, productId, seq) {
 														onclick="deleteProduct('${userNickname}', ${basket.productId}, ${basket.seq})">삭제</button>
 													<input type="hidden"
 													id="productId<c:out value="${countnumber}"/>"
-													value="${basket.productId}">
-													<input type="hidden"
+													value="${basket.productId}"> <input type="hidden"
 													id="productSeq<c:out value="${countnumber}"/>"
-													value="${basket.seq}">
-													</td>
+													value="${basket.seq}"></td>
 											</tr>
 										</c:if>
 									</c:forEach>
@@ -240,21 +240,19 @@ function deleteProduct(userNickname, productId, seq) {
 						</div>
 						<input id="hiddenNumber" value="<c:out value="${countnumber}"/>"
 							type="hidden">
+						<div class="d-flex justify-content-center mt-3">
+							<input type="hidden" id="totalAmount2" name="totalAmount"
+								value="${totalAmount}"> <input type="hidden"
+								id="selectedId_" name="selectedId" value="${productId}" /> <input
+								type="hidden" id="seletedSeq_" name="seletedSeq"
+								value="${basket.seq}" />
+							<button type="submit" class="btn btn-lg btn-secondary" id="order">주문하기</button>
 					</c:otherwise>
 				</c:choose>
-
-	<div class="d-flex justify-content-center mt-3">
-					<input type="hidden" id="totalAmount2" name="totalAmount"
-						value="${totalAmount}"> <input type="hidden"
-						id="selectedId_" name="selectedId" value="${productId}" /> <input
-						type="hidden" id="seletedSeq_" name="seletedSeq"
-						value="${basket.seq}" />
-					<button type="submit" class="btn btn-lg btn-secondary" id="order">주문하기</button>
-				</div>
-			</form>
 		</div>
+		</form>
+	</div>
 	</div>
 
-
-<jsp:include page="/layout/footer.jsp"/>
-
+	<%@ include file="/layout/accountAside.jsp"%>
+	<jsp:include page="/layout/footer.jsp" />
