@@ -109,7 +109,7 @@ body {
 		            pay_method: 'card',
 		            merchant_uid: 'merchant_' + new Date().getTime(),
 		            name: '멀개미:결제테스트',
-		            amount: 1,
+		            amount: 100,
 		            buyer_email: 'test@naver.com',
 		            buyer_name: $('#userName').val(),
 		            buyer_tel: $('#tel').val(),
@@ -141,7 +141,7 @@ body {
 		                }).done(function(data) {
 		                	alert(data)
 		                    //[2] 결제 정보가 확인되고 서버에서 정상적인 서비스 루틴을 사용하는 경우
-		                    if (data == '1') {
+		                    if (data == 1) {
 		                        var msg = '결제가 완료되었습니다.';
 		                       /*  msg += '\n고유 ID: ' + rsp.imp_uid;
 		                        msg += '\n상점 거래 ID: ' + rsp.merchant_uid;
