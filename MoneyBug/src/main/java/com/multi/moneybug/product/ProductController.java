@@ -169,7 +169,7 @@ public class ProductController {
 	//결제 후 이동
 	@PostMapping("product/paySuccess.do") 
 	@ResponseBody
-	public String payOrder(OrderListDTO orderListDTO, MemberDTO memberDTO, Model model, BasketDTO basketDTO, HttpSession session, String userId, int productId, @RequestParam("seqList") String seqList){ 
+	public int payOrder(OrderListDTO orderListDTO, MemberDTO memberDTO, Model model, BasketDTO basketDTO, HttpSession session, String userId, int productId, @RequestParam("seqList") String seqList){ 
 		int result = productService.payOrder(orderListDTO);
 		String[] seqStr = seqList.split(",");
 		for(String s : seqStr) {
@@ -179,7 +179,7 @@ public class ProductController {
 		String userNickname = (String) session.getAttribute("userNickname");
 		memberDTO.setUserNickname(userNickname);
 		memberService.usePoint(orderListDTO, memberDTO);
-		return result + ""; 
+		return result; 
 	}
 	
 	@RequestMapping("product/manageDelete")
